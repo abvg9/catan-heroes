@@ -3,39 +3,41 @@ package com.ucm.dasi.catan.warehouse;
 import java.util.Map;
 import java.util.TreeMap;
 
-import com.ucm.dasi.catan.warehouse.enums.Resource;
 import com.ucm.dasi.catan.warehouse.exceptions.ENegativeNumber;
 import com.ucm.dasi.catan.warehouse.exceptions.ENotEnoughtResources;
 
-public class Warehouse {
+public class Warehouse implements IWarehouse {
 
 	/* Atributes */
-	private TreeMap<Resource, Integer> resources;
+	
+	private TreeMap<ResourceType, Integer> resources;
 	private int quantityResources;
 
 	/* Constructors */
+	
 	public Warehouse() throws ENegativeNumber {
 		
-		initializeAttributes();
+		resources = new TreeMap<ResourceType, Integer>();
+		quantityResources = 0;
 		
-		for (Resource resourceType : Resource.values()) {
-			setResource(resourceType, 0);
+		for (ResourceType resourceType : ResourceType.values()) {
+			resources.put(resourceType, 0);
 		}
 	}
 
-	public Warehouse(Map<Resource, Integer> resources) throws ENegativeNumber {
+	public Warehouse(Map<ResourceType, Integer> resources) throws ENegativeNumber {
 		
 		this();
 
-		for (Resource resourceType : Resource.values()) {
+		for (ResourceType resourceType : ResourceType.values()) {
 			setResource(resourceType, resources.get(resourceType));
 		}
 
 	}
 
-	/* Getters and Setters */
+	/* Methods */
 
-	public int getResource(Resource resource) {
+	public int getResource(ResourceType resource) {
 		return resources.get(resource);
 	}
 
@@ -43,12 +45,10 @@ public class Warehouse {
 		return quantityResources;
 	}
 
-	/* Methods */
-
 	public void substract(Warehouse resourcesToPay) throws ENotEnoughtResources {
 
 		try {
-			for (Resource resourceType : Resource.values()) {
+			for (ResourceType resourceType : ResourceType.values()) {
 				int resourceQuantity = resourcesToPay.getResource(resourceType);
 				setResource(resourceType, resources.get(resourceType) - resourceQuantity);
 			}
@@ -59,13 +59,13 @@ public class Warehouse {
 
 	public void add(Warehouse resourcesToPay) throws ENegativeNumber {
 
-		for (Resource resourceType : Resource.values()) {
+		for (ResourceType resourceType : ResourceType.values()) {
 			int resourceQuantity = resourcesToPay.getResource(resourceType);
 			setResource(resourceType, resources.get(resourceType) + resourceQuantity);
 		}
 	}
 
-	protected void setResource(Resource resource, int newQuantity) throws ENegativeNumber {
+	protected void setResource(ResourceType resource, int newQuantity) throws ENegativeNumber {
 
 		if (newQuantity < 0) {
 			throw new ENegativeNumber(resource.toString());
@@ -76,9 +76,5 @@ public class Warehouse {
 
 		resources.put(resource, newQuantity);
 	}
-	
-	private void initializeAttributes() {
-		resources = new TreeMap<Resource, Integer>();
-		quantityResources = 0;
-	}
+
 }
