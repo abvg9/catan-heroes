@@ -1,5 +1,7 @@
 package com.ucm.dasi.catan.board;
 
+import com.ucm.dasi.catan.board.exception.InvalidBoardSelectionException;
+
 public interface ICatanBoard {
 
 	/**
@@ -7,8 +9,9 @@ public interface ICatanBoard {
 	 * @param x X coordinate
 	 * @param y	Y coordinate.
 	 * @return Terrain element found.
+	 * @throws InvalidBoardSelectionException 
 	 */
-	ICatanTerrain get(int x, int y);
+	ICatanTerrain get(int x, int y) throws InvalidBoardSelectionException;
 	
 	/**
 	 * Gets the height of the board.
