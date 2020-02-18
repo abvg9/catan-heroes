@@ -3,8 +3,8 @@ package com.ucm.dasi.catan.warehouse;
 import java.util.Map;
 import java.util.TreeMap;
 
-import com.ucm.dasi.catan.warehouse.exceptions.ENegativeNumber;
-import com.ucm.dasi.catan.warehouse.exceptions.ENotEnoughtResources;
+import com.ucm.dasi.catan.warehouse.exception.NegativeNumberException;
+import com.ucm.dasi.catan.warehouse.exception.NotEnoughtResourcesException;
 
 public class Warehouse implements IWarehouse {
 
@@ -15,7 +15,7 @@ public class Warehouse implements IWarehouse {
 
 	/* Constructors */
 	
-	public Warehouse() throws ENegativeNumber {
+	public Warehouse() {
 		
 		resources = new TreeMap<ResourceType, Integer>();
 		quantityResources = 0;
@@ -25,7 +25,7 @@ public class Warehouse implements IWarehouse {
 		}
 	}
 
-	public Warehouse(Map<ResourceType, Integer> resources) throws ENegativeNumber {
+	public Warehouse(Map<ResourceType, Integer> resources) throws NegativeNumberException {
 		
 		this();
 
@@ -45,19 +45,19 @@ public class Warehouse implements IWarehouse {
 		return quantityResources;
 	}
 
-	public void substract(Warehouse resourcesToPay) throws ENotEnoughtResources {
+	public void substract(Warehouse resourcesToPay) throws NotEnoughtResourcesException {
 
 		try {
 			for (ResourceType resourceType : ResourceType.values()) {
 				int resourceQuantity = resourcesToPay.getResource(resourceType);
 				setResource(resourceType, resources.get(resourceType) - resourceQuantity);
 			}
-		} catch (ENegativeNumber e) {
-			throw new ENotEnoughtResources();
+		} catch (NegativeNumberException e) {
+			throw new NotEnoughtResourcesException();
 		}
 	}
 
-	public void add(Warehouse resourcesToPay) throws ENegativeNumber {
+	public void add(Warehouse resourcesToPay) throws NegativeNumberException {
 
 		for (ResourceType resourceType : ResourceType.values()) {
 			int resourceQuantity = resourcesToPay.getResource(resourceType);
@@ -65,10 +65,10 @@ public class Warehouse implements IWarehouse {
 		}
 	}
 
-	protected void setResource(ResourceType resource, int newQuantity) throws ENegativeNumber {
+	protected void setResource(ResourceType resource, int newQuantity) throws NegativeNumberException {
 
 		if (newQuantity < 0) {
-			throw new ENegativeNumber(resource.toString());
+			throw new NegativeNumberException(resource.toString());
 		}
 
 		int oldQuantity = resources.get(resource);
