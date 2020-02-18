@@ -15,6 +15,8 @@ public class WarehouseTest {
 	//@Before
 	//public void setUp() {}
 	
+	/* CHECK QUANTITY TESTS */
+	
     @Test
 	public void checkQuantityNoEmptyConstructor() {
 		 	
@@ -98,5 +100,76 @@ public class WarehouseTest {
 			
 	}
     
-
+    @Test
+	public void checkQuantityAddSubstract() {
+    	
+		Map<ResourceType, Integer> resources1 = 
+				Map.of(ResourceType.Ore, 2, 
+						ResourceType.Brick, 2,
+						ResourceType.Wool, 2,
+						ResourceType.Lumber, 2,
+						ResourceType.Gain, 2);
+		
+		Map<ResourceType, Integer> resources2 = 
+				Map.of(ResourceType.Ore, 2, 
+						ResourceType.Brick, 2,
+						ResourceType.Wool, 3,
+						ResourceType.Lumber, 2,
+						ResourceType.Gain, 2);
+    			
+		try {
+			Warehouse warehouse1 = new Warehouse(resources1);
+			Warehouse warehouse2 = new Warehouse(resources2);
+			
+			try {
+				warehouse2.add(warehouse1);
+				warehouse2.substract(warehouse1);
+			} catch (NotEnoughtResourcesException e) {
+				System.err.println(e.getMessage());
+			}
+			
+			assertEquals(warehouse2.getQuantityResource(), 11, 0);
+			
+		} catch (NegativeNumberException e) {
+			System.err.println(e.getMessage());
+		}
+			
+	}
+    
+    /* COHERENCE WAREHOSE TESTS */
+    
+    @Test
+    public void checkResources() {
+    	
+		Map<ResourceType, Integer> resources1 = 
+				Map.of(ResourceType.Ore, 1, 
+						ResourceType.Brick, 2,
+						ResourceType.Wool, 3,
+						ResourceType.Lumber, 4,
+						ResourceType.Gain, 5);
+		
+		Map<ResourceType, Integer> resources2 = 
+				Map.of(ResourceType.Ore, 9, 
+						ResourceType.Brick, 8,
+						ResourceType.Wool, 7,
+						ResourceType.Lumber, 6,
+						ResourceType.Gain, 5);
+    			
+		try {
+			Warehouse warehouse1 = new Warehouse(resources1);
+			Warehouse warehouse2 = new Warehouse(resources2);
+			
+			Warehouse warehouse12 = warehouse1;
+			warehouse12.add(warehouse2);
+			
+			for (ResourceType resourceType : ResourceType.values()) {
+				assertEquals(warehouse12.getResource(resourceType), 10, 0);
+			}
+			
+		} catch (NegativeNumberException e) {
+			System.err.println(e.getMessage());
+		}
+		
+    }
+    
 }
