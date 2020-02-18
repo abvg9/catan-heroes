@@ -1,10 +1,10 @@
-package com.ucm.dasi.catan.warehouse.exceptions;
+package com.ucm.dasi.catan.warehouse.exception;
 
-public class ENotEnoughtResources extends Exception {
+public class NotEnoughtResourcesException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 	
-	public ENotEnoughtResources() {
+	public NotEnoughtResourcesException() {
 		super("You dont have enought resources to do that.");
 	}
 }

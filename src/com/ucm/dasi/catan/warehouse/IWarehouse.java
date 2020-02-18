@@ -1,7 +1,7 @@
 package com.ucm.dasi.catan.warehouse;
 
-import com.ucm.dasi.catan.warehouse.exceptions.ENegativeNumber;
-import com.ucm.dasi.catan.warehouse.exceptions.ENotEnoughtResources;
+import com.ucm.dasi.catan.warehouse.exception.NegativeNumberException;
+import com.ucm.dasi.catan.warehouse.exception.NotEnoughtResourcesException;
 
 public interface IWarehouse {
 
@@ -11,8 +11,8 @@ public interface IWarehouse {
 
 	int getQuantityResource();
 	
-	void substract(Warehouse resourcesToPay) throws ENotEnoughtResources ;
+	void substract(Warehouse resourcesToPay) throws NotEnoughtResourcesException ;
 
-	void add(Warehouse resourcesToPay) throws ENegativeNumber;
+	void add(Warehouse resourcesToPay) throws NegativeNumberException;
 
 }
