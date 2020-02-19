@@ -1,4 +1,4 @@
-First you need to download this to .jar files:
+First you need to download this tow .jar files:
 
 - search.maven.org/remotecontent?filepath=junit/junit/4.11/junit-4.11.jar
 
