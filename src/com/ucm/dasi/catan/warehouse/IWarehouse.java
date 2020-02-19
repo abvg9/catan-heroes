@@ -6,13 +6,15 @@ import com.ucm.dasi.catan.warehouse.exception.NotEnoughtResourcesException;
 public interface IWarehouse {
 
 	/* Methods */
-
-	int getResource(ResourceType resource);
+	
+	void add(Warehouse resourcesToPay) throws NegativeNumberException;
 
 	int getQuantityResource();
 	
+	int getResource(ResourceType resource);
+
 	void substract(Warehouse resourcesToPay) throws NotEnoughtResourcesException ;
 
-	void add(Warehouse resourcesToPay) throws NegativeNumberException;
+	
 
 }
