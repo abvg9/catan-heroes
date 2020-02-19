@@ -15,6 +15,4 @@ public interface IWarehouse {
 
 	void substract(Warehouse resourcesToPay) throws NotEnoughtResourcesException ;
 
-	
-
 }

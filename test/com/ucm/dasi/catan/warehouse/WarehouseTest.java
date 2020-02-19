@@ -17,14 +17,18 @@ public class WarehouseTest {
 				ResourceType.Lumber, 2, ResourceType.Gain, 2);
 
 		Warehouse warehouse = new Warehouse(resources);
+		
 		assertEquals(warehouse.getQuantityResource(), 10, 0);
 		
 	}
 
 	@Test
 	public void checkQuantityEmptyConstructor() {
+		
 		Warehouse warehouse = new Warehouse();
+		
 		assertEquals(warehouse.getQuantityResource(), 0, 0);
+		
 	}
 
 	@Test
@@ -34,7 +38,9 @@ public class WarehouseTest {
 				ResourceType.Lumber, 2, ResourceType.Gain, 2);
 
 		Warehouse warehouse = new Warehouse();
+		
 		warehouse.add(new Warehouse(resources));
+		
 		assertEquals(warehouse.getQuantityResource(), 10, 0);
 	}
 
@@ -49,6 +55,7 @@ public class WarehouseTest {
 
 		Warehouse warehouse1 = new Warehouse(resources1);
 		Warehouse warehouse2 = new Warehouse(resources2);
+		
 		warehouse2.substract(warehouse1);
 
 		assertEquals(warehouse2.getQuantityResource(), 1, 0);
@@ -66,9 +73,10 @@ public class WarehouseTest {
 
 		Warehouse warehouse1 = new Warehouse(resources1);
 		Warehouse warehouse2 = new Warehouse(resources2);
+		
 		warehouse2.add(warehouse1);
 		warehouse2.substract(warehouse1);
-
+		
 		assertEquals(warehouse2.getQuantityResource(), 11, 0);
 
 	}
