@@ -7,4 +7,5 @@ public class NegativeNumberException extends Exception {
 	public NegativeNumberException(String name) {
 		super("Value of " + name + "can't be negative.");
 	}
+	
 }
