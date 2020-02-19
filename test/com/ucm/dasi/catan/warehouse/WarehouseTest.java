@@ -12,9 +12,6 @@ public class WarehouseTest {
 
 	}
 
-	// @Before
-	// public void setUp() {}
-
 	/* CHECK QUANTITY TESTS */
 
 	@Test
