@@ -7,4 +7,5 @@ public class NotEnoughtResourcesException extends Exception {
 	public NotEnoughtResourcesException() {
 		super("You dont have enought resources to do that.");
 	}
+	
 }

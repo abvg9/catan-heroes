@@ -18,7 +18,7 @@ public class WarehouseTest {
 
 		Warehouse warehouse = new Warehouse(resources);
 		assertEquals(warehouse.getQuantityResource(), 10, 0);
-
+		
 	}
 
 	@Test
