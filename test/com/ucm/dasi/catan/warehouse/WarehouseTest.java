@@ -8,10 +8,6 @@ import com.ucm.dasi.catan.warehouse.exception.NotEnoughtResourcesException;
 
 public class WarehouseTest {
 
-	public WarehouseTest() {
-
-	}
-
 	/* CHECK QUANTITY TESTS */
 
 	@Test
