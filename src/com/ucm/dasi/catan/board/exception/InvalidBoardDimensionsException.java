@@ -6,5 +6,13 @@ public class InvalidBoardDimensionsException extends Exception {
 	 * 
 	 */
 	private static final long serialVersionUID = -7651089991744581056L;
+	
+	public InvalidBoardDimensionsException() {
+		super();
+	}
+	
+	public InvalidBoardDimensionsException(String message) {
+		super(message);
+	}
 
 }
