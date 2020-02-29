@@ -1,14 +1,18 @@
 package com.ucm.dasi.catan.board;
 
-public class CatanTerrain implements ICatanTerrain {
+public class BoardTerrain implements IBoardTerrain {
 
 	protected int productionNumber;
 	
 	protected TerrainType type;
 	
-	public CatanTerrain(int productionNumber, TerrainType type) {
+	public BoardTerrain(int productionNumber, TerrainType type) {
 		this.productionNumber = productionNumber;
 		this.type = type;
+	}
+	
+	public BoardElementType getElementType() {
+		return BoardElementType.Terrain;
 	}
 	
 	public int getProductionNumber() {

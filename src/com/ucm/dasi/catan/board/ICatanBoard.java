@@ -1,27 +1,17 @@
 package com.ucm.dasi.catan.board;
 
-import com.ucm.dasi.catan.board.exception.InvalidBoardSelectionException;
-
 public interface ICatanBoard {
-
-	/**
-	 * Gets the terrain element at the position specified.
-	 * @param x X coordinate
-	 * @param y	Y coordinate.
-	 * @return Terrain element found.
-	 * @throws InvalidBoardSelectionException 
-	 */
-	ICatanTerrain get(int x, int y) throws InvalidBoardSelectionException;
+	IBoardElement get(int x, int y);
 	
-	/**
-	 * Gets the height of the board.
-	 * @return Board's height.
-	 */
-	int getHeight();
+	IBoardConnection getEastConnection(int x, int y);
 	
-	/**
-	 * Gets the width of the board.
-	 * @return Board's width.
-	 */
-	int getWidth();
+	IBoardConnection getNorthConnection(int x, int y);
+	
+	IBoardConnection getSouthConnection(int x, int y);
+	
+	IBoardConnection getWestConnection(int x, int y);
+	
+	IBoardTerrain getTerrain(int x, int y);
+	
+	IBoardStructure getStructure(int x, int y);
 }

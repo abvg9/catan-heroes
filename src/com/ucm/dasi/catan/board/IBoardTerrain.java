@@ -1,6 +1,6 @@
 package com.ucm.dasi.catan.board;
 
-public interface ICatanTerrain {
+public interface IBoardTerrain extends IBoardElement {
 	/**
 	 * Gets the terrain's type
 	 * @return terrain's type.

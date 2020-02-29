@@ -6,6 +6,7 @@ public enum TerrainType {
 	Forest,
 	Hills,
 	Mountains,
+	None,
 	Pasture,
 	Sea
 }
