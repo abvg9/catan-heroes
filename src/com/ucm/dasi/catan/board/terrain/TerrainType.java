@@ -1,4 +1,4 @@
-package com.ucm.dasi.catan.board;
+package com.ucm.dasi.catan.board.terrain;
 
 public enum TerrainType {
 	Desert,

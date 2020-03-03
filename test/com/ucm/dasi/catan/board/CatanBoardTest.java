@@ -5,8 +5,14 @@ import static org.junit.Assert.assertNotEquals;
 
 import org.junit.Test;
 
+import com.ucm.dasi.catan.board.connection.BoardConnection;
+import com.ucm.dasi.catan.board.connection.ConnectionType;
 import com.ucm.dasi.catan.board.exception.InvalidBoardDimensionsException;
 import com.ucm.dasi.catan.board.exception.InvalidBoardElementException;
+import com.ucm.dasi.catan.board.structure.BoardStructure;
+import com.ucm.dasi.catan.board.structure.StructureType;
+import com.ucm.dasi.catan.board.terrain.BoardTerrain;
+import com.ucm.dasi.catan.board.terrain.TerrainType;
 
 public class CatanBoardTest {
 

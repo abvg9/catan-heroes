@@ -1,4 +1,4 @@
-package com.ucm.dasi.catan.board;
+package com.ucm.dasi.catan.board.structure;
 
 public enum StructureType {
 	City,
