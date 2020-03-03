@@ -8,18 +8,18 @@ import com.ucm.dasi.catan.board.BoardElementType;
 
 public class BoardConnectionTest {
 
-	@Test
-	public void itMustReturnTheRightElementType() {
-		BoardConnection connection = new BoardConnection(ConnectionType.Void);
-		
-		assertEquals(BoardElementType.Connection, connection.getElementType());
-	}
-	
-	@Test
-	public void itMustGetItsConnectionType() {
-		ConnectionType type = ConnectionType.Void;
-		BoardConnection connection = new BoardConnection(type);
-		
-		assertEquals(type, connection.getType());
-	}
+    @Test
+    public void itMustReturnTheRightElementType() {
+	BoardConnection connection = new BoardConnection(ConnectionType.Void);
+
+	assertEquals(BoardElementType.Connection, connection.getElementType());
+    }
+
+    @Test
+    public void itMustGetItsConnectionType() {
+	ConnectionType type = ConnectionType.Void;
+	BoardConnection connection = new BoardConnection(type);
+
+	assertEquals(type, connection.getType());
+    }
 }
