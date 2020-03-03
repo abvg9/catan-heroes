@@ -72,7 +72,7 @@ public class CatanBoard implements ICatanBoard {
 	
 	private void setDimensions(int width, int height) throws InvalidBoardDimensionsException {
 		if (width % 2 == 0 || height % 2 == 0) {
-			throw new InvalidBoardDimensionsException("Expected an odd number");
+			throw new InvalidBoardDimensionsException();
 		}
 		
 		terrainWidth = width / 2;
@@ -84,19 +84,19 @@ public class CatanBoard implements ICatanBoard {
 	
 	private void setElements(IBoardElement[][] elements) throws InvalidBoardDimensionsException, InvalidBoardElementException {
 		if (elements.length != width) {
-			throw new InvalidBoardDimensionsException("Expected a width of " + width);
+			throw new InvalidBoardDimensionsException();
 		}
 		
 		this.elements = new IBoardElement[width][height];
 		
 		for (int i = 0; i < width; ++i) {
 			if (elements[i].length != height) {
-				throw new InvalidBoardDimensionsException("Expected a height of " + height);
+				throw new InvalidBoardDimensionsException();
 			}
 			
 			for (int j = 0; j < height; ++j) {
 				if (!checkElementType(elements[i][j], i, j)) {
-					throw new InvalidBoardElementException("Expected an element type distinct of " + elements[i][j].getElementType());
+					throw new InvalidBoardElementException();
 				}
 				this.elements[i][j] = elements[i][j];
 			}
