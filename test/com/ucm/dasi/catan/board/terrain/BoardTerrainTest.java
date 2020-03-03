@@ -1,8 +1,10 @@
-package com.ucm.dasi.catan.board;
+package com.ucm.dasi.catan.board.terrain;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
+
+import com.ucm.dasi.catan.board.BoardElementType;
 
 public class BoardTerrainTest {
 

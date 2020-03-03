@@ -1,4 +1,6 @@
-package com.ucm.dasi.catan.board;
+package com.ucm.dasi.catan.board.connection;
+
+import com.ucm.dasi.catan.board.BoardElementType;
 
 public class BoardConnection implements IBoardConnection {
 

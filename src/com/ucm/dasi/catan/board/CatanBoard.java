@@ -1,7 +1,10 @@
 package com.ucm.dasi.catan.board;
 
+import com.ucm.dasi.catan.board.connection.IBoardConnection;
 import com.ucm.dasi.catan.board.exception.InvalidBoardDimensionsException;
 import com.ucm.dasi.catan.board.exception.InvalidBoardElementException;
+import com.ucm.dasi.catan.board.structure.IBoardStructure;
+import com.ucm.dasi.catan.board.terrain.IBoardTerrain;
 
 public class CatanBoard implements ICatanBoard {
 	
