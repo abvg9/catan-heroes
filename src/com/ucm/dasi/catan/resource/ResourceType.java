@@ -1,4 +1,4 @@
-package com.ucm.dasi.catan.warehouse;
+package com.ucm.dasi.catan.resource;
 
 public enum ResourceType {
     Ore, Brick, Wool, Lumber, Gain

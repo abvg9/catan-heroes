@@ -3,6 +3,7 @@ package com.ucm.dasi.catan.warehouse;
 import java.util.Map;
 import java.util.TreeMap;
 
+import com.ucm.dasi.catan.resource.ResourceType;
 import com.ucm.dasi.catan.warehouse.exception.NegativeNumberException;
 import com.ucm.dasi.catan.warehouse.exception.NotEnoughtResourcesException;
 
