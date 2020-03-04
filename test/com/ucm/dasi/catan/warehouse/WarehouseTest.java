@@ -3,6 +3,8 @@ package com.ucm.dasi.catan.warehouse;
 import static org.junit.Assert.assertEquals;
 import java.util.Map;
 import org.junit.Test;
+
+import com.ucm.dasi.catan.resource.ResourceType;
 import com.ucm.dasi.catan.warehouse.exception.NegativeNumberException;
 import com.ucm.dasi.catan.warehouse.exception.NotEnoughtResourcesException;
 
