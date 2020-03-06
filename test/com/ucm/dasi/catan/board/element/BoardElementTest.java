@@ -1,6 +1,6 @@
 package com.ucm.dasi.catan.board.element;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 
 import org.junit.Test;
 
@@ -13,6 +13,6 @@ public class BoardElementTest {
 	BoardElementType type = BoardElementType.Structure;
 	BoardElement boardElement = new MinimunBoardElement(type);
 	
-	assertEquals(type, boardElement.getElementType());
+	assertSame(type, boardElement.getElementType());
     }
 }
