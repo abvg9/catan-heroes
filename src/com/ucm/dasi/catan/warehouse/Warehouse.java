@@ -49,6 +49,21 @@ public class Warehouse implements IWarehouse {
 
     /* Methods */
     
+    @Override
+    public boolean equals(Object object) {
+	if (!(object instanceof IWarehouse)) {
+	    return false;
+	}
+	
+	for (ResourceType resourceType : ResourceType.values()) {   
+	    if (this.getResource(resourceType) != ((IWarehouse)object).getResource(resourceType)) {
+		return false;
+	    }
+	}
+	
+	return true;
+    }
+    
     public int getResource(ResourceType resource) {
 	return resources.get(resource);
     }
