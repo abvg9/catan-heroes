@@ -1,6 +1,7 @@
 package com.ucm.dasi.catan.board;
 
 import com.ucm.dasi.catan.board.connection.IBoardConnection;
+import com.ucm.dasi.catan.board.element.IBoardElement;
 import com.ucm.dasi.catan.board.structure.IBoardStructure;
 import com.ucm.dasi.catan.board.terrain.IBoardTerrain;
 
