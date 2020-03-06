@@ -1,6 +1,6 @@
 package com.ucm.dasi.catan.board.terrain;
 
-import com.ucm.dasi.catan.board.IBoardElement;
+import com.ucm.dasi.catan.board.element.IBoardElement;
 
 public interface IBoardTerrain extends IBoardElement {
     /**

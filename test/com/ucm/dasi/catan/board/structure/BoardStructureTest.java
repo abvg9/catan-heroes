@@ -10,7 +10,7 @@ public class BoardStructureTest {
 
     @Test
     public void itMustReturnTheRightElementType() {
-	BoardStructure connection = new BoardStructure(StructureType.None);
+	BoardStructure connection = new BoardStructure(null, StructureType.None);
 
 	assertEquals(BoardElementType.Structure, connection.getElementType());
     }
@@ -18,7 +18,7 @@ public class BoardStructureTest {
     @Test
     public void itMustGetItsStructureType() {
 	StructureType type = StructureType.None;
-	BoardStructure structure = new BoardStructure(type);
+	BoardStructure structure = new BoardStructure(null, type);
 
 	assertEquals(type, structure.getType());
     }
