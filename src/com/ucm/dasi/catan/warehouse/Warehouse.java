@@ -27,17 +27,43 @@ public class Warehouse implements IWarehouse {
     }
 
     public Warehouse(Map<ResourceType, Integer> resources) throws NegativeNumberException {
-
 	this();
 
 	for (ResourceType resourceType : ResourceType.values()) {
-	    setResource(resourceType, resources.get(resourceType));
+	    Integer resourceAmount = resources.get(resourceType);
+	    if (null == resourceAmount) {
+		resourceAmount = 0;
+	    }
+	    setResource(resourceType, resourceAmount);
 	}
 
     }
+    
+    public Warehouse(IWarehouse warehouse) throws NegativeNumberException {
+	this();
+	
+	for (ResourceType resourceType : ResourceType.values()) {   
+	    setResource(resourceType, warehouse.getResource(resourceType));
+	}
+    }
 
     /* Methods */
-
+    
+    @Override
+    public boolean equals(Object object) {
+	if (!(object instanceof IWarehouse)) {
+	    return false;
+	}
+	
+	for (ResourceType resourceType : ResourceType.values()) {   
+	    if (this.getResource(resourceType) != ((IWarehouse)object).getResource(resourceType)) {
+		return false;
+	    }
+	}
+	
+	return true;
+    }
+    
     public int getResource(ResourceType resource) {
 	return resources.get(resource);
     }
