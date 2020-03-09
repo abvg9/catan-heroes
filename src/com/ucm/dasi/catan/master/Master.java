@@ -5,9 +5,6 @@ import java.io.FileNotFoundException;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.TreeMap;
-
-import com.ucm.dasi.catan.actions.master.EndGame;
-import com.ucm.dasi.catan.actions.master.WaitMessage;
 import com.ucm.dasi.catan.warehouse.Warehouse;
 import jade.core.Agent;
 import jade.core.Profile;
@@ -41,7 +38,6 @@ public class Master extends Agent implements IMaster {
 	    }
 	    
 	    // Init game and ...
-	    addBehaviour(new EndGame(playersInformation.keySet(), "gamer1", this));
 	    
 
 	} catch (FileNotFoundException e) {
