@@ -5,14 +5,14 @@ import com.ucm.dasi.catan.warehouse.exception.NotEnoughtResourcesException;
 
 public interface IWarehouse {
 
-	/* Methods */
-	
-	void add(Warehouse resourcesToPay) throws NegativeNumberException;
+    /* Methods */
 
-	int getQuantityResource();
-	
-	int getResource(ResourceType resource);
+    void add(Warehouse resourcesToPay) throws NegativeNumberException;
 
-	void substract(Warehouse resourcesToPay) throws NotEnoughtResourcesException ;
+    int getQuantityResource();
+
+    int getResource(ResourceType resource);
+
+    void substract(Warehouse resourcesToPay) throws NotEnoughtResourcesException;
 
 }
