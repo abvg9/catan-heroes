@@ -3,6 +3,8 @@ package com.ucm.dasi.catan.game;
 import com.ucm.dasi.catan.board.ICatanEditableBoard;
 import com.ucm.dasi.catan.exception.NonNullInputException;
 import com.ucm.dasi.catan.exception.NonVoidCollectionException;
+import com.ucm.dasi.catan.game.handler.GameEngineHandlersMap;
+import com.ucm.dasi.catan.game.handler.IGameEngineHandlersMap;
 import com.ucm.dasi.catan.player.IPlayer;
 import com.ucm.dasi.catan.request.IRequest;
 

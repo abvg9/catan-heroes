@@ -1,4 +1,4 @@
-package com.ucm.dasi.catan.game;
+package com.ucm.dasi.catan.game.handler;
 
 import java.util.Map;
 import java.util.function.Consumer;
