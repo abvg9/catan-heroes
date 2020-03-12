@@ -3,7 +3,7 @@ package com.ucm.dasi.catan.request;
 import com.ucm.dasi.catan.board.BoardElementType;
 import com.ucm.dasi.catan.player.IPlayer;
 
-public class BuildElementRequest extends Request {
+public abstract class BuildElementRequest extends Request {
 
     private BoardElementType type;
 
