@@ -5,4 +5,4 @@ import java.util.function.Consumer;
 
 import com.ucm.dasi.catan.request.IRequest;
 
-public interface IGameEngineHandlersMap extends Map<Class<? extends IRequest>, Consumer<IRequest>> {}
+public interface IGameEngineHandlersMap extends Map<Class<? extends IRequest>, Consumer<? extends IRequest>> {}
