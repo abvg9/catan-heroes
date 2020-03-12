@@ -5,11 +5,11 @@ import com.ucm.dasi.catan.player.IPlayer;
 
 public class BuildElementRequest extends BaseRequest {
 
-    protected BoardElementType type;
+    private BoardElementType type;
 
-    protected int x;
+    private int x;
 
-    protected int y;
+    private int y;
 
     public BuildElementRequest(IPlayer player, BoardElementType type, int x, int y) {
 	super(player);
