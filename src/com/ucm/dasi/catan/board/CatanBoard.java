@@ -60,16 +60,16 @@ public class CatanBoard implements ICatanBoard {
 	return (IBoardStructure) this.elements[2 * x][2 * y];
     }
 
-    private boolean checkElementType(IBoardElement element, int x, int y) {
+    protected boolean checkElementType(BoardElementType type, int x, int y) {
 	if (1 == (x + y) % 2) {
-	    return element.getElementType() == BoardElementType.Connection;
+	    return type == BoardElementType.Connection;
 	}
 
 	if (x % 2 == 0) {
-	    return element.getElementType() == BoardElementType.Structure;
+	    return type == BoardElementType.Structure;
 	}
 
-	return element.getElementType() == BoardElementType.Terrain;
+	return type == BoardElementType.Terrain;
     }
 
     private void setDimensions(int width, int height) throws InvalidBoardDimensionsException {
@@ -98,7 +98,7 @@ public class CatanBoard implements ICatanBoard {
 	    }
 
 	    for (int j = 0; j < height; ++j) {
-		if (!checkElementType(elements[i][j], i, j)) {
+		if (null == elements[i][j] || !checkElementType(elements[i][j].getElementType(), i, j)) {
 		    throw new InvalidBoardElementException();
 		}
 		this.elements[i][j] = elements[i][j];
