@@ -5,15 +5,15 @@ import com.ucm.dasi.catan.exception.NonNullInputException;
 import com.ucm.dasi.catan.exception.NonVoidCollectionException;
 import com.ucm.dasi.catan.player.IPlayer;
 
-public class CatanGame implements ICatanGame {
+public class CatanGame<TBoard extends ICatanBoard> implements ICatanGame<TBoard> {
 
-    protected ICatanBoard board;
+    protected TBoard board;
 
     protected IPlayer[] players;
 
     private int turnIndex;
 
-    public CatanGame(ICatanBoard board, IPlayer[] players) throws NonNullInputException, NonVoidCollectionException {
+    public CatanGame(TBoard board, IPlayer[] players) throws NonNullInputException, NonVoidCollectionException {
 	checkBoard(board);
 	checkPlayers(players);
 
@@ -26,7 +26,7 @@ public class CatanGame implements ICatanGame {
 	return players[turnIndex];
     }
 
-    public ICatanBoard getBoard() {
+    public TBoard getBoard() {
 	return board;
     }
 
