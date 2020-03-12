@@ -19,7 +19,7 @@ public class BuildElementRequest extends BaseRequest {
 	this.y = y;
     }
 
-    public BoardElementType getType() {
+    public BoardElementType getElementType() {
 	return this.type;
     }
 
