@@ -16,7 +16,7 @@ public class WarehouseTest {
     public void checkQuantityNoEmptyConstructor() throws NegativeNumberException {
 
 	Map<ResourceType, Integer> resources = Map.of(ResourceType.Ore, 2, ResourceType.Brick, 2, ResourceType.Wool, 2,
-		ResourceType.Lumber, 2, ResourceType.Gain, 2);
+		ResourceType.Lumber, 2, ResourceType.Grain, 2);
 
 	Warehouse warehouse = new Warehouse(resources);
 
@@ -37,7 +37,7 @@ public class WarehouseTest {
     public void checkQuantityAdd() throws NegativeNumberException {
 
 	Map<ResourceType, Integer> resources = Map.of(ResourceType.Ore, 2, ResourceType.Brick, 2, ResourceType.Wool, 2,
-		ResourceType.Lumber, 2, ResourceType.Gain, 2);
+		ResourceType.Lumber, 2, ResourceType.Grain, 2);
 
 	Warehouse warehouse = new Warehouse();
 
@@ -50,10 +50,10 @@ public class WarehouseTest {
     public void checkQuantitySubstract() throws NegativeNumberException, NotEnoughtResourcesException {
 
 	Map<ResourceType, Integer> resources1 = Map.of(ResourceType.Ore, 2, ResourceType.Brick, 2, ResourceType.Wool, 2,
-		ResourceType.Lumber, 2, ResourceType.Gain, 2);
+		ResourceType.Lumber, 2, ResourceType.Grain, 2);
 
 	Map<ResourceType, Integer> resources2 = Map.of(ResourceType.Ore, 2, ResourceType.Brick, 2, ResourceType.Wool, 3,
-		ResourceType.Lumber, 2, ResourceType.Gain, 2);
+		ResourceType.Lumber, 2, ResourceType.Grain, 2);
 
 	Warehouse warehouse1 = new Warehouse(resources1);
 	Warehouse warehouse2 = new Warehouse(resources2);
@@ -70,10 +70,10 @@ public class WarehouseTest {
     public void checkResources() throws NegativeNumberException {
 
 	Map<ResourceType, Integer> resources1 = Map.of(ResourceType.Ore, 1, ResourceType.Brick, 2, ResourceType.Wool, 3,
-		ResourceType.Lumber, 4, ResourceType.Gain, 5);
+		ResourceType.Lumber, 4, ResourceType.Grain, 5);
 
 	Map<ResourceType, Integer> resources2 = Map.of(ResourceType.Ore, 9, ResourceType.Brick, 8, ResourceType.Wool, 7,
-		ResourceType.Lumber, 6, ResourceType.Gain, 5);
+		ResourceType.Lumber, 6, ResourceType.Grain, 5);
 
 	Warehouse warehouse1 = new Warehouse(resources1);
 	Warehouse warehouse2 = new Warehouse(resources2);
