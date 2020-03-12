@@ -8,8 +8,8 @@ public class BuildConnectionRequest extends BuildElementRequest implements IBuil
 
     private ConnectionType type;
     
-    public BuildConnectionRequest(IPlayer player, BoardElementType elementType, ConnectionType type,  int x, int y) {
-	super(player, elementType, x, y);
+    public BuildConnectionRequest(IPlayer player, ConnectionType type,  int x, int y) {
+	super(player, BoardElementType.Connection, x, y);
 	
 	this.type = type;
     }
