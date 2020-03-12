@@ -31,7 +31,7 @@ public class CatanGame<TBoard extends ICatanBoard> implements ICatanGame<TBoard>
     }
 
     public IPlayer[] getPlayers() {
-	return players.clone();
+	return players;
     }
 
     private void checkBoard(ICatanBoard board) throws NonNullInputException {

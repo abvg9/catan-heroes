@@ -72,7 +72,7 @@ public class Warehouse implements IWarehouse {
 	return quantityResources;
     }
 
-    public void substract(Warehouse resourcesToPay) throws NotEnoughtResourcesException {
+    public void substract(IWarehouse resourcesToPay) throws NotEnoughtResourcesException {
 
 	try {
 	    for (ResourceType resourceType : ResourceType.values()) {
@@ -84,7 +84,7 @@ public class Warehouse implements IWarehouse {
 	}
     }
 
-    public void add(Warehouse resourcesToPay) throws NegativeNumberException {
+    public void add(IWarehouse resourcesToPay) throws NegativeNumberException {
 
 	for (ResourceType resourceType : ResourceType.values()) {
 	    int resourceQuantity = resourcesToPay.getResource(resourceType);
