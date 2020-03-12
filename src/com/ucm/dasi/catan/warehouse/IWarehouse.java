@@ -8,12 +8,12 @@ public interface IWarehouse {
 
     /* Methods */
 
-    void add(Warehouse resourcesToPay) throws NegativeNumberException;
+    void add(IWarehouse resourcesToPay) throws NegativeNumberException;
 
     int getQuantityResource();
 
     int getResource(ResourceType resource);
 
-    void substract(Warehouse resourcesToPay) throws NotEnoughtResourcesException;
+    void substract(IWarehouse resourcesToPay) throws NotEnoughtResourcesException;
 
 }
