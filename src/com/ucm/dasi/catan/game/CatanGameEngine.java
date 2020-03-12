@@ -1,6 +1,6 @@
 package com.ucm.dasi.catan.game;
 
-import com.ucm.dasi.catan.board.ICatanBoard;
+import com.ucm.dasi.catan.board.ICatanEditableBoard;
 import com.ucm.dasi.catan.exception.NonNullInputException;
 import com.ucm.dasi.catan.exception.NonVoidCollectionException;
 import com.ucm.dasi.catan.player.IPlayer;
@@ -10,11 +10,11 @@ import java.util.TreeMap;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public abstract class CatanGameEngine extends CatanGame implements ICatanGameEngine {
+public abstract class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements ICatanGameEngine {
 
     private TreeMap<Class<? extends IRequest>, Consumer<IRequest>> handlersMap;
 
-    public CatanGameEngine(ICatanBoard board, IPlayer[] players,
+    public CatanGameEngine(ICatanEditableBoard board, IPlayer[] players,
 	    Function<CatanGameEngine, IGameEngineHandlersMap> handlersMapGenerator)
 	    throws NonNullInputException, NonVoidCollectionException {
 	
