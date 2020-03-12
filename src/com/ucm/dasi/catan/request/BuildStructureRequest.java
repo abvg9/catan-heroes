@@ -8,8 +8,8 @@ public class BuildStructureRequest extends BuildElementRequest implements IBuild
 
     private StructureType type;
 
-    public BuildStructureRequest(IPlayer player, BoardElementType elementType, StructureType type, int x, int y) {
-	super(player, elementType, x, y);
+    public BuildStructureRequest(IPlayer player, StructureType type, int x, int y) {
+	super(player, BoardElementType.Structure, x, y);
 
 	this.type = type;
     }
