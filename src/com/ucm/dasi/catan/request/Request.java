@@ -2,10 +2,10 @@ package com.ucm.dasi.catan.request;
 
 import com.ucm.dasi.catan.player.IPlayer;
 
-public abstract class BaseRequest implements IRequest {
+public abstract class Request implements IRequest {
     private IPlayer player;
     
-    public BaseRequest(IPlayer player) {
+    public Request(IPlayer player) {
 	this.player = player;
     }
     
