@@ -9,7 +9,12 @@ import com.ucm.dasi.catan.warehouse.IWarehouse;
 import com.ucm.dasi.catan.warehouse.Warehouse;
 import com.ucm.dasi.catan.warehouse.exception.NegativeNumberException;
 
-public class ConnectionCostProvider {
+public class ConnectionCostProvider extends CostProvider<ConnectionType> {
+    
+    public ConnectionCostProvider(Map<ConnectionType, IWarehouse> costMap) {
+	super(costMap);
+    }
+
     public static IWarehouse buildCostFromType(ConnectionType type) {
 	switch (type) {
 	case Road: {
