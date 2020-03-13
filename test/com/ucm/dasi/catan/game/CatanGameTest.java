@@ -27,26 +27,6 @@ import com.ucm.dasi.catan.warehouse.exception.NegativeNumberException;
 
 public class CatanGameTest {
 
-    private IBoardStructure buildNoneStructure() {
-	return new BoardStructure(null, new Warehouse(), StructureType.None);
-    }
-    
-    private IBoardTerrain buildNoneTerrain() {
-	return new BoardTerrain(0, TerrainType.None);
-    }
-
-    private ICatanBoard buildStandardBoard() throws InvalidBoardDimensionsException, InvalidBoardElementException {
-	IBoardElement[][] elements = { { buildNoneStructure(), buildVoidConnection(), buildNoneStructure(), },
-		{ buildVoidConnection(), buildNoneTerrain(), buildVoidConnection(), },
-		{ buildNoneStructure(), buildVoidConnection(), buildNoneStructure(), }, };
-
-	return new CatanBoard(3, 3, elements);
-    }
-
-    private IBoardConnection buildVoidConnection() {
-	return new BoardConnection(null, new Warehouse(), ConnectionType.Void);
-    }
-
     @Test(expected = NonNullInputException.class)
     public void itMustNotBuildAGameWithACollectionOfNullPlayers() throws NonNullInputException,
 	    NonVoidCollectionException, InvalidBoardDimensionsException, InvalidBoardElementException {
@@ -113,5 +93,25 @@ public class CatanGameTest {
 	CatanGame<ICatanBoard> game = new CatanGame<ICatanBoard>(board, players);
 
 	assertSame(players, game.getPlayers());
+    }
+
+    private IBoardStructure buildNoneStructure() {
+	return new BoardStructure(null, new Warehouse(), StructureType.None);
+    }
+
+    private IBoardTerrain buildNoneTerrain() {
+	return new BoardTerrain(0, TerrainType.None);
+    }
+
+    private ICatanBoard buildStandardBoard() throws InvalidBoardDimensionsException, InvalidBoardElementException {
+	IBoardElement[][] elements = { { buildNoneStructure(), buildVoidConnection(), buildNoneStructure(), },
+		{ buildVoidConnection(), buildNoneTerrain(), buildVoidConnection(), },
+		{ buildNoneStructure(), buildVoidConnection(), buildNoneStructure(), }, };
+
+	return new CatanBoard(3, 3, elements);
+    }
+
+    private IBoardConnection buildVoidConnection() {
+	return new BoardConnection(null, new Warehouse(), ConnectionType.Void);
     }
 }

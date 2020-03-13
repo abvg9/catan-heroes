@@ -21,18 +21,6 @@ import com.ucm.dasi.catan.warehouse.Warehouse;
 
 public class CatanBoardTest {
 
-    private IBoardTerrain createNoneTerrain() {
-	return new BoardTerrain(0, TerrainType.None);
-    }
-
-    private IBoardStructure createNoneStructure() {
-	return new BoardStructure(null, new Warehouse(), StructureType.None);
-    }
-
-    private IBoardConnection createVoidConnection() {
-	return new BoardConnection(null, new Warehouse(), ConnectionType.Void);
-    }
-
     @Test
     public void itMustBeInitializable() throws InvalidBoardDimensionsException, InvalidBoardElementException {
 
@@ -116,5 +104,17 @@ public class CatanBoardTest {
 		{ createNoneStructure(), createVoidConnection(), createNoneStructure(), }, };
 
 	new CatanBoard(3, 3, elements);
+    }
+
+    private IBoardTerrain createNoneTerrain() {
+	return new BoardTerrain(0, TerrainType.None);
+    }
+
+    private IBoardStructure createNoneStructure() {
+	return new BoardStructure(null, new Warehouse(), StructureType.None);
+    }
+
+    private IBoardConnection createVoidConnection() {
+	return new BoardConnection(null, new Warehouse(), ConnectionType.Void);
     }
 }
