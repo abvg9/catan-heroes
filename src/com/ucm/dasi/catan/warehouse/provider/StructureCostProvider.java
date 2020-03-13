@@ -9,8 +9,12 @@ import com.ucm.dasi.catan.warehouse.IWarehouse;
 import com.ucm.dasi.catan.warehouse.Warehouse;
 import com.ucm.dasi.catan.warehouse.exception.NegativeNumberException;
 
-public class StructureCostProvider {
+public class StructureCostProvider extends CostProvider<StructureType> {
     
+    public StructureCostProvider(Map<StructureType, IWarehouse> costMap) {
+	super(costMap);
+    }
+
     public static IWarehouse buildCostFromType(StructureType type) {
 	switch (type) {
 	case City:
