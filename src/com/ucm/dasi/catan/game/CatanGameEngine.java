@@ -79,6 +79,11 @@ public abstract class CatanGameEngine extends CatanGame<ICatanEditableBoard> imp
     }
 
     private void handleBuildConnectionRequest(IBuildConnectionRequest request) {
+	if (request.getPlayer().getId() != getActivePlayer().getId()) {
+	    handleRequestError(request);
+	    return;
+	}
+	
 	BoardConnection element = new BoardConnection(request.getPlayer(),
 		connectionCostProvider.getCost(request.getType()), request.getType());
 
@@ -91,6 +96,11 @@ public abstract class CatanGameEngine extends CatanGame<ICatanEditableBoard> imp
     }
 
     private void handleBuildStructureRequest(IBuildStructureRequest request) {
+	if (request.getPlayer().getId() != getActivePlayer().getId()) {
+	    handleRequestError(request);
+	    return;
+	}
+	
 	BoardElement element = new BoardStructure(request.getPlayer(), structureCostProvider.getCost(request.getType()),
 		request.getType());
 
