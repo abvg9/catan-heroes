@@ -1,4 +1,7 @@
-package com.ucm.dasi.catan.actions.master;
+package com.ucm.dasi.catan.adapter.actions.master;
+
+import com.ucm.dasi.catan.adapter.actions.player.PlayerActions;
+import com.ucm.dasi.catan.adapter.master.Master;
 
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
@@ -6,11 +9,15 @@ import jade.lang.acl.ACLMessage;
 public class WaitMessage extends CyclicBehaviour {
 
     private static final long serialVersionUID = 1L;
+    
+    Master master;
+    
+    public WaitMessage(final Master master) {
+	this.master = master;
+    }
 
     @Override
     public void action() {
-
-	System.out.println(myAgent.getName() + ": I'm waiting for messages");
 
 	ACLMessage msg = myAgent.receive();
 
@@ -21,6 +28,16 @@ public class WaitMessage extends CyclicBehaviour {
 	    ACLMessage reply = msg.createReply();
 
 	    System.out.println(myAgent.getName() + ": " + sender + "send me a message => " + content);
+
+	    switch (PlayerActions.values()[msg.getPerformative()]) {
+	    case buildStructure:
+		break;
+	    case endTurn:
+		// Give turn to another player.
+		break;
+	    default:
+		break;
+	    }
 
 	    reply.setPerformative(ACLMessage.CONFIRM);
 	    reply.setContent("Receiver Roger Roger");

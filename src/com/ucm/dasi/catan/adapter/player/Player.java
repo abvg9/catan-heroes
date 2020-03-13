@@ -1,8 +1,9 @@
-package com.ucm.dasi.catan.player;
+package com.ucm.dasi.catan.adapter.player;
 
 import java.util.Map;
 import java.util.TreeMap;
-import com.ucm.dasi.catan.actions.player.WaitMessage;
+
+import com.ucm.dasi.catan.adapter.actions.player.WaitMessage;
 import com.ucm.dasi.catan.warehouse.Warehouse;
 import jade.core.Agent;
 
@@ -23,10 +24,6 @@ public class Player extends Agent implements IPlayer {
     protected void setup() {
 
 	name = getAID().getName().split("@")[0];
-
-	// TO DELETE
-	System.out.println("Hello, my name is " + name);
-
 	points = 0;
 
 	Object[] args = getArguments();
@@ -42,15 +39,20 @@ public class Player extends Agent implements IPlayer {
 	    playersInformation.remove(name);
 
 	    // Our player always waits for messages.
-	    addBehaviour(new WaitMessage());
+	    addBehaviour(new WaitMessage(this));
 
 	} else {
-	    // NO PUEDO HACERLO MEDIANTE EXCEPCIONES :(
-	    System.err.println("Player " + name + " received an invalid arguments.");
+	    
 	    // Some error has ocurred.
-	    doDelete();
+	    System.err.println("Player " + name + " received an invalid arguments.");
+	    endGame();
 	}
 
+    }
+
+    @Override
+    public void endGame() {
+	doDelete();
     }
 
 }

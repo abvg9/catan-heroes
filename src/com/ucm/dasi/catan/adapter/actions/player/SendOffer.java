@@ -1,8 +1,9 @@
-package com.ucm.dasi.catan.actions.player;
+package com.ucm.dasi.catan.adapter.actions.player;
 
 import java.util.Set;
-import com.ucm.dasi.catan.actions.ActionTypes;
-import com.ucm.dasi.catan.actions.SendMessage;
+
+import com.ucm.dasi.catan.adapter.actions.SendMessage;
+
 import jade.core.Agent;
 import jade.core.behaviours.OneShotBehaviour;
 
@@ -19,7 +20,7 @@ public class SendOffer extends OneShotBehaviour {
 
     @Override
     public void action() {
-	agent.addBehaviour(new SendMessage(receivers, ActionTypes.sendOffer.getValue(), ""));
+	agent.addBehaviour(new SendMessage(receivers, PlayerActions.sendOffer.getValue()));
     }
 
 }

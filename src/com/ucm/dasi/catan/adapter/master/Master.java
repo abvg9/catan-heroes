@@ -1,10 +1,11 @@
-package com.ucm.dasi.catan.master;
+package com.ucm.dasi.catan.adapter.master;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.TreeMap;
+
 import com.ucm.dasi.catan.warehouse.Warehouse;
 import jade.core.Agent;
 import jade.core.Profile;
@@ -37,8 +38,9 @@ public class Master extends Agent implements IMaster {
 		createPlayer(player.getKey());
 	    }
 	    
-	    // Init game and ...
+	    // Give turns and shuffle.
 	    
+	    // Give turn to player and wait.
 
 	} catch (FileNotFoundException e) {
 	    e.printStackTrace();
@@ -77,11 +79,15 @@ public class Master extends Agent implements IMaster {
 
 	while (sc.hasNextLine()) {
 	    line = sc.nextLine();
-
 	    playersInformation.put(line, new Warehouse());
 	}
 
 	sc.close();
+    }
+
+    @Override
+    public void endGame() {
+	doDelete();
     }
 
 }

@@ -1,4 +1,4 @@
-package com.ucm.dasi.catan.master;
+package com.ucm.dasi.catan.adapter.master;
 
 import java.io.FileNotFoundException;
 
@@ -9,5 +9,7 @@ public interface IMaster {
     void createPlayer(final String name);
 
     void loadArguments() throws FileNotFoundException;
+    
+    void endGame();
 
 }

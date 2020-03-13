@@ -1,7 +1,9 @@
-package com.ucm.dasi.catan.actions.master;
+package com.ucm.dasi.catan.adapter.actions.master;
 
 import java.util.Set;
-import com.ucm.dasi.catan.actions.SendMessage;
+
+import com.ucm.dasi.catan.adapter.actions.SendMessage;
+
 import jade.core.Agent;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;

@@ -1,4 +1,4 @@
-package com.ucm.dasi.catan.actions;
+package com.ucm.dasi.catan.adapter.actions;
 
 import java.util.Set;
 import jade.core.AID;
@@ -18,6 +18,12 @@ public class SendMessage extends OneShotBehaviour {
 	this.receivers = receivers;
 	this.typeOfMessage = typeOfMessage;
 	this.message = message;
+    }
+    
+    public SendMessage(final Set<String> receivers, final int typeOfMessage) {
+	this.receivers = receivers;
+	this.typeOfMessage = typeOfMessage;
+	this.message = "";
     }
 
     public void action() {
