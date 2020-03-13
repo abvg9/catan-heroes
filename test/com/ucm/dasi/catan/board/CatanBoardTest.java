@@ -17,6 +17,7 @@ import com.ucm.dasi.catan.board.structure.StructureType;
 import com.ucm.dasi.catan.board.terrain.BoardTerrain;
 import com.ucm.dasi.catan.board.terrain.IBoardTerrain;
 import com.ucm.dasi.catan.board.terrain.TerrainType;
+import com.ucm.dasi.catan.warehouse.Warehouse;
 
 public class CatanBoardTest {
 
@@ -29,7 +30,7 @@ public class CatanBoardTest {
     }
 
     private IBoardConnection createVoidConnection() {
-	return new BoardConnection(null, ConnectionType.Void);
+	return new BoardConnection(null, new Warehouse(), ConnectionType.Void);
     }
 
     @Test
