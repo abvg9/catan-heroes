@@ -10,22 +10,18 @@ import com.ucm.dasi.catan.warehouse.Warehouse;
 import com.ucm.dasi.catan.warehouse.exception.NegativeNumberException;
 
 public class StructureCostProvider extends CostProvider<StructureType> {
-    
+
     public StructureCostProvider(Map<StructureType, IWarehouse> costMap) {
 	super(costMap);
     }
 
-    public static IWarehouse buildCostFromType(StructureType type) {
-	switch (type) {
-	case City:
-	    return buildCityCost();
-	case Settlement:
-	    return buildSettlementCost();
-	default:
-	    return new Warehouse();
-	}
+    public static StructureCostProvider buildDefaultProvider() {
+	TreeMap<StructureType, IWarehouse> costMap = new TreeMap<StructureType, IWarehouse>();
+	costMap.put(StructureType.City, buildCityCost());
+	costMap.put(StructureType.Settlement, buildSettlementCost());
+	return new StructureCostProvider(costMap);
     }
-    
+
     private static IWarehouse buildCityCost() {
 	Map<ResourceType, Integer> costMap = new TreeMap<ResourceType, Integer>();
 	costMap.put(ResourceType.Grain, 2);

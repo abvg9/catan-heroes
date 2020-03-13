@@ -28,7 +28,7 @@ import com.ucm.dasi.catan.warehouse.exception.NegativeNumberException;
 public class CatanGameTest {
 
     private IBoardStructure buildNoneStructure() {
-	return new BoardStructure(null, StructureType.None);
+	return new BoardStructure(null, new Warehouse(), StructureType.None);
     }
     
     private IBoardTerrain buildNoneTerrain() {

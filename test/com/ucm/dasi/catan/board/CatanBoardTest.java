@@ -26,7 +26,7 @@ public class CatanBoardTest {
     }
 
     private IBoardStructure createNoneStructure() {
-	return new BoardStructure(null, StructureType.None);
+	return new BoardStructure(null, new Warehouse(), StructureType.None);
     }
 
     private IBoardConnection createVoidConnection() {
@@ -38,7 +38,7 @@ public class CatanBoardTest {
 
 	IBoardElement[][] elements = { { createNoneStructure(), createVoidConnection(), createNoneStructure(), },
 		{ createVoidConnection(), createNoneTerrain(), createVoidConnection(), },
-		{ createNoneStructure(), createVoidConnection(), new BoardStructure(null, StructureType.None), }, };
+		{ createNoneStructure(), createVoidConnection(), createNoneStructure(), }, };
 
 	CatanBoard board = new CatanBoard(3, 3, elements);
 
@@ -110,11 +110,11 @@ public class CatanBoardTest {
     @Test(expected = InvalidBoardElementException.class)
     public void itMustFailIfAFalseStructureIsProvided()
 	    throws InvalidBoardDimensionsException, InvalidBoardElementException {
-	
+
 	IBoardElement[][] elements = { { createNoneTerrain(), createVoidConnection(), createNoneStructure(), },
 		{ createVoidConnection(), createNoneTerrain(), createVoidConnection(), },
 		{ createNoneStructure(), createVoidConnection(), createNoneStructure(), }, };
-	
+
 	new CatanBoard(3, 3, elements);
     }
 }
