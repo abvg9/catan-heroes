@@ -14,10 +14,13 @@ import com.ucm.dasi.catan.request.IBuildConnectionRequest;
 import com.ucm.dasi.catan.request.IBuildStructureRequest;
 import com.ucm.dasi.catan.request.IRequest;
 import com.ucm.dasi.catan.warehouse.exception.NotEnoughtResourcesException;
+import com.ucm.dasi.catan.warehouse.provider.ConnectionCostProvider;
 
 import java.util.function.Consumer;
 
 public abstract class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements ICatanGameEngine {
+
+    private ConnectionCostProvider connectionCostProvider;
 
     private Consumer<IRequest> errorHandler;
 
@@ -28,6 +31,7 @@ public abstract class CatanGameEngine extends CatanGame<ICatanEditableBoard> imp
 
 	super(board, players);
 
+	this.connectionCostProvider = ConnectionCostProvider.buildDefaultProvider();
 	this.errorHandler = errorHandler;
 	this.handlersMap = new GameEngineHandlersMap(generateMap());
     }
@@ -65,14 +69,14 @@ public abstract class CatanGameEngine extends CatanGame<ICatanEditableBoard> imp
 
 	map.put(IBuildConnectionRequest.class,
 		(IBuildConnectionRequest request) -> handleBuildConnectionRequest(request));
-	map.put(IBuildStructureRequest.class,
-		(IBuildStructureRequest request) -> handleBuildStructureRequest(request));
+	map.put(IBuildStructureRequest.class, (IBuildStructureRequest request) -> handleBuildStructureRequest(request));
 
 	return map;
     }
 
     private void handleBuildConnectionRequest(IBuildConnectionRequest request) {
-	BoardConnection element = new BoardConnection(request.getPlayer(), request.getType());
+	BoardConnection element = new BoardConnection(request.getPlayer(),
+		connectionCostProvider.getCost(request.getType()), request.getType());
 
 	try {
 	    getBoard().build(element, request.getX(), request.getY());

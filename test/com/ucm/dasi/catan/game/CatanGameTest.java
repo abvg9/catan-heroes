@@ -8,12 +8,15 @@ import com.ucm.dasi.catan.board.CatanBoard;
 import com.ucm.dasi.catan.board.ICatanBoard;
 import com.ucm.dasi.catan.board.connection.BoardConnection;
 import com.ucm.dasi.catan.board.connection.ConnectionType;
+import com.ucm.dasi.catan.board.connection.IBoardConnection;
 import com.ucm.dasi.catan.board.element.IBoardElement;
 import com.ucm.dasi.catan.board.exception.InvalidBoardDimensionsException;
 import com.ucm.dasi.catan.board.exception.InvalidBoardElementException;
 import com.ucm.dasi.catan.board.structure.BoardStructure;
+import com.ucm.dasi.catan.board.structure.IBoardStructure;
 import com.ucm.dasi.catan.board.structure.StructureType;
 import com.ucm.dasi.catan.board.terrain.BoardTerrain;
+import com.ucm.dasi.catan.board.terrain.IBoardTerrain;
 import com.ucm.dasi.catan.board.terrain.TerrainType;
 import com.ucm.dasi.catan.exception.NonNullInputException;
 import com.ucm.dasi.catan.exception.NonVoidCollectionException;
@@ -24,16 +27,24 @@ import com.ucm.dasi.catan.warehouse.exception.NegativeNumberException;
 
 public class CatanGameTest {
 
+    private IBoardStructure buildNoneStructure() {
+	return new BoardStructure(null, StructureType.None);
+    }
+    
+    private IBoardTerrain buildNoneTerrain() {
+	return new BoardTerrain(0, TerrainType.None);
+    }
+
     private ICatanBoard buildStandardBoard() throws InvalidBoardDimensionsException, InvalidBoardElementException {
-	IBoardElement[][] elements = {
-		{ new BoardStructure(null, StructureType.None), new BoardConnection(null, ConnectionType.Void),
-			new BoardStructure(null, StructureType.None), },
-		{ new BoardConnection(null, ConnectionType.Void), new BoardTerrain(0, TerrainType.None),
-			new BoardConnection(null, ConnectionType.Void), },
-		{ new BoardStructure(null, StructureType.None), new BoardConnection(null, ConnectionType.Void),
-			new BoardStructure(null, StructureType.None), }, };
+	IBoardElement[][] elements = { { buildNoneStructure(), buildVoidConnection(), buildNoneStructure(), },
+		{ buildVoidConnection(), buildNoneTerrain(), buildVoidConnection(), },
+		{ buildNoneStructure(), buildVoidConnection(), buildNoneStructure(), }, };
 
 	return new CatanBoard(3, 3, elements);
+    }
+
+    private IBoardConnection buildVoidConnection() {
+	return new BoardConnection(null, new Warehouse(), ConnectionType.Void);
     }
 
     @Test(expected = NonNullInputException.class)

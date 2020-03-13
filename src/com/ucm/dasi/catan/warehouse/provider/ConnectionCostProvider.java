@@ -14,15 +14,11 @@ public class ConnectionCostProvider extends CostProvider<ConnectionType> {
     public ConnectionCostProvider(Map<ConnectionType, IWarehouse> costMap) {
 	super(costMap);
     }
-
-    public static IWarehouse buildCostFromType(ConnectionType type) {
-	switch (type) {
-	case Road: {
-	    return buildRoadCost();
-	}
-	default:
-	    return new Warehouse();
-	}
+    
+    public static ConnectionCostProvider buildDefaultProvider() {
+	TreeMap<ConnectionType, IWarehouse> costMap = new TreeMap<ConnectionType, IWarehouse>();
+	costMap.put(ConnectionType.Road, buildRoadCost());
+	return new ConnectionCostProvider(costMap);
     }
 
     private static IWarehouse buildRoadCost() {
