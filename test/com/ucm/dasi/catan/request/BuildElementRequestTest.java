@@ -6,14 +6,14 @@ import org.junit.Test;
 import com.ucm.dasi.catan.board.BoardElementType;
 import com.ucm.dasi.catan.player.IPlayer;
 import com.ucm.dasi.catan.player.Player;
-import com.ucm.dasi.catan.warehouse.Warehouse;
-import com.ucm.dasi.catan.warehouse.exception.NegativeNumberException;
+import com.ucm.dasi.catan.resource.ResourceManager;
+import com.ucm.dasi.catan.resource.exception.NegativeNumberException;
 
 public class BuildElementRequestTest {
     
     @Test
     public void mustStoreInitialValues() throws NegativeNumberException {
-	IPlayer player = new Player(0, new Warehouse());
+	IPlayer player = new Player(0, new ResourceManager());
 	BoardElementType type = BoardElementType.Connection;
 	int x = 0;
 	int y = 1;

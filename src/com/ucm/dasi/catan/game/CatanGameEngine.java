@@ -12,9 +12,9 @@ import com.ucm.dasi.catan.player.IPlayer;
 import com.ucm.dasi.catan.request.IBuildConnectionRequest;
 import com.ucm.dasi.catan.request.IBuildStructureRequest;
 import com.ucm.dasi.catan.request.IRequest;
-import com.ucm.dasi.catan.warehouse.exception.NotEnoughtResourcesException;
-import com.ucm.dasi.catan.warehouse.provider.ConnectionCostProvider;
-import com.ucm.dasi.catan.warehouse.provider.StructureCostProvider;
+import com.ucm.dasi.catan.resource.exception.NotEnoughtResourcesException;
+import com.ucm.dasi.catan.resource.provider.ConnectionCostProvider;
+import com.ucm.dasi.catan.resource.provider.StructureCostProvider;
 
 import java.util.function.Consumer;
 
