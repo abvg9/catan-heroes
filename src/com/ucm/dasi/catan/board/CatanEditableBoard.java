@@ -17,8 +17,8 @@ public class CatanEditableBoard extends CatanBoard implements ICatanEditableBoar
     @Override
     public void build(IBoardElement element, int x, int y) throws InvalidBoardElementException {
 
-	if (!isValidBuild(element, x, y)) {
-	    throw new InvalidBoardElementException();
+	if (null == element || !isValidBuild(element, x, y)) {
+	    throw new InvalidBoardElementException(element == null ? null : element.getElementType());
 	}
 	this.elements[x][y] = element;
     }

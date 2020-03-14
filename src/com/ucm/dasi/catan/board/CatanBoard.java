@@ -99,7 +99,8 @@ public class CatanBoard implements ICatanBoard {
 
 	    for (int j = 0; j < height; ++j) {
 		if (null == elements[i][j] || !checkElementType(elements[i][j].getElementType(), i, j)) {
-		    throw new InvalidBoardElementException();
+		    throw new InvalidBoardElementException(
+			    null == elements[i][j] ? null : elements[i][j].getElementType());
 		}
 		this.elements[i][j] = elements[i][j];
 	    }
