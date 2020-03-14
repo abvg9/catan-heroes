@@ -47,35 +47,9 @@ public class Player extends Agent implements IPlayer {
 	    // Our player always waits for messages.
 	    addBehaviour(new WaitMessage(this));
 
-	    // CODIGO DE PRUEBAA
-	    try {
-		Thread.sleep(5000);
-	    } catch (InterruptedException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	    }
-
-	    Map<ResourceType, Integer> offer = Map.of(ResourceType.Ore, 2, ResourceType.Brick, 2, ResourceType.Wool,
-		    0, ResourceType.Lumber, 0, ResourceType.Gain, 0);
-
-	    Map<ResourceType, Integer> request = Map.of(ResourceType.Ore, 0, ResourceType.Brick, 0, ResourceType.Wool,
-		    0, ResourceType.Lumber, 2, ResourceType.Gain, 2);
-
-	    Warehouse[] offerAndRequest = new Warehouse[2];
-	    try {
-		offerAndRequest[0] = new Warehouse(offer);
-		offerAndRequest[1] = new Warehouse(request);
-	    } catch (NegativeNumberException e) {
-		e.printStackTrace();
-	    }
-	   
-	    if (name.equals("gamer1")) {
-		addBehaviour(new SendOffer(new HashSet<>(Arrays.asList("gamer2")), this, PlayerActions.sendOffer.getValue(), offerAndRequest));
-	    }
-
 	} else {
 
-	    // Some error has ocurred.
+	    // Some error has occurred.
 	    System.err.println("Player " + name + " received an invalid arguments.");
 	    endGame();
 	}
