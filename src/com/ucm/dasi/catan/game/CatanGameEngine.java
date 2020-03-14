@@ -2,7 +2,6 @@ package com.ucm.dasi.catan.game;
 
 import com.ucm.dasi.catan.board.ICatanEditableBoard;
 import com.ucm.dasi.catan.board.connection.BoardConnection;
-import com.ucm.dasi.catan.board.element.BoardElement;
 import com.ucm.dasi.catan.board.exception.InvalidBoardElementException;
 import com.ucm.dasi.catan.board.structure.BoardStructure;
 import com.ucm.dasi.catan.exception.NonNullInputException;
@@ -83,7 +82,7 @@ public abstract class CatanGameEngine extends CatanGame<ICatanEditableBoard> imp
 	    handleRequestError(request);
 	    return;
 	}
-	
+
 	BoardConnection element = new BoardConnection(request.getPlayer(),
 		connectionCostProvider.getCost(request.getType()), request.getType());
 
@@ -100,13 +99,14 @@ public abstract class CatanGameEngine extends CatanGame<ICatanEditableBoard> imp
 	    handleRequestError(request);
 	    return;
 	}
-	
-	BoardElement element = new BoardStructure(request.getPlayer(), structureCostProvider.getCost(request.getType()),
-		request.getType());
+
+	BoardStructure element = new BoardStructure(request.getPlayer(),
+		structureCostProvider.getCost(request.getType()), request.getType());
 
 	try {
 	    getBoard().build(element, request.getX(), request.getY());
-	} catch (InvalidBoardElementException e) {
+	    getActivePlayer().getWarehouse().substract(element.getCost());
+	} catch (InvalidBoardElementException | NotEnoughtResourcesException e) {
 	    handleRequestError(request);
 	}
     }
