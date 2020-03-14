@@ -1,13 +1,12 @@
-package com.ucm.dasi.catan.warehouse;
+package com.ucm.dasi.catan.resource;
 
 import java.util.Map;
 import java.util.TreeMap;
 
-import com.ucm.dasi.catan.resource.ResourceType;
-import com.ucm.dasi.catan.warehouse.exception.NegativeNumberException;
-import com.ucm.dasi.catan.warehouse.exception.NotEnoughtResourcesException;
+import com.ucm.dasi.catan.resource.exception.NegativeNumberException;
+import com.ucm.dasi.catan.resource.exception.NotEnoughtResourcesException;
 
-public class Warehouse implements IWarehouse {
+public class ResourceManager implements IResourceManager {
 
     /* Atributes */
 
@@ -16,7 +15,7 @@ public class Warehouse implements IWarehouse {
 
     /* Constructors */
 
-    public Warehouse() {
+    public ResourceManager() {
 
 	resources = new TreeMap<ResourceType, Integer>();
 	quantityResources = 0;
@@ -26,7 +25,7 @@ public class Warehouse implements IWarehouse {
 	}
     }
 
-    public Warehouse(Map<ResourceType, Integer> resources) throws NegativeNumberException {
+    public ResourceManager(Map<ResourceType, Integer> resources) throws NegativeNumberException {
 	this();
 
 	for (ResourceType resourceType : ResourceType.values()) {
@@ -39,7 +38,7 @@ public class Warehouse implements IWarehouse {
 
     }
     
-    public Warehouse(IWarehouse warehouse) throws NegativeNumberException {
+    public ResourceManager(IResourceManager warehouse) throws NegativeNumberException {
 	this();
 	
 	for (ResourceType resourceType : ResourceType.values()) {   
@@ -51,12 +50,12 @@ public class Warehouse implements IWarehouse {
     
     @Override
     public boolean equals(Object object) {
-	if (!(object instanceof IWarehouse)) {
+	if (!(object instanceof IResourceManager)) {
 	    return false;
 	}
 	
 	for (ResourceType resourceType : ResourceType.values()) {   
-	    if (this.getResource(resourceType) != ((IWarehouse)object).getResource(resourceType)) {
+	    if (this.getResource(resourceType) != ((IResourceManager)object).getResource(resourceType)) {
 		return false;
 	    }
 	}
@@ -72,7 +71,7 @@ public class Warehouse implements IWarehouse {
 	return quantityResources;
     }
 
-    public void substract(IWarehouse resourcesToPay) throws NotEnoughtResourcesException {
+    public void substract(IResourceManager resourcesToPay) throws NotEnoughtResourcesException {
 
 	try {
 	    for (ResourceType resourceType : ResourceType.values()) {
@@ -84,7 +83,7 @@ public class Warehouse implements IWarehouse {
 	}
     }
 
-    public void add(IWarehouse resourcesToPay) throws NegativeNumberException {
+    public void add(IResourceManager resourcesToPay) throws NegativeNumberException {
 
 	for (ResourceType resourceType : ResourceType.values()) {
 	    int resourceQuantity = resourcesToPay.getResource(resourceType);

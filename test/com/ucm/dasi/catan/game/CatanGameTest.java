@@ -22,8 +22,8 @@ import com.ucm.dasi.catan.exception.NonNullInputException;
 import com.ucm.dasi.catan.exception.NonVoidCollectionException;
 import com.ucm.dasi.catan.player.IPlayer;
 import com.ucm.dasi.catan.player.Player;
-import com.ucm.dasi.catan.warehouse.Warehouse;
-import com.ucm.dasi.catan.warehouse.exception.NegativeNumberException;
+import com.ucm.dasi.catan.resource.ResourceManager;
+import com.ucm.dasi.catan.resource.exception.NegativeNumberException;
 
 public class CatanGameTest {
 
@@ -39,7 +39,7 @@ public class CatanGameTest {
     @Test(expected = NonNullInputException.class)
     public void itMustNotBuildAGameWithANullBoard()
 	    throws NonNullInputException, NonVoidCollectionException, NegativeNumberException {
-	IPlayer[] players = { new Player(0, new Warehouse()) };
+	IPlayer[] players = { new Player(0, new ResourceManager()) };
 	new CatanGame<ICatanBoard>(null, players);
     }
 
@@ -65,7 +65,7 @@ public class CatanGameTest {
     public void itMustReturnTheActivePlayer() throws NonNullInputException, NonVoidCollectionException,
 	    NegativeNumberException, InvalidBoardDimensionsException, InvalidBoardElementException {
 
-	IPlayer activePlayer = new Player(0, new Warehouse());
+	IPlayer activePlayer = new Player(0, new ResourceManager());
 	IPlayer[] players = { activePlayer };
 	ICatanBoard board = buildStandardBoard();
 	CatanGame<ICatanBoard> game = new CatanGame<ICatanBoard>(board, players);
@@ -77,7 +77,7 @@ public class CatanGameTest {
     public void itMustReturnTheBoard() throws NonNullInputException, NonVoidCollectionException,
 	    NegativeNumberException, InvalidBoardDimensionsException, InvalidBoardElementException {
 
-	IPlayer[] players = { new Player(0, new Warehouse()) };
+	IPlayer[] players = { new Player(0, new ResourceManager()) };
 	ICatanBoard board = buildStandardBoard();
 	CatanGame<ICatanBoard> game = new CatanGame<ICatanBoard>(board, players);
 
@@ -88,7 +88,7 @@ public class CatanGameTest {
     public void itMustReturnTheStoredPlayersCollection() throws NonNullInputException, NonVoidCollectionException,
 	    NegativeNumberException, InvalidBoardDimensionsException, InvalidBoardElementException {
 
-	IPlayer[] players = { new Player(0, new Warehouse()) };
+	IPlayer[] players = { new Player(0, new ResourceManager()) };
 	ICatanBoard board = buildStandardBoard();
 	CatanGame<ICatanBoard> game = new CatanGame<ICatanBoard>(board, players);
 
@@ -96,7 +96,7 @@ public class CatanGameTest {
     }
 
     private IBoardStructure buildNoneStructure() {
-	return new BoardStructure(null, new Warehouse(), StructureType.None);
+	return new BoardStructure(null, new ResourceManager(), StructureType.None);
     }
 
     private IBoardTerrain buildNoneTerrain() {
@@ -112,6 +112,6 @@ public class CatanGameTest {
     }
 
     private IBoardConnection buildVoidConnection() {
-	return new BoardConnection(null, new Warehouse(), ConnectionType.Void);
+	return new BoardConnection(null, new ResourceManager(), ConnectionType.Void);
     }
 }

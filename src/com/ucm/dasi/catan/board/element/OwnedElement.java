@@ -2,17 +2,17 @@ package com.ucm.dasi.catan.board.element;
 
 import com.ucm.dasi.catan.board.BoardElementType;
 import com.ucm.dasi.catan.player.IPlayer;
-import com.ucm.dasi.catan.warehouse.IWarehouse;
-import com.ucm.dasi.catan.warehouse.Warehouse;
-import com.ucm.dasi.catan.warehouse.exception.NegativeNumberException;
+import com.ucm.dasi.catan.resource.IResourceManager;
+import com.ucm.dasi.catan.resource.ResourceManager;
+import com.ucm.dasi.catan.resource.exception.NegativeNumberException;
 
 public abstract class OwnedElement extends BoardElement implements IOwnedElement {
 
-    private IWarehouse cost;
+    private IResourceManager cost;
     
     private IPlayer owner;
     
-    public OwnedElement(BoardElementType type, IWarehouse cost, IPlayer owner) {
+    public OwnedElement(BoardElementType type, IResourceManager cost, IPlayer owner) {
 	super(type);
 	
 	this.cost = cost;
@@ -20,9 +20,9 @@ public abstract class OwnedElement extends BoardElement implements IOwnedElement
     }
     
     @Override
-    public IWarehouse getCost() {
+    public IResourceManager getCost() {
 	try {
-	    return new Warehouse(cost);
+	    return new ResourceManager(cost);
 	} catch (NegativeNumberException e) {
 	    return null;
 	}
