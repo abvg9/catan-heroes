@@ -40,7 +40,7 @@ public class ResourceManager implements IResourceManager {
     
     public ResourceManager(IResourceManager warehouse) throws NegativeNumberException {
 	this();
-	
+
 	for (ResourceType resourceType : ResourceType.values()) {   
 	    setResource(resourceType, warehouse.getResource(resourceType));
 	}
