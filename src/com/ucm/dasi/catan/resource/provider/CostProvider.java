@@ -1,28 +1,28 @@
-package com.ucm.dasi.catan.warehouse.provider;
+package com.ucm.dasi.catan.resource.provider;
 
 import java.util.Map;
 import java.util.TreeMap;
 
-import com.ucm.dasi.catan.warehouse.IWarehouse;
-import com.ucm.dasi.catan.warehouse.Warehouse;
-import com.ucm.dasi.catan.warehouse.exception.NegativeNumberException;
+import com.ucm.dasi.catan.resource.IResourceManager;
+import com.ucm.dasi.catan.resource.ResourceManager;
+import com.ucm.dasi.catan.resource.exception.NegativeNumberException;
 
 public class CostProvider<TType extends Comparable<TType>> implements ICostProvider<TType> {
 
-    protected TreeMap<TType, IWarehouse> costMap;
+    protected TreeMap<TType, IResourceManager> costMap;
     
-    public CostProvider(Map<TType, IWarehouse> costMap) {
-	this.costMap = new TreeMap<TType, IWarehouse>(costMap);
+    public CostProvider(Map<TType, IResourceManager> costMap) {
+	this.costMap = new TreeMap<TType, IResourceManager>(costMap);
     }
     
     @Override
-    public IWarehouse getCost(TType type) {
-	IWarehouse storedCost = this.costMap.get(type);
+    public IResourceManager getCost(TType type) {
+	IResourceManager storedCost = this.costMap.get(type);
 	
 	try {
-	    return storedCost == null ? new Warehouse() : new Warehouse(storedCost);
+	    return storedCost == null ? new ResourceManager() : new ResourceManager(storedCost);
 	} catch (NegativeNumberException e) {
-	    return new Warehouse();
+	    return new ResourceManager();
 	}
     }
 }
