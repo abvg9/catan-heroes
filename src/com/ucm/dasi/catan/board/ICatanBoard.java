@@ -9,6 +9,8 @@ public interface ICatanBoard {
     IBoardElement get(int x, int y);
 
     IBoardConnection getEastConnection(int x, int y);
+    
+    int getHeight();
 
     IBoardConnection getNorthConnection(int x, int y);
 
@@ -19,4 +21,6 @@ public interface ICatanBoard {
     IBoardTerrain getTerrain(int x, int y);
 
     IBoardStructure getStructure(int x, int y);
+    
+    int getWidth();
 }
