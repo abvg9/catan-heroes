@@ -18,7 +18,7 @@ import com.ucm.dasi.catan.resource.provider.StructureCostProvider;
 
 import java.util.function.Consumer;
 
-public abstract class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements ICatanGameEngine {
+public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements ICatanGameEngine {
 
     private ConnectionCostProvider connectionCostProvider;
 

@@ -6,6 +6,8 @@ import com.ucm.dasi.catan.board.exception.InvalidBoardDimensionsException;
 import com.ucm.dasi.catan.board.exception.InvalidBoardElementException;
 import com.ucm.dasi.catan.board.structure.IBoardStructure;
 import com.ucm.dasi.catan.board.structure.StructureType;
+import com.ucm.dasi.catan.board.terrain.IBoardTerrain;
+import com.ucm.dasi.catan.board.terrain.TerrainType;
 
 public class CatanEditableBoard extends CatanBoard implements ICatanEditableBoard {
 
@@ -26,24 +28,30 @@ public class CatanEditableBoard extends CatanBoard implements ICatanEditableBoar
 
     private boolean isValidBuild(IBoardElement element, int x, int y) {
 
-	boolean isValidElementToBuild;
-	if (null == elements[x][y]) {
-	    isValidElementToBuild = this.isValidBuildNew(element);
-	} else {
-	    isValidElementToBuild = this.isValidBuildUpgrade(element, elements[x][y]);
-	}
-
-	if (!isValidElementToBuild) {
+	if (!this.checkElementType(element.getElementType(), x, y)) {
 	    return false;
 	}
 
-	return this.checkElementType(element.getElementType(), x, y);
+	if (null == elements[x][y]) {
+	    return this.isValidBuildNew(element, x, y);
+	} else {
+	    return this.isValidBuildUpgrade(element, elements[x][y]);
+	}
     }
 
-    private boolean isValidBuildNew(IBoardElement element) {
+    private boolean isValidBuildNew(IBoardElement element, int x, int y) {
 
 	return element.getElementType() != BoardElementType.Structure
-		|| ((IBoardStructure) element).getType() != StructureType.City;
+		|| ((IBoardStructure) element).getType() != StructureType.City && this.isNonVoidTerrainCloseTo(x, y);
+    }
+
+    private boolean isNonVoidTerrainCloseTo(int x, int y) {
+
+	return get(x, y).getElementType() == BoardElementType.Structure
+		&& (x - 1 >= 0 && y - 1 >= 0 && ((IBoardTerrain) get(x - 1, y - 1)).getType() != TerrainType.None)
+		|| (x - 1 >= 0 && y + 1 < getHeight() && ((IBoardTerrain) get(x - 1, y + 1)).getType() != TerrainType.None)
+		|| (x + 1 < getWidth() && y - 1 >= 0 && ((IBoardTerrain) get(x + 1, y - 1)).getType() != TerrainType.None)
+		|| (x + 1 < getWidth() && y + 1 < getHeight() && ((IBoardTerrain) get(x + 1, y + 1)).getType() != TerrainType.None);
     }
 
     private boolean isValidBuildUpgrade(IBoardElement element, IBoardElement oldElement) {
