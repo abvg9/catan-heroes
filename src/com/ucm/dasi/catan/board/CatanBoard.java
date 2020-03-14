@@ -34,6 +34,11 @@ public class CatanBoard implements ICatanBoard {
     public IBoardConnection getEastConnection(int x, int y) {
 	return (IBoardConnection) this.elements[2 * x + 2][2 * y + 1];
     }
+    
+    @Override
+    public int getHeight() {
+        return height;
+    }
 
     @Override
     public IBoardConnection getNorthConnection(int x, int y) {
@@ -48,6 +53,11 @@ public class CatanBoard implements ICatanBoard {
     @Override
     public IBoardConnection getWestConnection(int x, int y) {
 	return (IBoardConnection) this.elements[2 * x][2 * y + 1];
+    }
+    
+    @Override
+    public int getWidth() {
+        return width;
     }
 
     @Override
