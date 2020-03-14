@@ -1,4 +1,4 @@
-package com.ucm.dasi.catan.warehouse;
+package com.ucm.dasi.catan.resource;
 
 import static org.junit.Assert.assertEquals;
 import java.util.Map;
@@ -9,7 +9,7 @@ import com.ucm.dasi.catan.resource.ResourceManager;
 import com.ucm.dasi.catan.resource.exception.NegativeNumberException;
 import com.ucm.dasi.catan.resource.exception.NotEnoughtResourcesException;
 
-public class WarehouseTest {
+public class ResourceManagerTest {
 
     /* CHECK QUANTITY TESTS */
 
