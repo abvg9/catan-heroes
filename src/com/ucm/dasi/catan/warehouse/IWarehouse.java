@@ -4,7 +4,9 @@ import com.ucm.dasi.catan.resource.ResourceType;
 import com.ucm.dasi.catan.warehouse.exception.NegativeNumberException;
 import com.ucm.dasi.catan.warehouse.exception.NotEnoughtResourcesException;
 
-public interface IWarehouse {
+import jade.util.leap.Serializable;
+
+public interface IWarehouse extends Serializable {
 
     /* Methods */
 

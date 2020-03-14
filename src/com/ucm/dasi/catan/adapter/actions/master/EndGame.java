@@ -11,9 +11,9 @@ import jade.lang.acl.ACLMessage;
 public class EndGame extends OneShotBehaviour {
 
     private static final long serialVersionUID = 1L;
-    Set<String> players;
-    String winner;
-    Agent agent;
+    private Set<String> players;
+    private String winner;
+    private Agent agent;
 
     public EndGame(final Set<String> players, final String winner, Agent agent) {
 	this.players = players;

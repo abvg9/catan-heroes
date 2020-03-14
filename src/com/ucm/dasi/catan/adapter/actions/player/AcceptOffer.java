@@ -11,8 +11,8 @@ import jade.core.behaviours.OneShotBehaviour;
 public class AcceptOffer extends OneShotBehaviour {
 
     private static final long serialVersionUID = 1L;
-    String receiver;
-    Agent agent;
+    private String receiver;
+    private Agent agent;
 
     public AcceptOffer(final String receiver, Agent agent) {
 	this.receiver = receiver;

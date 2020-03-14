@@ -11,13 +11,11 @@ import jade.core.behaviours.OneShotBehaviour;
 public class GiveTurn extends OneShotBehaviour {
 
     private static final long serialVersionUID = 1L;
-    String receiver;
-    int turn;
-    Agent agent;
+    private String receiver;
+    private Agent agent;
 
-    public GiveTurn(final String receiver, final int turn, Agent agent) {
+    public GiveTurn(final String receiver, Agent agent) {
 	this.receiver = receiver;
-	this.turn = turn;
 	this.agent = agent;
     }
 

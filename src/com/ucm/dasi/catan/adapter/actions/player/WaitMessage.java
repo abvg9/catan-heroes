@@ -2,15 +2,17 @@ package com.ucm.dasi.catan.adapter.actions.player;
 
 import com.ucm.dasi.catan.adapter.actions.master.MasterActions;
 import com.ucm.dasi.catan.adapter.player.Player;
+import com.ucm.dasi.catan.warehouse.Warehouse;
 
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.UnreadableException;
 
 public class WaitMessage extends CyclicBehaviour {
 
     private static final long serialVersionUID = 1L;
     
-    Player player;
+    private Player player;
     
     public WaitMessage(final Player player) {
 	this.player = player;
@@ -44,10 +46,19 @@ public class WaitMessage extends CyclicBehaviour {
 		
 		switch (PlayerActions.values()[msg.getPerformative()]) {
 		case acceptOffer:
-		    // Player receive ACK confirming an offer, lets make the treat.
+		    // Player received ACK confirming an offer, lets make the treat.
 		    break;
 		case sendOffer:
-		    // Player receive some offer, he needs to think.
+		    // Player received some offer, he needs to think.
+		    try {
+			Warehouse offerAndRequest[] = (Warehouse[]) msg.getContentObject();
+		    } catch (UnreadableException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		    }
+		    break;
+		case counteroffer:
+		    // Player received counteroffer, he needs to think.
 		    break;
 		default:
 		    break;

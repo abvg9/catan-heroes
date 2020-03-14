@@ -1,5 +1,6 @@
 package com.ucm.dasi.catan.adapter.actions;
 
+import java.io.IOException;
 import java.util.Set;
 import jade.core.AID;
 import jade.core.behaviours.OneShotBehaviour;
@@ -9,21 +10,25 @@ public class SendMessage extends OneShotBehaviour {
 
     private static final long serialVersionUID = 1L;
 
-    /* Atributes */
-    Set<String> receivers;
-    int typeOfMessage;
-    String message;
+    private Set<String> receivers;
+    private int typeOfMessage;
+    private String message;
+    private Object[] objects;
 
-    public SendMessage(final Set<String> receivers, final int typeOfMessage, final String message) {
-	this.receivers = receivers;
-	this.typeOfMessage = typeOfMessage;
-	this.message = message;
-    }
-    
     public SendMessage(final Set<String> receivers, final int typeOfMessage) {
 	this.receivers = receivers;
 	this.typeOfMessage = typeOfMessage;
 	this.message = "";
+    }
+    
+    public SendMessage(final Set<String> receivers, final int typeOfMessage, final String message) {
+	this(receivers, typeOfMessage);
+	this.message = message;
+    }
+     
+    public SendMessage(final Set<String> receivers, final int typeOfMessage, final Object[] objects) {
+	this(receivers, typeOfMessage);
+	this.objects = objects;
     }
 
     public void action() {
@@ -36,6 +41,11 @@ public class SendMessage extends OneShotBehaviour {
 	
 	msg.setLanguage("English");
 	msg.setContent(message);
+	try {
+	    msg.setContentObject(objects);
+	} catch (IOException e) {
+	    e.printStackTrace();
+	}
 	myAgent.send(msg);
     }
 

@@ -60,7 +60,7 @@ public class Master extends Agent implements IMaster {
 	ContainerController container = runtime.createAgentContainer(profile);
 	try {
 
-	    AgentController ag = container.createNewAgent(name, "com.ucm.dasi.catan.player.Player",
+	    AgentController ag = container.createNewAgent(name, "com.ucm.dasi.catan.adapter.player.Player",
 		    new Object[] { playersInformation });// arguments
 	    ag.start();
 

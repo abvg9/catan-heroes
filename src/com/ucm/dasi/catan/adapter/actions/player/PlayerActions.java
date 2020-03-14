@@ -2,7 +2,7 @@ package com.ucm.dasi.catan.adapter.actions.player;
 
 public enum PlayerActions {
     
-    sendOffer(0), buildStructure(1), acceptOffer(2), endTurn(3);
+    sendOffer(0), buildStructure(1), acceptOffer(2), endTurn(3), counteroffer(4);
 
     private final int value;
     

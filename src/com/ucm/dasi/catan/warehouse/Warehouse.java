@@ -10,7 +10,7 @@ import com.ucm.dasi.catan.warehouse.exception.NotEnoughtResourcesException;
 public class Warehouse implements IWarehouse {
 
     /* Atributes */
-
+    private static final long serialVersionUID = 1L;
     private TreeMap<ResourceType, Integer> resources;
     private int quantityResources;
 

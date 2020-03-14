@@ -12,8 +12,8 @@ import jade.lang.acl.ACLMessage;
 public class EndTurn extends OneShotBehaviour {
 
     private static final long serialVersionUID = 1L;
-    int points;
-    Agent agent;
+    private int points;
+    private Agent agent;
 
     public EndTurn(final int points, Agent agent) {
 	this.points = points;

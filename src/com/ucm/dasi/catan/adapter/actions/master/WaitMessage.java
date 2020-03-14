@@ -9,8 +9,7 @@ import jade.lang.acl.ACLMessage;
 public class WaitMessage extends CyclicBehaviour {
 
     private static final long serialVersionUID = 1L;
-    
-    Master master;
+    private Master master;
     
     public WaitMessage(final Master master) {
 	this.master = master;
@@ -33,6 +32,7 @@ public class WaitMessage extends CyclicBehaviour {
 	    case buildStructure:
 		break;
 	    case endTurn:
+		// Check if the player has 10 points.
 		// Give turn to another player.
 		break;
 	    default:

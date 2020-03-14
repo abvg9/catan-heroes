@@ -11,7 +11,7 @@ import jade.core.behaviours.OneShotBehaviour;
 public class BuildStructure extends OneShotBehaviour {
 
     private static final long serialVersionUID = 1L;
-    Agent agent;
+    private Agent agent;
 
     public BuildStructure(Agent agent) {
 	this.agent = agent;
