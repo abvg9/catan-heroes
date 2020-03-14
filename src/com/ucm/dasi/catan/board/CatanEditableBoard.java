@@ -1,6 +1,7 @@
 package com.ucm.dasi.catan.board;
 
 import com.ucm.dasi.catan.board.element.IBoardElement;
+import com.ucm.dasi.catan.board.element.OwnedElement;
 import com.ucm.dasi.catan.board.exception.InvalidBoardDimensionsException;
 import com.ucm.dasi.catan.board.exception.InvalidBoardElementException;
 import com.ucm.dasi.catan.board.structure.IBoardStructure;
@@ -29,7 +30,7 @@ public class CatanEditableBoard extends CatanBoard implements ICatanEditableBoar
 	if (null == elements[x][y]) {
 	    isValidElementToBuild = this.isValidBuildNew(element);
 	} else {
-	    isValidElementToBuild = this.isValidBuildUpgrade(element);
+	    isValidElementToBuild = this.isValidBuildUpgrade(element, elements[x][y]);
 	}
 
 	if (!isValidElementToBuild) {
@@ -45,9 +46,13 @@ public class CatanEditableBoard extends CatanBoard implements ICatanEditableBoar
 		|| ((IBoardStructure) element).getType() != StructureType.City;
     }
 
-    private boolean isValidBuildUpgrade(IBoardElement element) {
+    private boolean isValidBuildUpgrade(IBoardElement element, IBoardElement oldElement) {
 
-	return !isValidBuildNew(element);
+	return oldElement.getElementType() == BoardElementType.Structure
+		&& ((IBoardStructure) oldElement).getType() == StructureType.Settlement
+		&& element.getElementType() == BoardElementType.Structure
+		&& ((IBoardStructure) element).getType() == StructureType.City
+		&& ((OwnedElement) oldElement).getOwner() == ((OwnedElement) element).getOwner();
     }
 
 }
