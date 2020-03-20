@@ -3,6 +3,7 @@ package com.ucm.dasi.catan.game;
 import com.ucm.dasi.catan.board.BoardElementType;
 import com.ucm.dasi.catan.board.ICatanEditableBoard;
 import com.ucm.dasi.catan.board.connection.BoardConnection;
+import com.ucm.dasi.catan.board.connection.ConnectionDirection;
 import com.ucm.dasi.catan.board.element.IOwnedElement;
 import com.ucm.dasi.catan.board.exception.InvalidBoardElementException;
 import com.ucm.dasi.catan.board.structure.BoardStructure;
@@ -53,6 +54,28 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
 	errorHandler.accept(request);
     }
 
+    private boolean isConnectionConnected(IPlayer player, int x, int y) {
+	if (board.get(x, y).getElementType() != BoardElementType.Connection) {
+	    return false;
+	}
+
+	ConnectionDirection direction = board.getConnectionDirection(x, y);
+
+	if (direction == ConnectionDirection.Horizontal) {
+	    return this.isHorizontalConnectionConnected(player, x, y);
+	} else if (direction == ConnectionDirection.Vertical) {
+	    return this.isVerticalConnectionConnected(player, x, y);
+	} else {
+	    return false;
+	}
+    }
+
+    private boolean isHorizontalConnectionConnected(IPlayer player, int x, int y) {
+	// Get the structure locations. The board topology ensures their existence
+	return isStructurePointConnectedOrControlled(player, x - 1, y)
+		|| isStructurePointConnectedOrControlled(player, x + 1, y);
+    }
+
     private boolean isStructurePointConnected(IPlayer player, int x, int y) {
 	return board.get(x, y).getElementType() == BoardElementType.Structure
 		&& ((x > 0 && isStructureConnectedCheckConnection(player, (IOwnedElement) board.get(x - 1, y)))
@@ -63,8 +86,21 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
 				&& isStructureConnectedCheckConnection(player, (IOwnedElement) board.get(x, y + 1))));
     }
 
+    private boolean isStructurePointConnectedOrControlled(IPlayer player, int x, int y) {
+	return (board.get(x, y).getElementType() == BoardElementType.Structure
+		&& ((IOwnedElement) board.get(x, y)).getOwner() != null
+		&& ((IOwnedElement) board.get(x, y)).getOwner().getId() == player.getId())
+		|| isStructurePointConnected(player, x, y);
+    }
+
     private boolean isStructureConnectedCheckConnection(IPlayer player, IOwnedElement element) {
 	return element.getOwner() != null && element.getOwner().getId() == player.getId();
+    }
+
+    private boolean isVerticalConnectionConnected(IPlayer player, int x, int y) {
+	// Get the structure locations. The board topology ensures their existence
+	return isStructurePointConnectedOrControlled(player, x, y - 1)
+		|| isStructurePointConnectedOrControlled(player, x, y + 1);
     }
 
     private void processTurnRequest(IRequest request) {
@@ -102,6 +138,11 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
 	    return;
 	}
 
+	if (!isConnectionConnected(request.getPlayer(), request.getX(), request.getY())) {
+	    handleRequestError(request);
+	    return;
+	}
+
 	BoardConnection element = new BoardConnection(request.getPlayer(),
 		connectionCostProvider.getCost(request.getType()), request.getType());
 
@@ -118,7 +159,7 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
 	    handleRequestError(request);
 	    return;
 	}
-	
+
 	if (!isStructurePointConnected(request.getPlayer(), request.getX(), request.getY())) {
 	    handleRequestError(request);
 	    return;

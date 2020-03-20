@@ -58,11 +58,14 @@ public class CatanGameEngineTest {
 
 	CatanGameEngine engine = new CatanGameEngine(board, players, errorHandler);
 
-	IRequest[] requests = { new BuildStructureRequest(player, StructureType.Settlement, 2, 2) };
+	int requestX = 2;
+	int requestY = 2;
+	
+	IRequest[] requests = { new BuildStructureRequest(player, StructureType.Settlement, requestX, requestY) };
 
 	engine.processRequests(requests);
 
-	IBoardElement elementBuilt = board.get(2, 2);
+	IBoardElement elementBuilt = board.get(requestX, requestY);
 
 	assertSame(BoardElementType.Structure, elementBuilt.getElementType());
 	assertSame(StructureType.Settlement, ((IBoardStructure) elementBuilt).getType());
@@ -94,11 +97,13 @@ public class CatanGameEngineTest {
 
 	CatanGameEngine engine = new CatanGameEngine(board, players, errorHandler);
 
-	IRequest[] requests = { new BuildConnectionRequest(player, ConnectionType.Road, 1, 0) };
+	int requestX = 3;
+	int requestY = 2;
+	IRequest[] requests = { new BuildConnectionRequest(player, ConnectionType.Road, requestX, requestY) };
 
 	engine.processRequests(requests);
 
-	IBoardElement elementBuilt = board.get(1, 0);
+	IBoardElement elementBuilt = board.get(requestX, requestY);
 
 	assertSame(BoardElementType.Connection, elementBuilt.getElementType());
 	assertSame(ConnectionType.Road, ((IBoardConnection) elementBuilt).getType());
