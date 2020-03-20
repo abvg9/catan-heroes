@@ -1,6 +1,7 @@
 package com.ucm.dasi.catan.game;
 
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.fail;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -28,6 +29,7 @@ import com.ucm.dasi.catan.exception.NonNullInputException;
 import com.ucm.dasi.catan.exception.NonVoidCollectionException;
 import com.ucm.dasi.catan.player.IPlayer;
 import com.ucm.dasi.catan.player.Player;
+import com.ucm.dasi.catan.request.BuildConnectionRequest;
 import com.ucm.dasi.catan.request.BuildStructureRequest;
 import com.ucm.dasi.catan.request.IRequest;
 import com.ucm.dasi.catan.resource.ResourceManager;
@@ -37,20 +39,21 @@ import com.ucm.dasi.catan.resource.exception.NegativeNumberException;
 public class CatanGameEngineTest {
 
     @Test
-    public void itMustProcessAValidBuildStructureRequest() throws InvalidBoardDimensionsException, InvalidBoardElementException,
-	    NegativeNumberException, NonNullInputException, NonVoidCollectionException {
+    public void itMustProcessAValidBuildStructureRequest() throws InvalidBoardDimensionsException,
+	    InvalidBoardElementException, NegativeNumberException, NonNullInputException, NonVoidCollectionException {
 
 	Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
-	
+
 	playerResources.put(ResourceType.Brick, 1);
 	playerResources.put(ResourceType.Grain, 1);
 	playerResources.put(ResourceType.Lumber, 1);
 	playerResources.put(ResourceType.Wool, 1);
-	
+
 	IPlayer player = new Player(0, new ResourceManager(playerResources));
 	IPlayer[] players = { player };
 	ICatanEditableBoard board = buildStandardBoard(player);
 	Consumer<IRequest> errorHandler = (request) -> {
+	    fail();
 	};
 
 	CatanGameEngine engine = new CatanGameEngine(board, players, errorHandler);
@@ -58,17 +61,52 @@ public class CatanGameEngineTest {
 	IRequest[] requests = { new BuildStructureRequest(player, StructureType.Settlement, 2, 2) };
 
 	engine.processRequests(requests);
-	
+
 	IBoardElement elementBuilt = board.get(2, 2);
-	
+
 	assertSame(BoardElementType.Structure, elementBuilt.getElementType());
-	assertSame(StructureType.Settlement, ((IBoardStructure)elementBuilt).getType());
-	assertSame(player.getId(), ((IOwnedElement)elementBuilt).getOwner().getId());
+	assertSame(StructureType.Settlement, ((IBoardStructure) elementBuilt).getType());
+	assertSame(player.getId(), ((IOwnedElement) elementBuilt).getOwner().getId());
 	assertSame(0, player.getWarehouse().getResource(ResourceType.Brick));
+	assertSame(0, player.getWarehouse().getResource(ResourceType.Grain));
+	assertSame(0, player.getWarehouse().getResource(ResourceType.Lumber));
+	assertSame(0, player.getWarehouse().getResource(ResourceType.Wool));
     }
-    
-    public void itMustProcessAValidBuildConnectionRequest() {
-	
+
+    @Test
+    public void itMustProcessAValidBuildConnectionRequest()
+	    throws NegativeNumberException, InvalidBoardDimensionsException, InvalidBoardElementException,
+	    NonNullInputException, NonVoidCollectionException {
+
+	Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
+
+	playerResources.put(ResourceType.Brick, 1);
+	playerResources.put(ResourceType.Grain, 1);
+	playerResources.put(ResourceType.Lumber, 1);
+	playerResources.put(ResourceType.Wool, 1);
+
+	IPlayer player = new Player(0, new ResourceManager(playerResources));
+	IPlayer[] players = { player };
+	ICatanEditableBoard board = buildStandardBoard(player);
+	Consumer<IRequest> errorHandler = (request) -> {
+	    fail();
+	};
+
+	CatanGameEngine engine = new CatanGameEngine(board, players, errorHandler);
+
+	IRequest[] requests = { new BuildConnectionRequest(player, ConnectionType.Road, 1, 0) };
+
+	engine.processRequests(requests);
+
+	IBoardElement elementBuilt = board.get(1, 0);
+
+	assertSame(BoardElementType.Connection, elementBuilt.getElementType());
+	assertSame(ConnectionType.Road, ((IBoardConnection) elementBuilt).getType());
+	assertSame(player.getId(), ((IOwnedElement) elementBuilt).getOwner().getId());
+	assertSame(0, player.getWarehouse().getResource(ResourceType.Brick));
+	assertSame(1, player.getWarehouse().getResource(ResourceType.Grain));
+	assertSame(0, player.getWarehouse().getResource(ResourceType.Lumber));
+	assertSame(1, player.getWarehouse().getResource(ResourceType.Wool));
     }
 
     private IBoardTerrain buildMountainTerrain() {
@@ -82,7 +120,7 @@ public class CatanGameEngineTest {
     private IBoardTerrain buildNoneTerrain() {
 	return new BoardTerrain(0, TerrainType.None);
     }
-    
+
     private IBoardConnection buildPlayerConnection(IPlayer player) {
 	return new BoardConnection(player, new ResourceManager(), ConnectionType.Road);
     }
