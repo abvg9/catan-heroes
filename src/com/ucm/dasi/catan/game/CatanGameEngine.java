@@ -1,7 +1,9 @@
 package com.ucm.dasi.catan.game;
 
+import com.ucm.dasi.catan.board.BoardElementType;
 import com.ucm.dasi.catan.board.ICatanEditableBoard;
 import com.ucm.dasi.catan.board.connection.BoardConnection;
+import com.ucm.dasi.catan.board.element.IOwnedElement;
 import com.ucm.dasi.catan.board.exception.InvalidBoardElementException;
 import com.ucm.dasi.catan.board.structure.BoardStructure;
 import com.ucm.dasi.catan.exception.NonNullInputException;
@@ -49,6 +51,20 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
 
     protected void handleRequestError(IRequest request) {
 	errorHandler.accept(request);
+    }
+
+    private boolean isStructurePointConnected(IPlayer player, int x, int y) {
+	return board.get(x, y).getElementType() == BoardElementType.Structure
+		&& ((x > 0 && isStructureConnectedCheckConnection(player, (IOwnedElement) board.get(x - 1, y)))
+			|| (x + 1 < board.getWidth()
+				&& isStructureConnectedCheckConnection(player, (IOwnedElement) board.get(x + 1, y)))
+			|| (y > 0 && isStructureConnectedCheckConnection(player, (IOwnedElement) board.get(x, y - 1)))
+			|| (y + 1 > board.getHeight()
+				&& isStructureConnectedCheckConnection(player, (IOwnedElement) board.get(x, y + 1))));
+    }
+
+    private boolean isStructureConnectedCheckConnection(IPlayer player, IOwnedElement element) {
+	return element.getOwner() != null && element.getOwner().getId() == player.getId();
     }
 
     private void processTurnRequest(IRequest request) {
@@ -99,6 +115,11 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
 
     private void handleBuildStructureRequest(IBuildStructureRequest request) {
 	if (request.getPlayer().getId() != getActivePlayer().getId()) {
+	    handleRequestError(request);
+	    return;
+	}
+	
+	if (!isStructurePointConnected(request.getPlayer(), request.getX(), request.getY())) {
 	    handleRequestError(request);
 	    return;
 	}

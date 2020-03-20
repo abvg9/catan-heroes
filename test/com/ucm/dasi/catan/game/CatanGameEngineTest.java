@@ -49,7 +49,7 @@ public class CatanGameEngineTest {
 	
 	IPlayer player = new Player(0, new ResourceManager(playerResources));
 	IPlayer[] players = { player };
-	ICatanEditableBoard board = buildStandardBoard();
+	ICatanEditableBoard board = buildStandardBoard(player);
 	Consumer<IRequest> errorHandler = (request) -> {
 	};
 
@@ -82,13 +82,17 @@ public class CatanGameEngineTest {
     private IBoardTerrain buildNoneTerrain() {
 	return new BoardTerrain(0, TerrainType.None);
     }
+    
+    private IBoardConnection buildPlayerConnection(IPlayer player) {
+	return new BoardConnection(player, new ResourceManager(), ConnectionType.Road);
+    }
 
-    private ICatanEditableBoard buildStandardBoard()
+    private ICatanEditableBoard buildStandardBoard(IPlayer player1)
 	    throws InvalidBoardDimensionsException, InvalidBoardElementException {
 	IBoardElement[][] elements = {
 		{ buildNoneStructure(), buildVoidConnection(), buildNoneStructure(), buildVoidConnection(),
 			buildNoneStructure(), },
-		{ buildVoidConnection(), buildNoneTerrain(), buildVoidConnection(), buildMountainTerrain(),
+		{ buildVoidConnection(), buildNoneTerrain(), buildPlayerConnection(player1), buildMountainTerrain(),
 			buildVoidConnection(), },
 		{ buildNoneStructure(), buildVoidConnection(), buildNoneStructure(), buildVoidConnection(),
 			buildNoneStructure(), },

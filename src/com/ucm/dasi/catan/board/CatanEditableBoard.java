@@ -27,15 +27,15 @@ public class CatanEditableBoard extends CatanBoard implements ICatanEditableBoar
 	}
 	this.elements[x][y] = element;
     }
-    
+
     private boolean isVoidElement(IBoardElement element) {
 	switch (element.getElementType()) {
 	case Connection:
-	    return ((IBoardConnection)element).getType() == ConnectionType.Void;
+	    return ((IBoardConnection) element).getType() == ConnectionType.Void;
 	case Structure:
-	    return ((IBoardStructure)element).getType() == StructureType.None;
+	    return ((IBoardStructure) element).getType() == StructureType.None;
 	case Terrain:
-	    return ((IBoardTerrain)element).getType() == TerrainType.None;
+	    return ((IBoardTerrain) element).getType() == TerrainType.None;
 	default:
 	    return false;
 	}
@@ -63,10 +63,13 @@ public class CatanEditableBoard extends CatanBoard implements ICatanEditableBoar
     private boolean isNonVoidTerrainCloseTo(int x, int y) {
 
 	return get(x, y).getElementType() == BoardElementType.Structure
-		&& (x - 1 >= 0 && y - 1 >= 0 && ((IBoardTerrain) get(x - 1, y - 1)).getType() != TerrainType.None)
-		|| (x - 1 >= 0 && y + 1 < getHeight() && ((IBoardTerrain) get(x - 1, y + 1)).getType() != TerrainType.None)
-		|| (x + 1 < getWidth() && y - 1 >= 0 && ((IBoardTerrain) get(x + 1, y - 1)).getType() != TerrainType.None)
-		|| (x + 1 < getWidth() && y + 1 < getHeight() && ((IBoardTerrain) get(x + 1, y + 1)).getType() != TerrainType.None);
+		&& ((x - 1 >= 0 && y - 1 >= 0 && ((IBoardTerrain) get(x - 1, y - 1)).getType() != TerrainType.None)
+			|| (x - 1 >= 0 && y + 1 < getHeight()
+				&& ((IBoardTerrain) get(x - 1, y + 1)).getType() != TerrainType.None)
+			|| (x + 1 < getWidth() && y - 1 >= 0
+				&& ((IBoardTerrain) get(x + 1, y - 1)).getType() != TerrainType.None)
+			|| (x + 1 < getWidth() && y + 1 < getHeight()
+				&& ((IBoardTerrain) get(x + 1, y + 1)).getType() != TerrainType.None));
     }
 
     private boolean isValidBuildUpgrade(IBoardElement element, IBoardElement oldElement) {
