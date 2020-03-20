@@ -1,5 +1,7 @@
 package com.ucm.dasi.catan.board;
 
+import com.ucm.dasi.catan.board.connection.ConnectionType;
+import com.ucm.dasi.catan.board.connection.IBoardConnection;
 import com.ucm.dasi.catan.board.element.IBoardElement;
 import com.ucm.dasi.catan.board.element.OwnedElement;
 import com.ucm.dasi.catan.board.exception.InvalidBoardDimensionsException;
@@ -25,6 +27,19 @@ public class CatanEditableBoard extends CatanBoard implements ICatanEditableBoar
 	}
 	this.elements[x][y] = element;
     }
+    
+    private boolean isVoidElement(IBoardElement element) {
+	switch (element.getElementType()) {
+	case Connection:
+	    return ((IBoardConnection)element).getType() == ConnectionType.Void;
+	case Structure:
+	    return ((IBoardStructure)element).getType() == StructureType.None;
+	case Terrain:
+	    return ((IBoardTerrain)element).getType() == TerrainType.None;
+	default:
+	    return false;
+	}
+    }
 
     private boolean isValidBuild(IBoardElement element, int x, int y) {
 
@@ -32,7 +47,7 @@ public class CatanEditableBoard extends CatanBoard implements ICatanEditableBoar
 	    return false;
 	}
 
-	if (null == elements[x][y]) {
+	if (isVoidElement(elements[x][y])) {
 	    return this.isValidBuildNew(element, x, y);
 	} else {
 	    return this.isValidBuildUpgrade(element, elements[x][y]);
