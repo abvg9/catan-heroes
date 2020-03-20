@@ -47,19 +47,6 @@ public class CatanBoardTest {
     }
 
     @Test
-    public void itMustGetATerrainByItsPosition() throws InvalidBoardDimensionsException, InvalidBoardElementException {
-
-	IBoardElement element = createNoneTerrain();
-	IBoardElement[][] elements = { { createNoneStructure(), createVoidConnection(), createNoneStructure(), },
-		{ createVoidConnection(), element, createVoidConnection(), },
-		{ createNoneStructure(), createVoidConnection(), createNoneStructure(), }, };
-
-	CatanBoard board = new CatanBoard(3, 3, elements);
-
-	assertEquals(element, board.getTerrain(0, 0));
-    }
-
-    @Test
     public void itMustGetAnStructureByItsPosition()
 	    throws InvalidBoardDimensionsException, InvalidBoardElementException {
 
