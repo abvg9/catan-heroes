@@ -8,6 +8,7 @@ import com.ucm.dasi.catan.exception.NonNullInputException;
 import com.ucm.dasi.catan.exception.NonVoidCollectionException;
 import com.ucm.dasi.catan.game.handler.GameEngineHandlersMap;
 import com.ucm.dasi.catan.game.handler.IGameEngineHandlersMap;
+import com.ucm.dasi.catan.lang.ComparableClass;
 import com.ucm.dasi.catan.player.IPlayer;
 import com.ucm.dasi.catan.request.IBuildConnectionRequest;
 import com.ucm.dasi.catan.request.IBuildStructureRequest;
@@ -54,7 +55,8 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
 	Class<?>[] interfaces = request.getClass().getInterfaces();
 
 	for (Class<?> interfaceType : interfaces) {
-	    Consumer<? extends IRequest> consumer = handlersMap.get(interfaceType);
+	    @SuppressWarnings({ "rawtypes", "unchecked" })
+	    Consumer<? extends IRequest> consumer = handlersMap.get(new ComparableClass(interfaceType));
 	    if (consumer != null) {
 		consumeRequest(consumer, request);
 		break;
@@ -70,9 +72,10 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
     private IGameEngineHandlersMap generateMap() {
 	IGameEngineHandlersMap map = new GameEngineHandlersMap();
 
-	map.put(IBuildConnectionRequest.class,
+	map.put(new ComparableClass<IBuildConnectionRequest>(IBuildConnectionRequest.class),
 		(IBuildConnectionRequest request) -> handleBuildConnectionRequest(request));
-	map.put(IBuildStructureRequest.class, (IBuildStructureRequest request) -> handleBuildStructureRequest(request));
+	map.put(new ComparableClass<IBuildStructureRequest>(IBuildStructureRequest.class),
+		(IBuildStructureRequest request) -> handleBuildStructureRequest(request));
 
 	return map;
     }
