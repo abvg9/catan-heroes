@@ -32,10 +32,10 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
 
     private IGameEngineHandlersMap handlersMap;
 
-    public CatanGameEngine(ICatanEditableBoard board, IPlayer[] players, Consumer<IRequest> errorHandler)
+    public CatanGameEngine(ICatanEditableBoard board, IPlayer[] players, int turnIndex, Consumer<IRequest> errorHandler)
 	    throws NonNullInputException, NonVoidCollectionException {
 
-	super(board, players);
+	super(board, players, turnIndex);
 
 	connectionCostProvider = ConnectionCostProvider.buildDefaultProvider();
 	structureCostProvider = StructureCostProvider.buildDefaultProvider();
