@@ -1,5 +1,5 @@
 package com.ucm.dasi.catan.request;
 
 public enum RequestType {
-    BuildConnection, BuildStructure
+    BuildConnection, BuildStructure, EndTurn, StartTurn
 }
