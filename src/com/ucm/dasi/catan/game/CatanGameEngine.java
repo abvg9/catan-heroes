@@ -144,7 +144,7 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
 	}
 
 	BoardConnection element = new BoardConnection(request.getPlayer(),
-		connectionCostProvider.getCost(request.getType()), request.getType());
+		connectionCostProvider.getCost(request.getConnectionType()), request.getConnectionType());
 
 	try {
 	    getBoard().build(element, request.getX(), request.getY());
@@ -166,7 +166,7 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
 	}
 
 	BoardStructure element = new BoardStructure(request.getPlayer(),
-		structureCostProvider.getCost(request.getType()), request.getType());
+		structureCostProvider.getCost(request.getStructureType()), request.getStructureType());
 
 	try {
 	    getBoard().build(element, request.getX(), request.getY());

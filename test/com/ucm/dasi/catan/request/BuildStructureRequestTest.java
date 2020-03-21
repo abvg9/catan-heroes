@@ -18,6 +18,6 @@ public class BuildStructureRequestTest {
 	
 	BuildStructureRequest request = new BuildStructureRequest(player, type, 0, 1);
     
-	assertSame(type, request.getType());
+	assertSame(type, request.getStructureType());
     }
 }
