@@ -10,16 +10,17 @@ import com.ucm.dasi.catan.resource.ResourceManager;
 import com.ucm.dasi.catan.resource.exception.NegativeNumberException;
 
 public class BuildElementRequestTest {
-    
+
     @Test
     public void mustStoreInitialValues() throws NegativeNumberException {
 	IPlayer player = new Player(0, new ResourceManager());
 	BoardElementType type = BoardElementType.Connection;
 	int x = 0;
 	int y = 1;
-	
-	MinimunBuildElementRequest request = new MinimunBuildElementRequest(player, type, x, y);
-    
+
+	MinimunBuildElementRequest request = new MinimunBuildElementRequest(player, RequestType.BuildConnection, type,
+		x, y);
+
 	assertSame(type, request.getElementType());
 	assertSame(x, request.getX());
 	assertSame(y, request.getY());
