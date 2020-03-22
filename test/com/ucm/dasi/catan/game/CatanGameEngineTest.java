@@ -56,7 +56,7 @@ public class CatanGameEngineTest {
 	    fail();
 	};
 
-	CatanGameEngine engine = new CatanGameEngine(true, board, players, errorHandler);
+	CatanGameEngine engine = new CatanGameEngine(board, players, true, errorHandler);
 
 	int requestX = 2;
 	int requestY = 2;
@@ -95,7 +95,7 @@ public class CatanGameEngineTest {
 	    fail();
 	};
 
-	CatanGameEngine engine = new CatanGameEngine(true, board, players, errorHandler);
+	CatanGameEngine engine = new CatanGameEngine(board, players, true, errorHandler);
 
 	int requestX = 3;
 	int requestY = 2;
