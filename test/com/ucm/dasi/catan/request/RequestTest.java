@@ -14,8 +14,17 @@ public class RequestTest {
     public void itMustStoreItsPlayer() throws NegativeNumberException {
 	IPlayer player = new Player(0, new ResourceManager());
 	
-	MinimunRequest request = new MinimunRequest(player);
+	MinimunRequest request = new MinimunRequest(player, RequestType.BuildConnection);
 	
 	assertSame(player, request.getPlayer());
+    }
+    
+    @Test()
+    public void itMustStoreItsRequestType() throws NegativeNumberException {
+	RequestType requestType = RequestType.BuildConnection;
+	
+	MinimunRequest request = new MinimunRequest(new Player(0, new ResourceManager()), requestType);
+	
+	assertSame(requestType, request.getType());
     }
 }
