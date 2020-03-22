@@ -40,8 +40,36 @@ import com.ucm.dasi.catan.resource.exception.NegativeNumberException;
 public class CatanGameEngineTest {
 
     @Test
-    public void itMustNotProcessAValidBuildStructureRequestIfTheTurnIsNotStarted()
-	    throws InvalidBoardDimensionsException, InvalidBoardElementException, NegativeNumberException,
+    public void itMustNotProcessAValidBuildConnectionRequestIfThePlayerHasNotEnoughtResources()
+	    throws NegativeNumberException, InvalidBoardDimensionsException, InvalidBoardElementException,
+	    NonNullInputException, NonVoidCollectionException {
+
+	Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
+
+	IPlayer player1 = new Player(0, new ResourceManager(playerResources));
+	IPlayer[] players = { player1 };
+	ICatanEditableBoard board = buildStandardBoard(player1);
+
+	AtomicBoolean requestFailed = new AtomicBoolean(false);
+
+	Consumer<IRequest> errorHandler = (request) -> {
+	    requestFailed.set(true);
+	};
+
+	CatanGameEngine engine = new CatanGameEngine(board, players, true, errorHandler);
+
+	int requestX = 3;
+	int requestY = 2;
+	IRequest[] requests = { new BuildConnectionRequest(player1, ConnectionType.Road, requestX, requestY) };
+
+	engine.processRequests(requests);
+
+	assertSame(true, requestFailed.get());
+    }
+
+    @Test
+    public void itMustNotProcessAValidBuildConnectionRequestIfThePlayerIsNotTheActiveOne()
+	    throws NegativeNumberException, InvalidBoardDimensionsException, InvalidBoardElementException,
 	    NonNullInputException, NonVoidCollectionException {
 
 	Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
@@ -51,30 +79,30 @@ public class CatanGameEngineTest {
 	playerResources.put(ResourceType.Lumber, 1);
 	playerResources.put(ResourceType.Wool, 1);
 
-	IPlayer player = new Player(0, new ResourceManager(playerResources));
-	IPlayer[] players = { player };
-	ICatanEditableBoard board = buildStandardBoard(player);
-	
+	IPlayer player1 = new Player(0, new ResourceManager(playerResources));
+	IPlayer player2 = new Player(1, new ResourceManager(playerResources));
+	IPlayer[] players = { player1, player2 };
+	ICatanEditableBoard board = buildStandardBoard(player2);
+
 	AtomicBoolean requestFailed = new AtomicBoolean(false);
-	
+
 	Consumer<IRequest> errorHandler = (request) -> {
 	    requestFailed.set(true);
 	};
 
-	CatanGameEngine engine = new CatanGameEngine(board, players, false, errorHandler);
+	CatanGameEngine engine = new CatanGameEngine(board, players, true, errorHandler);
 
-	int requestX = 2;
+	int requestX = 3;
 	int requestY = 2;
-
-	IRequest[] requests = { new BuildStructureRequest(player, StructureType.Settlement, requestX, requestY) };
+	IRequest[] requests = { new BuildConnectionRequest(player2, ConnectionType.Road, requestX, requestY) };
 
 	engine.processRequests(requests);
-	
+
 	assertSame(true, requestFailed.get());
     }
-    
+
     @Test
-    public void itMustNotProcessAValidBuildConnectionRequest()
+    public void itMustNotProcessAValidBuildConnectionRequestIfTheTurnIsNotStarted()
 	    throws NegativeNumberException, InvalidBoardDimensionsException, InvalidBoardElementException,
 	    NonNullInputException, NonVoidCollectionException {
 
@@ -88,9 +116,9 @@ public class CatanGameEngineTest {
 	IPlayer player = new Player(0, new ResourceManager(playerResources));
 	IPlayer[] players = { player };
 	ICatanEditableBoard board = buildStandardBoard(player);
-	
+
 	AtomicBoolean requestFailed = new AtomicBoolean(false);
-	
+
 	Consumer<IRequest> errorHandler = (request) -> {
 	    requestFailed.set(true);
 	};
@@ -107,8 +135,73 @@ public class CatanGameEngineTest {
     }
 
     @Test
-    public void itMustProcessAValidBuildStructureRequest() throws InvalidBoardDimensionsException,
-	    InvalidBoardElementException, NegativeNumberException, NonNullInputException, NonVoidCollectionException {
+    public void itMustNotProcessAValidBuildStructureRequestIfThePlayerHasNotEnoughtResources()
+	    throws InvalidBoardDimensionsException, InvalidBoardElementException, NegativeNumberException,
+	    NonNullInputException, NonVoidCollectionException {
+
+	Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
+
+	IPlayer player1 = new Player(0, new ResourceManager(playerResources));
+	IPlayer[] players = { player1 };
+	ICatanEditableBoard board = buildStandardBoard(player1);
+
+	AtomicBoolean requestFailed = new AtomicBoolean(false);
+
+	Consumer<IRequest> errorHandler = (request) -> {
+	    requestFailed.set(true);
+	};
+
+	CatanGameEngine engine = new CatanGameEngine(board, players, true, errorHandler);
+
+	int requestX = 2;
+	int requestY = 2;
+
+	IRequest[] requests = { new BuildStructureRequest(player1, StructureType.Settlement, requestX, requestY) };
+
+	engine.processRequests(requests);
+
+	assertSame(true, requestFailed.get());
+    }
+
+    @Test
+    public void itMustNotProcessAValidBuildStructureRequestIfThePlayerIsNotTheActiveOne()
+	    throws InvalidBoardDimensionsException, InvalidBoardElementException, NegativeNumberException,
+	    NonNullInputException, NonVoidCollectionException {
+
+	Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
+
+	playerResources.put(ResourceType.Brick, 1);
+	playerResources.put(ResourceType.Grain, 1);
+	playerResources.put(ResourceType.Lumber, 1);
+	playerResources.put(ResourceType.Wool, 1);
+
+	IPlayer player1 = new Player(0, new ResourceManager(playerResources));
+	IPlayer player2 = new Player(1, new ResourceManager(playerResources));
+	IPlayer[] players = { player1, player2 };
+	ICatanEditableBoard board = buildStandardBoard(player2);
+
+	AtomicBoolean requestFailed = new AtomicBoolean(false);
+
+	Consumer<IRequest> errorHandler = (request) -> {
+	    requestFailed.set(true);
+	};
+
+	CatanGameEngine engine = new CatanGameEngine(board, players, true, errorHandler);
+
+	int requestX = 2;
+	int requestY = 2;
+
+	IRequest[] requests = { new BuildStructureRequest(player2, StructureType.Settlement, requestX, requestY) };
+
+	engine.processRequests(requests);
+
+	assertSame(true, requestFailed.get());
+    }
+
+    @Test
+    public void itMustNotProcessAValidBuildStructureRequestIfTheTurnIsNotStarted()
+	    throws InvalidBoardDimensionsException, InvalidBoardElementException, NegativeNumberException,
+	    NonNullInputException, NonVoidCollectionException {
 
 	Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
 
@@ -120,11 +213,14 @@ public class CatanGameEngineTest {
 	IPlayer player = new Player(0, new ResourceManager(playerResources));
 	IPlayer[] players = { player };
 	ICatanEditableBoard board = buildStandardBoard(player);
+
+	AtomicBoolean requestFailed = new AtomicBoolean(false);
+
 	Consumer<IRequest> errorHandler = (request) -> {
-	    fail();
+	    requestFailed.set(true);
 	};
 
-	CatanGameEngine engine = new CatanGameEngine(board, players, true, errorHandler);
+	CatanGameEngine engine = new CatanGameEngine(board, players, false, errorHandler);
 
 	int requestX = 2;
 	int requestY = 2;
@@ -133,15 +229,7 @@ public class CatanGameEngineTest {
 
 	engine.processRequests(requests);
 
-	IBoardElement elementBuilt = board.get(requestX, requestY);
-
-	assertSame(BoardElementType.Structure, elementBuilt.getElementType());
-	assertSame(StructureType.Settlement, ((IBoardStructure) elementBuilt).getType());
-	assertSame(player.getId(), ((IOwnedElement) elementBuilt).getOwner().getId());
-	assertSame(0, player.getWarehouse().getResource(ResourceType.Brick));
-	assertSame(0, player.getWarehouse().getResource(ResourceType.Grain));
-	assertSame(0, player.getWarehouse().getResource(ResourceType.Lumber));
-	assertSame(0, player.getWarehouse().getResource(ResourceType.Wool));
+	assertSame(true, requestFailed.get());
     }
 
     @Test
@@ -180,6 +268,44 @@ public class CatanGameEngineTest {
 	assertSame(1, player.getWarehouse().getResource(ResourceType.Grain));
 	assertSame(0, player.getWarehouse().getResource(ResourceType.Lumber));
 	assertSame(1, player.getWarehouse().getResource(ResourceType.Wool));
+    }
+
+    @Test
+    public void itMustProcessAValidBuildStructureRequest() throws InvalidBoardDimensionsException,
+	    InvalidBoardElementException, NegativeNumberException, NonNullInputException, NonVoidCollectionException {
+
+	Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
+
+	playerResources.put(ResourceType.Brick, 1);
+	playerResources.put(ResourceType.Grain, 1);
+	playerResources.put(ResourceType.Lumber, 1);
+	playerResources.put(ResourceType.Wool, 1);
+
+	IPlayer player = new Player(0, new ResourceManager(playerResources));
+	IPlayer[] players = { player };
+	ICatanEditableBoard board = buildStandardBoard(player);
+	Consumer<IRequest> errorHandler = (request) -> {
+	    fail();
+	};
+
+	CatanGameEngine engine = new CatanGameEngine(board, players, true, errorHandler);
+
+	int requestX = 2;
+	int requestY = 2;
+
+	IRequest[] requests = { new BuildStructureRequest(player, StructureType.Settlement, requestX, requestY) };
+
+	engine.processRequests(requests);
+
+	IBoardElement elementBuilt = board.get(requestX, requestY);
+
+	assertSame(BoardElementType.Structure, elementBuilt.getElementType());
+	assertSame(StructureType.Settlement, ((IBoardStructure) elementBuilt).getType());
+	assertSame(player.getId(), ((IOwnedElement) elementBuilt).getOwner().getId());
+	assertSame(0, player.getWarehouse().getResource(ResourceType.Brick));
+	assertSame(0, player.getWarehouse().getResource(ResourceType.Grain));
+	assertSame(0, player.getWarehouse().getResource(ResourceType.Lumber));
+	assertSame(0, player.getWarehouse().getResource(ResourceType.Wool));
     }
 
     private IBoardTerrain buildMountainTerrain() {
