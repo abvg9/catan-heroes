@@ -8,13 +8,17 @@ import com.ucm.dasi.catan.player.IPlayer;
 
 public class CatanGame<TBoard extends ICatanBoard> implements ICatanGame<TBoard> {
 
-    protected TBoard board;
+    private TBoard board;
 
-    protected IPlayer[] players;
+    private IPlayer[] players;
 
     private int turnIndex;
 
-    public CatanGame(TBoard board, IPlayer[] players, int turnIndex) throws NonNullInputException, NonVoidCollectionException {
+    private boolean turnStarted;
+
+    public CatanGame(TBoard board, IPlayer[] players, int turnIndex, boolean turnStarted)
+	    throws NonNullInputException, NonVoidCollectionException {
+	
 	checkBoard(board);
 	checkPlayers(players);
 	checkTurnIndex(players, turnIndex);
@@ -22,6 +26,7 @@ public class CatanGame<TBoard extends ICatanBoard> implements ICatanGame<TBoard>
 	this.board = board;
 	this.players = players;
 	this.turnIndex = turnIndex;
+	this.turnStarted = turnStarted;
     }
 
     public IPlayer getActivePlayer() {
@@ -34,6 +39,18 @@ public class CatanGame<TBoard extends ICatanBoard> implements ICatanGame<TBoard>
 
     public IPlayer[] getPlayers() {
 	return players;
+    }
+
+    public boolean isTurnStarted() {
+	return turnStarted;
+    }
+
+    protected void passTurn() {
+	turnIndex = (turnIndex + 1) % players.length;
+    }
+
+    protected void switchTurnStarted() {
+	turnStarted = !turnStarted;
     }
 
     private void checkBoard(ICatanBoard board) throws NonNullInputException {
