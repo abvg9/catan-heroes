@@ -95,6 +95,18 @@ public class CatanGameTest {
 	assertSame(players, game.getPlayers());
     }
 
+    @Test
+    public void itMustReturnTheTurnStartedAttribute() throws NegativeNumberException, InvalidBoardDimensionsException,
+	    InvalidBoardElementException, NonNullInputException, NonVoidCollectionException {
+	
+	IPlayer[] players = { new Player(0, new ResourceManager()) };
+	ICatanBoard board = buildStandardBoard();
+	boolean turnStarted = true;
+	CatanGame<ICatanBoard> game = new CatanGame<ICatanBoard>(board, players, turnStarted);
+	
+	assertSame(turnStarted, game.isTurnStarted());
+    }
+
     private IBoardStructure buildNoneStructure() {
 	return new BoardStructure(null, new ResourceManager(), StructureType.None);
     }
