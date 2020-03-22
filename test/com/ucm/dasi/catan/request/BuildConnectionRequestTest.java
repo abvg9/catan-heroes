@@ -1,7 +1,8 @@
 package com.ucm.dasi.catan.request;
 
-import static org.junit.Assert.assertSame;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertSame;
+
+import org.junit.jupiter.api.Test;
 
 import com.ucm.dasi.catan.board.connection.ConnectionType;
 import com.ucm.dasi.catan.player.IPlayer;

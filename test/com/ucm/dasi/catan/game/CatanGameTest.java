@@ -1,8 +1,9 @@
 package com.ucm.dasi.catan.game;
 
-import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.ucm.dasi.catan.board.CatanBoard;
 import com.ucm.dasi.catan.board.ICatanBoard;
@@ -27,38 +28,45 @@ import com.ucm.dasi.catan.resource.exception.NegativeNumberException;
 
 public class CatanGameTest {
 
-    @Test(expected = NonNullInputException.class)
+    @Test
     public void itMustNotBuildAGameWithACollectionOfNullPlayers() throws NonNullInputException,
 	    NonVoidCollectionException, InvalidBoardDimensionsException, InvalidBoardElementException {
 
 	IPlayer[] players = { null };
 	ICatanBoard board = buildStandardBoard();
 	new CatanGame<ICatanBoard>(board, players, 0);
+	
+	assertThrows(NonNullInputException.class, () -> new CatanGame<ICatanBoard>(board, players, 0));
     }
 
-    @Test(expected = NonNullInputException.class)
+    @Test
     public void itMustNotBuildAGameWithANullBoard()
 	    throws NonNullInputException, NonVoidCollectionException, NegativeNumberException {
+	
 	IPlayer[] players = { new Player(0, new ResourceManager()) };
-	new CatanGame<ICatanBoard>(null, players, 0);
+	
+	assertThrows(NonNullInputException.class, () -> new CatanGame<ICatanBoard>(null, players, 0));
     }
 
-    @Test(expected = NonNullInputException.class)
+    @Test
     public void itMustNotBuildAGameWithANullCollectionOfPlayers() throws NonNullInputException,
 	    NonVoidCollectionException, InvalidBoardDimensionsException, InvalidBoardElementException {
 
 	IPlayer[] players = null;
 	ICatanBoard board = buildStandardBoard();
-	new CatanGame<ICatanBoard>(board, players, 0);
+	
+	assertThrows(NonNullInputException.class, () -> new CatanGame<ICatanBoard>(board, players, 0));
     }
 
-    @Test(expected = NonVoidCollectionException.class)
+    @Test
     public void itMustNotBuildAGameWithAVoidCollectionOfPlayers() throws NonNullInputException,
 	    NonVoidCollectionException, InvalidBoardDimensionsException, InvalidBoardElementException {
 
 	IPlayer[] players = {};
 	ICatanBoard board = buildStandardBoard();
 	new CatanGame<ICatanBoard>(board, players, 0);
+	
+	assertThrows(NonVoidCollectionException.class, () -> new CatanGame<ICatanBoard>(board, players, 0));
     }
 
     @Test
