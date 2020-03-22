@@ -1,9 +1,10 @@
 package com.ucm.dasi.catan.board;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.ucm.dasi.catan.board.connection.BoardConnection;
 import com.ucm.dasi.catan.board.connection.ConnectionType;
@@ -77,9 +78,10 @@ public class CatanBoardTest {
 	assertEquals(element, board.getStructure(0, 0));
     }
 
-    @Test(expected = InvalidBoardElementException.class)
+    @Test()
     public void itMustFailIfAFalseConnectionIsProvided()
 	    throws InvalidBoardDimensionsException, InvalidBoardElementException {
+	
 	IBoardElement[][] elements = {
 		{ new BoardStructure(null, StructureType.None), new BoardStructure(null, StructureType.None),
 			new BoardStructure(null, StructureType.None), },
@@ -87,10 +89,11 @@ public class CatanBoardTest {
 			new BoardConnection(null, ConnectionType.Void), },
 		{ new BoardStructure(null, StructureType.None), new BoardConnection(null, ConnectionType.Void),
 			new BoardStructure(null, StructureType.None), }, };
-	new CatanBoard(3, 3, elements);
+	
+	assertThrows(InvalidBoardElementException.class, () -> new CatanBoard(3, 3, elements));
     }
 
-    @Test(expected = InvalidBoardElementException.class)
+    @Test()
     public void itMustFailIfAFalseTerrainIsProvided()
 	    throws InvalidBoardDimensionsException, InvalidBoardElementException {
 	IBoardElement[][] elements = {
@@ -100,10 +103,11 @@ public class CatanBoardTest {
 			new BoardConnection(null, ConnectionType.Void), },
 		{ new BoardStructure(null, StructureType.None), new BoardConnection(null, ConnectionType.Void),
 			new BoardStructure(null, StructureType.None), }, };
-	new CatanBoard(3, 3, elements);
+	
+	assertThrows(InvalidBoardElementException.class, () -> new CatanBoard(3, 3, elements));
     }
 
-    @Test(expected = InvalidBoardElementException.class)
+    @Test()
     public void itMustFailIfAFalseStructureIsProvided()
 	    throws InvalidBoardDimensionsException, InvalidBoardElementException {
 	IBoardElement[][] elements = {
@@ -113,6 +117,7 @@ public class CatanBoardTest {
 			new BoardConnection(null, ConnectionType.Void), },
 		{ new BoardStructure(null, StructureType.None), new BoardConnection(null, ConnectionType.Void),
 			new BoardStructure(null, StructureType.None), }, };
-	new CatanBoard(3, 3, elements);
+	
+	assertThrows(InvalidBoardElementException.class, () -> new CatanBoard(3, 3, elements));
     }
 }

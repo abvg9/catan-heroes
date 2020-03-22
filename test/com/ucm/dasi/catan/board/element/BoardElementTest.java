@@ -1,8 +1,8 @@
 package com.ucm.dasi.catan.board.element;
 
-import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.ucm.dasi.catan.board.BoardElementType;
 
