@@ -5,6 +5,7 @@ import static org.junit.Assert.fail;
 
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
 import org.junit.Test;
@@ -39,6 +40,73 @@ import com.ucm.dasi.catan.resource.exception.NegativeNumberException;
 public class CatanGameEngineTest {
 
     @Test
+    public void itMustNotProcessAValidBuildStructureRequestIfTheTurnIsNotStarted()
+	    throws InvalidBoardDimensionsException, InvalidBoardElementException, NegativeNumberException,
+	    NonNullInputException, NonVoidCollectionException {
+
+	Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
+
+	playerResources.put(ResourceType.Brick, 1);
+	playerResources.put(ResourceType.Grain, 1);
+	playerResources.put(ResourceType.Lumber, 1);
+	playerResources.put(ResourceType.Wool, 1);
+
+	IPlayer player = new Player(0, new ResourceManager(playerResources));
+	IPlayer[] players = { player };
+	ICatanEditableBoard board = buildStandardBoard(player);
+	
+	AtomicBoolean requestFailed = new AtomicBoolean(false);
+	
+	Consumer<IRequest> errorHandler = (request) -> {
+	    requestFailed.set(true);
+	};
+
+	CatanGameEngine engine = new CatanGameEngine(board, players, false, errorHandler);
+
+	int requestX = 2;
+	int requestY = 2;
+
+	IRequest[] requests = { new BuildStructureRequest(player, StructureType.Settlement, requestX, requestY) };
+
+	engine.processRequests(requests);
+	
+	assertSame(true, requestFailed.get());
+    }
+    
+    @Test
+    public void itMustNotProcessAValidBuildConnectionRequest()
+	    throws NegativeNumberException, InvalidBoardDimensionsException, InvalidBoardElementException,
+	    NonNullInputException, NonVoidCollectionException {
+
+	Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
+
+	playerResources.put(ResourceType.Brick, 1);
+	playerResources.put(ResourceType.Grain, 1);
+	playerResources.put(ResourceType.Lumber, 1);
+	playerResources.put(ResourceType.Wool, 1);
+
+	IPlayer player = new Player(0, new ResourceManager(playerResources));
+	IPlayer[] players = { player };
+	ICatanEditableBoard board = buildStandardBoard(player);
+	
+	AtomicBoolean requestFailed = new AtomicBoolean(false);
+	
+	Consumer<IRequest> errorHandler = (request) -> {
+	    requestFailed.set(true);
+	};
+
+	CatanGameEngine engine = new CatanGameEngine(board, players, false, errorHandler);
+
+	int requestX = 3;
+	int requestY = 2;
+	IRequest[] requests = { new BuildConnectionRequest(player, ConnectionType.Road, requestX, requestY) };
+
+	engine.processRequests(requests);
+
+	assertSame(true, requestFailed.get());
+    }
+
+    @Test
     public void itMustProcessAValidBuildStructureRequest() throws InvalidBoardDimensionsException,
 	    InvalidBoardElementException, NegativeNumberException, NonNullInputException, NonVoidCollectionException {
 
@@ -60,7 +128,7 @@ public class CatanGameEngineTest {
 
 	int requestX = 2;
 	int requestY = 2;
-	
+
 	IRequest[] requests = { new BuildStructureRequest(player, StructureType.Settlement, requestX, requestY) };
 
 	engine.processRequests(requests);
