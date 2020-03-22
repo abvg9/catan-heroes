@@ -34,7 +34,6 @@ public class CatanGameTest {
 
 	IPlayer[] players = { null };
 	ICatanBoard board = buildStandardBoard();
-	new CatanGame<ICatanBoard>(board, players, 0);
 	
 	assertThrows(NonNullInputException.class, () -> new CatanGame<ICatanBoard>(board, players, 0));
     }
@@ -64,7 +63,6 @@ public class CatanGameTest {
 
 	IPlayer[] players = {};
 	ICatanBoard board = buildStandardBoard();
-	new CatanGame<ICatanBoard>(board, players, 0);
 	
 	assertThrows(NonVoidCollectionException.class, () -> new CatanGame<ICatanBoard>(board, players, 0));
     }

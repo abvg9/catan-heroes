@@ -34,7 +34,12 @@ jacocoTestReport {
 sourceSets {
     main {
         java {
-            srcDirs = ["src", "test"]
+            srcDirs = ["src"]
+        }
+    }
+    test {
+    	java {
+            srcDirs = ["test"]
         }
     }
 }
