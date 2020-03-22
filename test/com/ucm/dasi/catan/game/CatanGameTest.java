@@ -27,103 +27,103 @@ import com.ucm.dasi.catan.resource.exception.NegativeNumberException;
 
 public class CatanGameTest {
 
-    @Test(expected = NonNullInputException.class)
-    public void itMustNotBuildAGameWithACollectionOfNullPlayers() throws NonNullInputException,
-	    NonVoidCollectionException, InvalidBoardDimensionsException, InvalidBoardElementException {
+	@Test(expected = NonNullInputException.class)
+	public void itMustNotBuildAGameWithACollectionOfNullPlayers() throws NonNullInputException,
+			NonVoidCollectionException, InvalidBoardDimensionsException, InvalidBoardElementException {
 
-	IPlayer[] players = { null };
-	ICatanBoard board = buildStandardBoard();
-	new CatanGame<ICatanBoard>(board, players, false);
-    }
+		IPlayer[] players = { null };
+		ICatanBoard board = buildStandardBoard();
+		new CatanGame<ICatanBoard>(board, players, 0, false);
+	}
 
-    @Test(expected = NonNullInputException.class)
-    public void itMustNotBuildAGameWithANullBoard()
-	    throws NonNullInputException, NonVoidCollectionException, NegativeNumberException {
-	IPlayer[] players = { new Player(0, new ResourceManager()) };
-	new CatanGame<ICatanBoard>(null, players, false);
-    }
+	@Test(expected = NonNullInputException.class)
+	public void itMustNotBuildAGameWithANullBoard()
+			throws NonNullInputException, NonVoidCollectionException, NegativeNumberException {
+		IPlayer[] players = { new Player(0, new ResourceManager()) };
+		new CatanGame<ICatanBoard>(null, players, 0, false);
+	}
 
-    @Test(expected = NonNullInputException.class)
-    public void itMustNotBuildAGameWithANullCollectionOfPlayers() throws NonNullInputException,
-	    NonVoidCollectionException, InvalidBoardDimensionsException, InvalidBoardElementException {
+	@Test(expected = NonNullInputException.class)
+	public void itMustNotBuildAGameWithANullCollectionOfPlayers() throws NonNullInputException,
+			NonVoidCollectionException, InvalidBoardDimensionsException, InvalidBoardElementException {
 
-	IPlayer[] players = null;
-	ICatanBoard board = buildStandardBoard();
-	new CatanGame<ICatanBoard>(board, players, false);
-    }
+		IPlayer[] players = null;
+		ICatanBoard board = buildStandardBoard();
+		new CatanGame<ICatanBoard>(board, players, 0, false);
+	}
 
-    @Test(expected = NonVoidCollectionException.class)
-    public void itMustNotBuildAGameWithAVoidCollectionOfPlayers() throws NonNullInputException,
-	    NonVoidCollectionException, InvalidBoardDimensionsException, InvalidBoardElementException {
+	@Test(expected = NonVoidCollectionException.class)
+	public void itMustNotBuildAGameWithAVoidCollectionOfPlayers() throws NonNullInputException,
+			NonVoidCollectionException, InvalidBoardDimensionsException, InvalidBoardElementException {
 
-	IPlayer[] players = {};
-	ICatanBoard board = buildStandardBoard();
-	new CatanGame<ICatanBoard>(board, players, false);
-    }
+		IPlayer[] players = {};
+		ICatanBoard board = buildStandardBoard();
+		new CatanGame<ICatanBoard>(board, players, 0, false);
+	}
 
-    @Test
-    public void itMustReturnTheActivePlayer() throws NonNullInputException, NonVoidCollectionException,
-	    NegativeNumberException, InvalidBoardDimensionsException, InvalidBoardElementException {
+	@Test
+	public void itMustReturnTheActivePlayer() throws NonNullInputException, NonVoidCollectionException,
+			NegativeNumberException, InvalidBoardDimensionsException, InvalidBoardElementException {
 
-	IPlayer activePlayer = new Player(0, new ResourceManager());
-	IPlayer[] players = { activePlayer };
-	ICatanBoard board = buildStandardBoard();
-	CatanGame<ICatanBoard> game = new CatanGame<ICatanBoard>(board, players, false);
+		IPlayer activePlayer = new Player(0, new ResourceManager());
+		IPlayer[] players = { activePlayer };
+		ICatanBoard board = buildStandardBoard();
+		CatanGame<ICatanBoard> game = new CatanGame<ICatanBoard>(board, players, 0, false);
 
-	assertSame(activePlayer, game.getActivePlayer());
-    }
+		assertSame(activePlayer, game.getActivePlayer());
+	}
 
-    @Test
-    public void itMustReturnTheBoard() throws NonNullInputException, NonVoidCollectionException,
-	    NegativeNumberException, InvalidBoardDimensionsException, InvalidBoardElementException {
+	@Test
+	public void itMustReturnTheBoard() throws NonNullInputException, NonVoidCollectionException,
+			NegativeNumberException, InvalidBoardDimensionsException, InvalidBoardElementException {
 
-	IPlayer[] players = { new Player(0, new ResourceManager()) };
-	ICatanBoard board = buildStandardBoard();
-	CatanGame<ICatanBoard> game = new CatanGame<ICatanBoard>(board, players, false);
+		IPlayer[] players = { new Player(0, new ResourceManager()) };
+		ICatanBoard board = buildStandardBoard();
+		CatanGame<ICatanBoard> game = new CatanGame<ICatanBoard>(board, players, 0, false);
 
-	assertSame(board, game.getBoard());
-    }
+		assertSame(board, game.getBoard());
+	}
 
-    @Test
-    public void itMustReturnTheStoredPlayersCollection() throws NonNullInputException, NonVoidCollectionException,
-	    NegativeNumberException, InvalidBoardDimensionsException, InvalidBoardElementException {
+	@Test
+	public void itMustReturnTheStoredPlayersCollection() throws NonNullInputException, NonVoidCollectionException,
+			NegativeNumberException, InvalidBoardDimensionsException, InvalidBoardElementException {
 
-	IPlayer[] players = { new Player(0, new ResourceManager()) };
-	ICatanBoard board = buildStandardBoard();
-	CatanGame<ICatanBoard> game = new CatanGame<ICatanBoard>(board, players, false);
+		IPlayer[] players = { new Player(0, new ResourceManager()) };
+		ICatanBoard board = buildStandardBoard();
+		CatanGame<ICatanBoard> game = new CatanGame<ICatanBoard>(board, players, 0, false);
 
-	assertSame(players, game.getPlayers());
-    }
+		assertSame(players, game.getPlayers());
+	}
 
-    @Test
-    public void itMustReturnTheTurnStartedAttribute() throws NegativeNumberException, InvalidBoardDimensionsException,
-	    InvalidBoardElementException, NonNullInputException, NonVoidCollectionException {
-	
-	IPlayer[] players = { new Player(0, new ResourceManager()) };
-	ICatanBoard board = buildStandardBoard();
-	boolean turnStarted = true;
-	CatanGame<ICatanBoard> game = new CatanGame<ICatanBoard>(board, players, turnStarted);
-	
-	assertSame(turnStarted, game.isTurnStarted());
-    }
+	@Test
+	public void itMustReturnTheTurnStartedAttribute() throws NegativeNumberException, InvalidBoardDimensionsException,
+			InvalidBoardElementException, NonNullInputException, NonVoidCollectionException {
 
-    private IBoardStructure buildNoneStructure() {
-	return new BoardStructure(null, new ResourceManager(), StructureType.None);
-    }
+		IPlayer[] players = { new Player(0, new ResourceManager()) };
+		ICatanBoard board = buildStandardBoard();
+		boolean turnStarted = true;
+		CatanGame<ICatanBoard> game = new CatanGame<ICatanBoard>(board, players, 0, turnStarted);
 
-    private IBoardTerrain buildNoneTerrain() {
-	return new BoardTerrain(0, TerrainType.None);
-    }
+		assertSame(turnStarted, game.isTurnStarted());
+	}
 
-    private ICatanBoard buildStandardBoard() throws InvalidBoardDimensionsException, InvalidBoardElementException {
-	IBoardElement[][] elements = { { buildNoneStructure(), buildVoidConnection(), buildNoneStructure(), },
-		{ buildVoidConnection(), buildNoneTerrain(), buildVoidConnection(), },
-		{ buildNoneStructure(), buildVoidConnection(), buildNoneStructure(), }, };
+	private IBoardStructure buildNoneStructure() {
+		return new BoardStructure(null, new ResourceManager(), StructureType.None);
+	}
 
-	return new CatanBoard(3, 3, elements);
-    }
+	private IBoardTerrain buildNoneTerrain() {
+		return new BoardTerrain(0, TerrainType.None);
+	}
 
-    private IBoardConnection buildVoidConnection() {
-	return new BoardConnection(null, new ResourceManager(), ConnectionType.Void);
-    }
+	private ICatanBoard buildStandardBoard() throws InvalidBoardDimensionsException, InvalidBoardElementException {
+		IBoardElement[][] elements = { { buildNoneStructure(), buildVoidConnection(), buildNoneStructure(), },
+				{ buildVoidConnection(), buildNoneTerrain(), buildVoidConnection(), },
+				{ buildNoneStructure(), buildVoidConnection(), buildNoneStructure(), }, };
+
+		return new CatanBoard(3, 3, elements);
+	}
+
+	private IBoardConnection buildVoidConnection() {
+		return new BoardConnection(null, new ResourceManager(), ConnectionType.Void);
+	}
 }
