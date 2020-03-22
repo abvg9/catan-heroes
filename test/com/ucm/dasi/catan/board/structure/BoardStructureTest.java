@@ -5,12 +5,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
 import com.ucm.dasi.catan.board.BoardElementType;
+import com.ucm.dasi.catan.resource.ResourceManager;
 
 public class BoardStructureTest {
 
     @Test
     public void itMustReturnTheRightElementType() {
-	BoardStructure connection = new BoardStructure(null, StructureType.None);
+	BoardStructure connection = new BoardStructure(null, new ResourceManager(), StructureType.None);
 
 	assertEquals(BoardElementType.Structure, connection.getElementType());
     }
@@ -18,7 +19,7 @@ public class BoardStructureTest {
     @Test
     public void itMustGetItsStructureType() {
 	StructureType type = StructureType.None;
-	BoardStructure structure = new BoardStructure(null, type);
+	BoardStructure structure = new BoardStructure(null, new ResourceManager(), type);
 
 	assertEquals(type, structure.getType());
     }
