@@ -1,4 +1,4 @@
-package com.ucm.dasi.catan.warehouse.exception;
+package com.ucm.dasi.catan.resource.exception;
 
 public class NotEnoughtResourcesException extends Exception {
 
