@@ -33,14 +33,14 @@ public class CatanGameTest {
 
 	IPlayer[] players = { null };
 	ICatanBoard board = buildStandardBoard();
-	new CatanGame<ICatanBoard>(board, players);
+	new CatanGame<ICatanBoard>(false, board, players);
     }
 
     @Test(expected = NonNullInputException.class)
     public void itMustNotBuildAGameWithANullBoard()
 	    throws NonNullInputException, NonVoidCollectionException, NegativeNumberException {
 	IPlayer[] players = { new Player(0, new ResourceManager()) };
-	new CatanGame<ICatanBoard>(null, players);
+	new CatanGame<ICatanBoard>(false, null, players);
     }
 
     @Test(expected = NonNullInputException.class)
@@ -49,7 +49,7 @@ public class CatanGameTest {
 
 	IPlayer[] players = null;
 	ICatanBoard board = buildStandardBoard();
-	new CatanGame<ICatanBoard>(board, players);
+	new CatanGame<ICatanBoard>(false, board, players);
     }
 
     @Test(expected = NonVoidCollectionException.class)
@@ -58,7 +58,7 @@ public class CatanGameTest {
 
 	IPlayer[] players = {};
 	ICatanBoard board = buildStandardBoard();
-	new CatanGame<ICatanBoard>(board, players);
+	new CatanGame<ICatanBoard>(false, board, players);
     }
 
     @Test
@@ -68,7 +68,7 @@ public class CatanGameTest {
 	IPlayer activePlayer = new Player(0, new ResourceManager());
 	IPlayer[] players = { activePlayer };
 	ICatanBoard board = buildStandardBoard();
-	CatanGame<ICatanBoard> game = new CatanGame<ICatanBoard>(board, players);
+	CatanGame<ICatanBoard> game = new CatanGame<ICatanBoard>(false, board, players);
 
 	assertSame(activePlayer, game.getActivePlayer());
     }
@@ -79,7 +79,7 @@ public class CatanGameTest {
 
 	IPlayer[] players = { new Player(0, new ResourceManager()) };
 	ICatanBoard board = buildStandardBoard();
-	CatanGame<ICatanBoard> game = new CatanGame<ICatanBoard>(board, players);
+	CatanGame<ICatanBoard> game = new CatanGame<ICatanBoard>(false, board, players);
 
 	assertSame(board, game.getBoard());
     }
@@ -90,7 +90,7 @@ public class CatanGameTest {
 
 	IPlayer[] players = { new Player(0, new ResourceManager()) };
 	ICatanBoard board = buildStandardBoard();
-	CatanGame<ICatanBoard> game = new CatanGame<ICatanBoard>(board, players);
+	CatanGame<ICatanBoard> game = new CatanGame<ICatanBoard>(false, board, players);
 
 	assertSame(players, game.getPlayers());
     }
