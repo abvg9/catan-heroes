@@ -1,7 +1,8 @@
 package com.ucm.dasi.catan.request;
 
-import static org.junit.Assert.assertSame;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertSame;
+
+import org.junit.jupiter.api.Test;
 
 import com.ucm.dasi.catan.player.IPlayer;
 import com.ucm.dasi.catan.player.Player;
@@ -10,7 +11,7 @@ import com.ucm.dasi.catan.resource.exception.NegativeNumberException;
 
 public class RequestTest {
 
-    @Test()
+    @Test
     public void itMustStoreItsPlayer() throws NegativeNumberException {
 	IPlayer player = new Player(0, new ResourceManager());
 	

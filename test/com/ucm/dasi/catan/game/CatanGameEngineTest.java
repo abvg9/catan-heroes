@@ -1,14 +1,14 @@
 package com.ucm.dasi.catan.game;
 
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.ucm.dasi.catan.board.BoardElementType;
 import com.ucm.dasi.catan.board.CatanEditableBoard;
