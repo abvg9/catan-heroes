@@ -32,10 +32,10 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
 
     private IGameEngineHandlersMap handlersMap;
 
-    public CatanGameEngine(ICatanEditableBoard board, IPlayer[] players, Consumer<IRequest> errorHandler)
+    public CatanGameEngine(boolean turnStarted, ICatanEditableBoard board, IPlayer[] players, Consumer<IRequest> errorHandler)
 	    throws NonNullInputException, NonVoidCollectionException {
 
-	super(board, players);
+	super(turnStarted, board, players);
 
 	connectionCostProvider = ConnectionCostProvider.buildDefaultProvider();
 	structureCostProvider = StructureCostProvider.buildDefaultProvider();
@@ -55,11 +55,11 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
     }
 
     private boolean isConnectionConnected(IPlayer player, int x, int y) {
-	if (board.get(x, y).getElementType() != BoardElementType.Connection) {
+	if (getBoard().get(x, y).getElementType() != BoardElementType.Connection) {
 	    return false;
 	}
 
-	ConnectionDirection direction = board.getConnectionDirection(x, y);
+	ConnectionDirection direction = getBoard().getConnectionDirection(x, y);
 
 	if (direction == ConnectionDirection.Horizontal) {
 	    return this.isHorizontalConnectionConnected(player, x, y);
@@ -77,19 +77,19 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
     }
 
     private boolean isStructurePointConnected(IPlayer player, int x, int y) {
-	return board.get(x, y).getElementType() == BoardElementType.Structure
-		&& ((x > 0 && isStructureConnectedCheckConnection(player, (IOwnedElement) board.get(x - 1, y)))
-			|| (x + 1 < board.getWidth()
-				&& isStructureConnectedCheckConnection(player, (IOwnedElement) board.get(x + 1, y)))
-			|| (y > 0 && isStructureConnectedCheckConnection(player, (IOwnedElement) board.get(x, y - 1)))
-			|| (y + 1 > board.getHeight()
-				&& isStructureConnectedCheckConnection(player, (IOwnedElement) board.get(x, y + 1))));
+	return getBoard().get(x, y).getElementType() == BoardElementType.Structure
+		&& ((x > 0 && isStructureConnectedCheckConnection(player, (IOwnedElement) getBoard().get(x - 1, y)))
+			|| (x + 1 < getBoard().getWidth()
+				&& isStructureConnectedCheckConnection(player, (IOwnedElement) getBoard().get(x + 1, y)))
+			|| (y > 0 && isStructureConnectedCheckConnection(player, (IOwnedElement) getBoard().get(x, y - 1)))
+			|| (y + 1 > getBoard().getHeight()
+				&& isStructureConnectedCheckConnection(player, (IOwnedElement) getBoard().get(x, y + 1))));
     }
 
     private boolean isStructurePointConnectedOrControlled(IPlayer player, int x, int y) {
-	return (board.get(x, y).getElementType() == BoardElementType.Structure
-		&& ((IOwnedElement) board.get(x, y)).getOwner() != null
-		&& ((IOwnedElement) board.get(x, y)).getOwner().getId() == player.getId())
+	return (getBoard().get(x, y).getElementType() == BoardElementType.Structure
+		&& ((IOwnedElement) getBoard().get(x, y)).getOwner() != null
+		&& ((IOwnedElement) getBoard().get(x, y)).getOwner().getId() == player.getId())
 		|| isStructurePointConnected(player, x, y);
     }
 
