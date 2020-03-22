@@ -18,6 +18,6 @@ public class BuildConnectionRequestTest {
 	
 	BuildConnectionRequest request = new BuildConnectionRequest(player, type, 0, 1);
     
-	assertSame(type, request.getType());
+	assertSame(type, request.getConnectionType());
     }
 }

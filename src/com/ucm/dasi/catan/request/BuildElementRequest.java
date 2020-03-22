@@ -11,16 +11,16 @@ public abstract class BuildElementRequest extends Request {
 
     private int y;
 
-    public BuildElementRequest(IPlayer player, BoardElementType type, int x, int y) {
-	super(player);
+    public BuildElementRequest(IPlayer player, RequestType requestType, BoardElementType elementType, int x, int y) {
+	super(player, requestType);
 
-	this.type = type;
+	this.type = elementType;
 	this.x = x;
 	this.y = y;
     }
 
     public BoardElementType getElementType() {
-	return this.type;
+	return type;
     }
 
     public int getX() {

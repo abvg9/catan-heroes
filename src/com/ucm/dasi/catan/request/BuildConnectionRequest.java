@@ -9,13 +9,13 @@ public class BuildConnectionRequest extends BuildElementRequest implements IBuil
     private ConnectionType type;
     
     public BuildConnectionRequest(IPlayer player, ConnectionType type,  int x, int y) {
-	super(player, BoardElementType.Connection, x, y);
+	super(player, RequestType.BuildConnection, BoardElementType.Connection, x, y);
 	
 	this.type = type;
     }
 
     @Override
-    public ConnectionType getType() {
+    public ConnectionType getConnectionType() {
 	return type;
     }
 

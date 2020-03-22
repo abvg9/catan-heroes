@@ -11,11 +11,11 @@ import com.ucm.dasi.catan.exception.NonNullInputException;
 import com.ucm.dasi.catan.exception.NonVoidCollectionException;
 import com.ucm.dasi.catan.game.handler.GameEngineHandlersMap;
 import com.ucm.dasi.catan.game.handler.IGameEngineHandlersMap;
-import com.ucm.dasi.catan.lang.ComparableClass;
 import com.ucm.dasi.catan.player.IPlayer;
 import com.ucm.dasi.catan.request.IBuildConnectionRequest;
 import com.ucm.dasi.catan.request.IBuildStructureRequest;
 import com.ucm.dasi.catan.request.IRequest;
+import com.ucm.dasi.catan.request.RequestType;
 import com.ucm.dasi.catan.resource.exception.NotEnoughtResourcesException;
 import com.ucm.dasi.catan.resource.provider.ConnectionCostProvider;
 import com.ucm.dasi.catan.resource.provider.StructureCostProvider;
@@ -104,15 +104,10 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
     }
 
     private void processTurnRequest(IRequest request) {
-	Class<?>[] interfaces = request.getClass().getInterfaces();
 
-	for (Class<?> interfaceType : interfaces) {
-	    @SuppressWarnings({ "rawtypes", "unchecked" })
-	    Consumer<? extends IRequest> consumer = handlersMap.get(new ComparableClass(interfaceType));
-	    if (consumer != null) {
-		consumeRequest(consumer, request);
-		break;
-	    }
+	Consumer<? extends IRequest> consumer = handlersMap.get(request.getType());
+	if (consumer != null) {
+	    consumeRequest(consumer, request);
 	}
     }
 
@@ -124,10 +119,9 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
     private IGameEngineHandlersMap generateMap() {
 	IGameEngineHandlersMap map = new GameEngineHandlersMap();
 
-	map.put(new ComparableClass<IBuildConnectionRequest>(IBuildConnectionRequest.class),
+	map.put(RequestType.BuildConnection,
 		(IBuildConnectionRequest request) -> handleBuildConnectionRequest(request));
-	map.put(new ComparableClass<IBuildStructureRequest>(IBuildStructureRequest.class),
-		(IBuildStructureRequest request) -> handleBuildStructureRequest(request));
+	map.put(RequestType.BuildStructure, (IBuildStructureRequest request) -> handleBuildStructureRequest(request));
 
 	return map;
     }
@@ -144,7 +138,7 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
 	}
 
 	BoardConnection element = new BoardConnection(request.getPlayer(),
-		connectionCostProvider.getCost(request.getType()), request.getType());
+		connectionCostProvider.getCost(request.getConnectionType()), request.getConnectionType());
 
 	try {
 	    getBoard().build(element, request.getX(), request.getY());
@@ -166,7 +160,7 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
 	}
 
 	BoardStructure element = new BoardStructure(request.getPlayer(),
-		structureCostProvider.getCost(request.getType()), request.getType());
+		structureCostProvider.getCost(request.getStructureType()), request.getStructureType());
 
 	try {
 	    getBoard().build(element, request.getX(), request.getY());
