@@ -14,6 +14,11 @@ public class Player implements IPlayer {
     this.id = id;
     this.warehouse = new ResourceManager(warehouse);
   }
+  
+  @Override
+  public int compareTo(IPlayer other) {
+    return getId() - other.getId();
+  }
 
   @Override
   public int getId() {
