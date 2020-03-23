@@ -8,7 +8,7 @@ import com.ucm.dasi.catan.resource.exception.NegativeNumberException;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class StructureCostProvider extends CostProvider<StructureType> {
+public class StructureCostProvider extends ResourceManagerProvider<StructureType> {
 
   public StructureCostProvider(Map<StructureType, IResourceManager> costMap) {
     super(costMap);
