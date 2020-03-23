@@ -21,7 +21,7 @@ public class Player implements IPlayer {
   }
 
   @Override
-  public IResourceManager getWarehouse() {
+  public IResourceManager getResourceManager() {
     return warehouse;
   }
 }

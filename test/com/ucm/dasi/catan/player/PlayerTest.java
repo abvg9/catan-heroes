@@ -22,6 +22,6 @@ public class PlayerTest {
     IResourceManager warehouse = new ResourceManager();
     Player player = new Player(0, warehouse);
 
-    assertEquals(warehouse, player.getWarehouse());
+    assertEquals(warehouse, player.getResourceManager());
   }
 }
