@@ -14,7 +14,9 @@ import com.ucm.dasi.catan.game.handler.IGameEngineHandlersMap;
 import com.ucm.dasi.catan.player.IPlayer;
 import com.ucm.dasi.catan.request.IBuildConnectionRequest;
 import com.ucm.dasi.catan.request.IBuildStructureRequest;
+import com.ucm.dasi.catan.request.IEndTurnRequest;
 import com.ucm.dasi.catan.request.IRequest;
+import com.ucm.dasi.catan.request.IStartTurnRequest;
 import com.ucm.dasi.catan.request.RequestType;
 import com.ucm.dasi.catan.resource.exception.NotEnoughtResourcesException;
 import com.ucm.dasi.catan.resource.provider.ConnectionCostProvider;
@@ -32,10 +34,10 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
 
     private IGameEngineHandlersMap handlersMap;
 
-    public CatanGameEngine(ICatanEditableBoard board, IPlayer[] players, int turnIndex, Consumer<IRequest> errorHandler)
-	    throws NonNullInputException, NonVoidCollectionException {
+    public CatanGameEngine(ICatanEditableBoard board, IPlayer[] players, int turnIndex, boolean turnStarted,
+	    Consumer<IRequest> errorHandler) throws NonNullInputException, NonVoidCollectionException {
 
-	super(board, players, turnIndex);
+	super(board, players, turnIndex, turnStarted);
 
 	connectionCostProvider = ConnectionCostProvider.buildDefaultProvider();
 	structureCostProvider = StructureCostProvider.buildDefaultProvider();
@@ -55,11 +57,11 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
     }
 
     private boolean isConnectionConnected(IPlayer player, int x, int y) {
-	if (board.get(x, y).getElementType() != BoardElementType.Connection) {
+	if (getBoard().get(x, y).getElementType() != BoardElementType.Connection) {
 	    return false;
 	}
 
-	ConnectionDirection direction = board.getConnectionDirection(x, y);
+	ConnectionDirection direction = getBoard().getConnectionDirection(x, y);
 
 	if (direction == ConnectionDirection.Horizontal) {
 	    return this.isHorizontalConnectionConnected(player, x, y);
@@ -77,19 +79,19 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
     }
 
     private boolean isStructurePointConnected(IPlayer player, int x, int y) {
-	return board.get(x, y).getElementType() == BoardElementType.Structure
-		&& ((x > 0 && isStructureConnectedCheckConnection(player, (IOwnedElement) board.get(x - 1, y)))
-			|| (x + 1 < board.getWidth()
-				&& isStructureConnectedCheckConnection(player, (IOwnedElement) board.get(x + 1, y)))
-			|| (y > 0 && isStructureConnectedCheckConnection(player, (IOwnedElement) board.get(x, y - 1)))
-			|| (y + 1 > board.getHeight()
-				&& isStructureConnectedCheckConnection(player, (IOwnedElement) board.get(x, y + 1))));
+	return getBoard().get(x, y).getElementType() == BoardElementType.Structure && ((x > 0
+		&& isStructureConnectedCheckConnection(player, (IOwnedElement) getBoard().get(x - 1, y)))
+		|| (x + 1 < getBoard().getWidth()
+			&& isStructureConnectedCheckConnection(player, (IOwnedElement) getBoard().get(x + 1, y)))
+		|| (y > 0 && isStructureConnectedCheckConnection(player, (IOwnedElement) getBoard().get(x, y - 1)))
+		|| (y + 1 > getBoard().getHeight()
+			&& isStructureConnectedCheckConnection(player, (IOwnedElement) getBoard().get(x, y + 1))));
     }
 
     private boolean isStructurePointConnectedOrControlled(IPlayer player, int x, int y) {
-	return (board.get(x, y).getElementType() == BoardElementType.Structure
-		&& ((IOwnedElement) board.get(x, y)).getOwner() != null
-		&& ((IOwnedElement) board.get(x, y)).getOwner().getId() == player.getId())
+	return (getBoard().get(x, y).getElementType() == BoardElementType.Structure
+		&& ((IOwnedElement) getBoard().get(x, y)).getOwner() != null
+		&& ((IOwnedElement) getBoard().get(x, y)).getOwner().getId() == player.getId())
 		|| isStructurePointConnected(player, x, y);
     }
 
@@ -122,12 +124,19 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
 	map.put(RequestType.BuildConnection,
 		(IBuildConnectionRequest request) -> handleBuildConnectionRequest(request));
 	map.put(RequestType.BuildStructure, (IBuildStructureRequest request) -> handleBuildStructureRequest(request));
+	map.put(RequestType.EndTurn, (IEndTurnRequest request) -> handleEndTurnRequest(request));
+	map.put(RequestType.StartTurn, (IStartTurnRequest request) -> handleStartTurnRequest(request));
 
 	return map;
     }
 
     private void handleBuildConnectionRequest(IBuildConnectionRequest request) {
 	if (request.getPlayer().getId() != getActivePlayer().getId()) {
+	    handleRequestError(request);
+	    return;
+	}
+
+	if (!isTurnStarted()) {
 	    handleRequestError(request);
 	    return;
 	}
@@ -154,6 +163,11 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
 	    return;
 	}
 
+	if (!isTurnStarted()) {
+	    handleRequestError(request);
+	    return;
+	}
+
 	if (!isStructurePointConnected(request.getPlayer(), request.getX(), request.getY())) {
 	    handleRequestError(request);
 	    return;
@@ -168,6 +182,35 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
 	} catch (InvalidBoardElementException | NotEnoughtResourcesException e) {
 	    handleRequestError(request);
 	}
+    }
+
+    private void handleEndTurnRequest(IEndTurnRequest request) {
+	if (request.getPlayer().getId() != getActivePlayer().getId()) {
+	    handleRequestError(request);
+	    return;
+	}
+
+	if (!isTurnStarted()) {
+	    handleRequestError(request);
+	    return;
+	}
+
+	switchTurnStarted();
+	passTurn();
+    }
+
+    private void handleStartTurnRequest(IStartTurnRequest request) {
+	if (request.getPlayer().getId() != getActivePlayer().getId()) {
+	    handleRequestError(request);
+	    return;
+	}
+
+	if (isTurnStarted()) {
+	    handleRequestError(request);
+	    return;
+	}
+
+	switchTurnStarted();
     }
 
 }
