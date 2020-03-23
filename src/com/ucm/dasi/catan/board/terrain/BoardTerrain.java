@@ -5,22 +5,22 @@ import com.ucm.dasi.catan.board.element.BoardElement;
 
 public class BoardTerrain extends BoardElement implements IBoardTerrain {
 
-    protected int productionNumber;
+  protected int productionNumber;
 
-    protected TerrainType type;
+  protected TerrainType type;
 
-    public BoardTerrain(int productionNumber, TerrainType type) {
-	super(BoardElementType.Terrain);
-	
-	this.productionNumber = productionNumber;
-	this.type = type;
-    }
+  public BoardTerrain(int productionNumber, TerrainType type) {
+    super(BoardElementType.Terrain);
 
-    public int getProductionNumber() {
-	return productionNumber;
-    }
+    this.productionNumber = productionNumber;
+    this.type = type;
+  }
 
-    public TerrainType getType() {
-	return type;
-    }
+  public int getProductionNumber() {
+    return productionNumber;
+  }
+
+  public TerrainType getType() {
+    return type;
+  }
 }

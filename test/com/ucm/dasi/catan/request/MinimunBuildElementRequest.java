@@ -5,8 +5,8 @@ import com.ucm.dasi.catan.player.IPlayer;
 
 public class MinimunBuildElementRequest extends BuildElementRequest {
 
-    public MinimunBuildElementRequest(IPlayer player, RequestType requestType, BoardElementType type, int x, int y) {
-	super(player, requestType, type, x, y);
-    }
-
+  public MinimunBuildElementRequest(
+      IPlayer player, RequestType requestType, BoardElementType type, int x, int y) {
+    super(player, requestType, type, x, y);
+  }
 }

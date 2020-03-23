@@ -5,13 +5,13 @@ import com.ucm.dasi.catan.board.element.IBoardElement;
 import com.ucm.dasi.catan.board.structure.IBoardStructure;
 
 public interface ICatanBoard {
-    IBoardElement get(int x, int y);
-    
-    ConnectionDirection getConnectionDirection(int x, int y);
-    
-    int getHeight();
+  IBoardElement get(int x, int y);
 
-    IBoardStructure getStructure(int x, int y);
-    
-    int getWidth();
+  ConnectionDirection getConnectionDirection(int x, int y);
+
+  int getHeight();
+
+  IBoardStructure getStructure(int x, int y);
+
+  int getWidth();
 }
