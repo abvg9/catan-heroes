@@ -6,16 +6,17 @@ import com.ucm.dasi.catan.resource.exception.NegativeNumberException;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class CostProvider<TType extends Comparable<TType>> implements ICostProvider<TType> {
+public class ResourceManagerProvider<TType extends Comparable<TType>>
+    implements IResourceManagerProvider<TType> {
 
   protected TreeMap<TType, IResourceManager> costMap;
 
-  public CostProvider(Map<TType, IResourceManager> costMap) {
+  public ResourceManagerProvider(Map<TType, IResourceManager> costMap) {
     this.costMap = new TreeMap<TType, IResourceManager>(costMap);
   }
 
   @Override
-  public IResourceManager getCost(TType type) {
+  public IResourceManager getResourceManager(TType type) {
     IResourceManager storedCost = this.costMap.get(type);
 
     try {

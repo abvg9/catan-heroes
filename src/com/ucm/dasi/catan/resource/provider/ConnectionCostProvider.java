@@ -8,7 +8,7 @@ import com.ucm.dasi.catan.resource.exception.NegativeNumberException;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class ConnectionCostProvider extends CostProvider<ConnectionType> {
+public class ConnectionCostProvider extends ResourceManagerProvider<ConnectionType> {
 
   public ConnectionCostProvider(Map<ConnectionType, IResourceManager> costMap) {
     super(costMap);
