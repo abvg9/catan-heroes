@@ -23,10 +23,14 @@ import com.ucm.dasi.catan.player.IPlayer;
 import com.ucm.dasi.catan.player.Player;
 import com.ucm.dasi.catan.resource.ResourceManager;
 import com.ucm.dasi.catan.resource.exception.NegativeNumberException;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 public class CatanGameTest {
 
+  @DisplayName("It must not build a game with a collection of null players")
+  @Tag(value = "CatanGame")
   @Test
   public void itMustNotBuildAGameWithACollectionOfNullPlayers()
       throws NonNullInputException, NonVoidCollectionException, InvalidBoardDimensionsException,
@@ -38,6 +42,8 @@ public class CatanGameTest {
         NonNullInputException.class, () -> new CatanGame<ICatanBoard>(board, players, 0, false));
   }
 
+  @DisplayName("It must not build a game with a null board")
+  @Tag(value = "CatanGame")
   @Test
   public void itMustNotBuildAGameWithANullBoard()
       throws NonNullInputException, NonVoidCollectionException, NegativeNumberException {
@@ -46,6 +52,8 @@ public class CatanGameTest {
         NonNullInputException.class, () -> new CatanGame<ICatanBoard>(null, players, 0, false));
   }
 
+  @DisplayName("It must not build a game with a null collection of players")
+  @Tag(value = "CatanGame")
   @Test
   public void itMustNotBuildAGameWithANullCollectionOfPlayers()
       throws NonNullInputException, NonVoidCollectionException, InvalidBoardDimensionsException,
@@ -57,6 +65,8 @@ public class CatanGameTest {
         NonNullInputException.class, () -> new CatanGame<ICatanBoard>(board, players, 0, false));
   }
 
+  @DisplayName("It must not build a game with a void collection of players")
+  @Tag(value = "CatanGame")
   @Test
   public void itMustNotBuildAGameWithAVoidCollectionOfPlayers()
       throws NonNullInputException, NonVoidCollectionException, InvalidBoardDimensionsException,
@@ -69,6 +79,8 @@ public class CatanGameTest {
         () -> new CatanGame<ICatanBoard>(board, players, 0, false));
   }
 
+  @DisplayName("It must return the active player")
+  @Tag(value = "CatanGame")
   @Test
   public void itMustReturnTheActivePlayer()
       throws NonNullInputException, NonVoidCollectionException, NegativeNumberException,
@@ -82,6 +94,8 @@ public class CatanGameTest {
     assertSame(activePlayer, game.getActivePlayer());
   }
 
+  @DisplayName("It must return the board")
+  @Tag(value = "CatanGame")
   @Test
   public void itMustReturnTheBoard()
       throws NonNullInputException, NonVoidCollectionException, NegativeNumberException,
@@ -94,6 +108,8 @@ public class CatanGameTest {
     assertSame(board, game.getBoard());
   }
 
+  @DisplayName("It must return the stored players collection")
+  @Tag(value = "CatanGame")
   @Test
   public void itMustReturnTheStoredPlayersCollection()
       throws NonNullInputException, NonVoidCollectionException, NegativeNumberException,
@@ -106,6 +122,8 @@ public class CatanGameTest {
     assertSame(players, game.getPlayers());
   }
 
+  @DisplayName("It must return the turn started attribute")
+  @Tag(value = "CatanGame")
   @Test
   public void itMustReturnTheTurnStartedAttribute()
       throws NegativeNumberException, InvalidBoardDimensionsException, InvalidBoardElementException,
