@@ -6,7 +6,7 @@ import com.ucm.dasi.catan.resource.IResourceManager;
 
 public class MinimunOwnedElement extends OwnedElement {
 
-    public MinimunOwnedElement(BoardElementType type, IResourceManager cost,  IPlayer owner) {
-	super(type, cost, owner);
-    }
+  public MinimunOwnedElement(BoardElementType type, IResourceManager cost, IPlayer owner) {
+    super(type, cost, owner);
+  }
 }

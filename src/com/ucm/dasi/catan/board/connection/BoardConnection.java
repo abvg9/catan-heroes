@@ -7,16 +7,16 @@ import com.ucm.dasi.catan.resource.IResourceManager;
 
 public class BoardConnection extends OwnedElement implements IBoardConnection {
 
-    protected ConnectionType type;
+  protected ConnectionType type;
 
-    public BoardConnection(IPlayer owner, IResourceManager cost, ConnectionType type) {
-	super(BoardElementType.Connection, cost, owner);
+  public BoardConnection(IPlayer owner, IResourceManager cost, ConnectionType type) {
+    super(BoardElementType.Connection, cost, owner);
 
-	this.type = type;
-    }
+    this.type = type;
+  }
 
-    @Override
-    public ConnectionType getType() {
-	return type;
-    }
+  @Override
+  public ConnectionType getType() {
+    return type;
+  }
 }

@@ -6,17 +6,16 @@ import com.ucm.dasi.catan.player.IPlayer;
 
 public class BuildConnectionRequest extends BuildElementRequest implements IBuildConnectionRequest {
 
-    private ConnectionType type;
-    
-    public BuildConnectionRequest(IPlayer player, ConnectionType type,  int x, int y) {
-	super(player, RequestType.BuildConnection, BoardElementType.Connection, x, y);
-	
-	this.type = type;
-    }
+  private ConnectionType type;
 
-    @Override
-    public ConnectionType getConnectionType() {
-	return type;
-    }
+  public BuildConnectionRequest(IPlayer player, ConnectionType type, int x, int y) {
+    super(player, RequestType.BuildConnection, BoardElementType.Connection, x, y);
 
+    this.type = type;
+  }
+
+  @Override
+  public ConnectionType getConnectionType() {
+    return type;
+  }
 }

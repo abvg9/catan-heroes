@@ -7,16 +7,16 @@ import com.ucm.dasi.catan.resource.IResourceManager;
 
 public class BoardStructure extends OwnedElement implements IBoardStructure {
 
-    private StructureType type;
+  private StructureType type;
 
-    public BoardStructure(IPlayer owner, IResourceManager cost, StructureType type) {
-	super(BoardElementType.Structure, cost, owner);
+  public BoardStructure(IPlayer owner, IResourceManager cost, StructureType type) {
+    super(BoardElementType.Structure, cost, owner);
 
-	this.type = type;
-    }
+    this.type = type;
+  }
 
-    @Override
-    public StructureType getType() {
-	return type;
-    }
+  @Override
+  public StructureType getType() {
+    return type;
+  }
 }

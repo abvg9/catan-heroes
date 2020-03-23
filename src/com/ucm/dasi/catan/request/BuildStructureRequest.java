@@ -6,17 +6,16 @@ import com.ucm.dasi.catan.player.IPlayer;
 
 public class BuildStructureRequest extends BuildElementRequest implements IBuildStructureRequest {
 
-    private StructureType type;
+  private StructureType type;
 
-    public BuildStructureRequest(IPlayer player, StructureType type, int x, int y) {
-	super(player, RequestType.BuildStructure, BoardElementType.Structure, x, y);
+  public BuildStructureRequest(IPlayer player, StructureType type, int x, int y) {
+    super(player, RequestType.BuildStructure, BoardElementType.Structure, x, y);
 
-	this.type = type;
-    }
+    this.type = type;
+  }
 
-    @Override
-    public StructureType getStructureType() {
-	return type;
-    }
-
+  @Override
+  public StructureType getStructureType() {
+    return type;
+  }
 }
