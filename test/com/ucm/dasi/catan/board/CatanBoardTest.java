@@ -17,10 +17,14 @@ import com.ucm.dasi.catan.board.terrain.BoardTerrain;
 import com.ucm.dasi.catan.board.terrain.IBoardTerrain;
 import com.ucm.dasi.catan.board.terrain.TerrainType;
 import com.ucm.dasi.catan.resource.ResourceManager;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 public class CatanBoardTest {
 
+  @DisplayName("It must be initializable")
+  @Tag(value = "CatanBoard")
   @Test
   public void itMustBeInitializable()
       throws InvalidBoardDimensionsException, InvalidBoardElementException {
@@ -42,6 +46,8 @@ public class CatanBoardTest {
     assertNotEquals(null, board);
   }
 
+  @DisplayName("It must get an element by its position")
+  @Tag(value = "CatanBoard")
   @Test
   public void itMustGetAnElementByItsPosition()
       throws InvalidBoardDimensionsException, InvalidBoardElementException {
@@ -64,6 +70,8 @@ public class CatanBoardTest {
     assertEquals(element, board.get(0, 0));
   }
 
+  @DisplayName("It must get an structure by its position")
+  @Tag(value = "CatanBoard")
   @Test
   public void itMustGetAnStructureByItsPosition()
       throws InvalidBoardDimensionsException, InvalidBoardElementException {
@@ -86,7 +94,9 @@ public class CatanBoardTest {
     assertEquals(element, board.getStructure(0, 0));
   }
 
-  @Test()
+  @DisplayName("It must fail if a false connection is provided")
+  @Tag(value = "CatanBoard")
+  @Test
   public void itMustFailIfAFalseConnectionIsProvided()
       throws InvalidBoardDimensionsException, InvalidBoardElementException {
 
@@ -105,7 +115,9 @@ public class CatanBoardTest {
     assertThrows(InvalidBoardElementException.class, () -> new CatanBoard(3, 3, elements));
   }
 
-  @Test()
+  @DisplayName("It must fail if a false terrain is provided")
+  @Tag(value = "CatanBoard")
+  @Test
   public void itMustFailIfAFalseTerrainIsProvided()
       throws InvalidBoardDimensionsException, InvalidBoardElementException {
 
@@ -124,7 +136,9 @@ public class CatanBoardTest {
     assertThrows(InvalidBoardElementException.class, () -> new CatanBoard(3, 3, elements));
   }
 
-  @Test()
+  @DisplayName("It must fail if a false structure is provided")
+  @Tag(value = "CatanBoard")
+  @Test
   public void itMustFailIfAFalseStructureIsProvided()
       throws InvalidBoardDimensionsException, InvalidBoardElementException {
 
