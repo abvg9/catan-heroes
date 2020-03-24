@@ -34,12 +34,17 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 public class CatanGameEngineTest {
 
+  @DisplayName(
+      "It must not process a valid build connection request if the player has not enought resources")
+  @Tag(value = "CatanBoardEngine")
   @Test
-  public void itMustNotProcessAValidBuildConnectionRequestIfThePlayerHasNotEnoughtResources()
+  public void itMustNotProcessAValidBuildConnectionRequestI()
       throws NegativeNumberException, InvalidBoardDimensionsException, InvalidBoardElementException,
           NonNullInputException, NonVoidCollectionException {
 
@@ -69,8 +74,11 @@ public class CatanGameEngineTest {
     assertSame(true, requestFailed.get());
   }
 
+  @DisplayName(
+      "It must not process a valid build connection request if the player is not the active one")
+  @Tag(value = "CatanBoardEngine")
   @Test
-  public void itMustNotProcessAValidBuildConnectionRequestIfThePlayerIsNotTheActiveOne()
+  public void itMustNotProcessAValidBuildConnectionRequestII()
       throws NegativeNumberException, InvalidBoardDimensionsException, InvalidBoardElementException,
           NonNullInputException, NonVoidCollectionException {
 
@@ -106,8 +114,10 @@ public class CatanGameEngineTest {
     assertSame(true, requestFailed.get());
   }
 
+  @DisplayName("It must not process a valid build connection request if the turn is not started")
+  @Tag(value = "CatanBoardEngine")
   @Test
-  public void itMustNotProcessAValidBuildConnectionRequestIfTheTurnIsNotStarted()
+  public void itMustNotProcessAValidBuildConnectionRequestIII()
       throws NegativeNumberException, InvalidBoardDimensionsException, InvalidBoardElementException,
           NonNullInputException, NonVoidCollectionException {
 
@@ -142,8 +152,11 @@ public class CatanGameEngineTest {
     assertSame(true, requestFailed.get());
   }
 
+  @DisplayName(
+      "It must not process a valid build structure request if the player has not enought resources")
+  @Tag(value = "CatanBoardEngine")
   @Test
-  public void itMustNotProcessAValidBuildStructureRequestIfThePlayerHasNotEnoughtResources()
+  public void itMustNotProcessAValidBuildStructureRequestI()
       throws InvalidBoardDimensionsException, InvalidBoardElementException, NegativeNumberException,
           NonNullInputException, NonVoidCollectionException {
 
@@ -174,8 +187,11 @@ public class CatanGameEngineTest {
     assertSame(true, requestFailed.get());
   }
 
+  @DisplayName(
+      "It must not process a valid build structure request if the player is not the active one")
+  @Tag(value = "CatanBoardEngine")
   @Test
-  public void itMustNotProcessAValidBuildStructureRequestIfThePlayerIsNotTheActiveOne()
+  public void itMustNotProcessAValidBuildStructureRequestII()
       throws InvalidBoardDimensionsException, InvalidBoardElementException, NegativeNumberException,
           NonNullInputException, NonVoidCollectionException {
 
@@ -212,8 +228,10 @@ public class CatanGameEngineTest {
     assertSame(true, requestFailed.get());
   }
 
+  @DisplayName("It must not process a valid build structure request if the turn is not started")
+  @Tag(value = "CatanBoardEngine")
   @Test
-  public void itMustNotProcessAValidBuildStructureRequestIfTheTurnIsNotStarted()
+  public void itMustNotProcessAValidBuildStructureRequestIII()
       throws InvalidBoardDimensionsException, InvalidBoardElementException, NegativeNumberException,
           NonNullInputException, NonVoidCollectionException {
 
@@ -249,6 +267,8 @@ public class CatanGameEngineTest {
     assertSame(true, requestFailed.get());
   }
 
+  @DisplayName("It must process a valid build connection request")
+  @Tag(value = "CatanBoardEngine")
   @Test
   public void itMustProcessAValidBuildConnectionRequest()
       throws NegativeNumberException, InvalidBoardDimensionsException, InvalidBoardElementException,
@@ -284,12 +304,14 @@ public class CatanGameEngineTest {
     assertSame(BoardElementType.Connection, elementBuilt.getElementType());
     assertSame(ConnectionType.Road, ((IBoardConnection) elementBuilt).getType());
     assertSame(player.getId(), ((IOwnedElement) elementBuilt).getOwner().getId());
-    assertSame(0, player.getWarehouse().getResource(ResourceType.Brick));
-    assertSame(1, player.getWarehouse().getResource(ResourceType.Grain));
-    assertSame(0, player.getWarehouse().getResource(ResourceType.Lumber));
-    assertSame(1, player.getWarehouse().getResource(ResourceType.Wool));
+    assertSame(0, player.getResourceManager().getResource(ResourceType.Brick));
+    assertSame(1, player.getResourceManager().getResource(ResourceType.Grain));
+    assertSame(0, player.getResourceManager().getResource(ResourceType.Lumber));
+    assertSame(1, player.getResourceManager().getResource(ResourceType.Wool));
   }
 
+  @DisplayName("It must process a valid build structure request")
+  @Tag(value = "CatanBoardEngine")
   @Test
   public void itMustProcessAValidBuildStructureRequest()
       throws InvalidBoardDimensionsException, InvalidBoardElementException, NegativeNumberException,
@@ -326,10 +348,10 @@ public class CatanGameEngineTest {
     assertSame(BoardElementType.Structure, elementBuilt.getElementType());
     assertSame(StructureType.Settlement, ((IBoardStructure) elementBuilt).getType());
     assertSame(player.getId(), ((IOwnedElement) elementBuilt).getOwner().getId());
-    assertSame(0, player.getWarehouse().getResource(ResourceType.Brick));
-    assertSame(0, player.getWarehouse().getResource(ResourceType.Grain));
-    assertSame(0, player.getWarehouse().getResource(ResourceType.Lumber));
-    assertSame(0, player.getWarehouse().getResource(ResourceType.Wool));
+    assertSame(0, player.getResourceManager().getResource(ResourceType.Brick));
+    assertSame(0, player.getResourceManager().getResource(ResourceType.Grain));
+    assertSame(0, player.getResourceManager().getResource(ResourceType.Lumber));
+    assertSame(0, player.getResourceManager().getResource(ResourceType.Wool));
   }
 
   private IBoardTerrain buildMountainTerrain() {

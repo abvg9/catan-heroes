@@ -167,7 +167,7 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
 
     try {
       getBoard().build(element, request.getX(), request.getY());
-      getActivePlayer().getWarehouse().substract(element.getCost());
+      getActivePlayer().getResourceManager().substract(element.getCost());
     } catch (InvalidBoardElementException | NotEnoughtResourcesException e) {
       handleRequestError(request);
     }
@@ -197,7 +197,7 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
 
     try {
       getBoard().build(element, request.getX(), request.getY());
-      getActivePlayer().getWarehouse().substract(element.getCost());
+      getActivePlayer().getResourceManager().substract(element.getCost());
     } catch (InvalidBoardElementException | NotEnoughtResourcesException e) {
       handleRequestError(request);
     }
