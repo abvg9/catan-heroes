@@ -7,11 +7,16 @@ import com.ucm.dasi.catan.player.IPlayer;
 import com.ucm.dasi.catan.player.Player;
 import com.ucm.dasi.catan.resource.ResourceManager;
 import com.ucm.dasi.catan.resource.exception.NegativeNumberException;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 public class BuildStructureRequestTest {
+
+  @DisplayName("It must store its structure type")
+  @Tag(value = "BuildStructureRequest")
   @Test
-  public void mustStoreConnectionType() throws NegativeNumberException {
+  public void mustStoreStructureType() throws NegativeNumberException {
     IPlayer player = new Player(0, new ResourceManager());
     StructureType type = StructureType.Settlement;
 
