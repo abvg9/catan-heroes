@@ -13,8 +13,10 @@ import com.ucm.dasi.catan.resource.IResourceManager;
 import com.ucm.dasi.catan.resource.ResourceManager;
 import com.ucm.dasi.catan.resource.exception.NegativeNumberException;
 import com.ucm.dasi.catan.resource.production.IResourceProduction;
+import com.ucm.dasi.catan.resource.production.ResourceProduction;
 import com.ucm.dasi.catan.resource.provider.ITerrainProductionProvider;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.TreeMap;
 
 public class CatanBoard implements ICatanBoard {
@@ -95,8 +97,6 @@ public class CatanBoard implements ICatanBoard {
 
   protected void buildProductionDictionary() {
 
-    productionDictionary = new TreeMap<Integer, IResourceProduction>();
-
     TreeMap<Integer, Map<IPlayer, IResourceManager>> innerMap =
         new TreeMap<Integer, Map<IPlayer, IResourceManager>>();
 
@@ -105,6 +105,24 @@ public class CatanBoard implements ICatanBoard {
         analyzeTerrainProduction(innerMap, i, j);
       }
     }
+
+    productionDictionary = buildProductionDictionaryFromInnerMap(innerMap);
+  }
+
+  private TreeMap<Integer, IResourceProduction> buildProductionDictionaryFromInnerMap(
+      TreeMap<Integer, Map<IPlayer, IResourceManager>> innerMap) {
+
+    TreeMap<Integer, IResourceProduction> productionDictionary =
+        new TreeMap<Integer, IResourceProduction>();
+
+    for (Entry<Integer, Map<IPlayer, IResourceManager>> entry : innerMap.entrySet()) {
+      int productionNumber = entry.getKey();
+      Map<IPlayer, IResourceManager> playersProduction = entry.getValue();
+      productionDictionary.put(
+          productionNumber, new ResourceProduction(productionNumber, playersProduction));
+    }
+
+    return productionDictionary;
   }
 
   protected boolean isProductionDictionaryInitialized() {
