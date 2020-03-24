@@ -12,10 +12,14 @@ import com.ucm.dasi.catan.resource.ResourceType;
 import com.ucm.dasi.catan.resource.exception.NegativeNumberException;
 import java.util.Map;
 import java.util.TreeMap;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 public class OwnedElementTest {
 
+  @DisplayName("It must return its cost")
+  @Tag(value = "OwnedElement")
   @Test
   public void itMustReturnItsCost() throws NegativeNumberException {
     IPlayer player = new Player(0, new ResourceManager());
@@ -29,8 +33,10 @@ public class OwnedElementTest {
     assertEquals(cost, element.getCost());
   }
 
+  @DisplayName("It must return its owner")
+  @Tag(value = "OwnedElement")
   @Test
-  public void itMustReturnItsType() throws NegativeNumberException {
+  public void itMustReturnItsOwner() throws NegativeNumberException {
     IPlayer player = new Player(0, new ResourceManager());
     OwnedElement element =
         new MinimunOwnedElement(BoardElementType.Structure, new ResourceManager(), player);
