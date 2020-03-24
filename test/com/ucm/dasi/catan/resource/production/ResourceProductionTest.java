@@ -1,12 +1,14 @@
-package com.ucm.dasi.catan.resource;
+package com.ucm.dasi.catan.resource.production;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
 import com.ucm.dasi.catan.player.IPlayer;
 import com.ucm.dasi.catan.player.Player;
+import com.ucm.dasi.catan.resource.IResourceManager;
+import com.ucm.dasi.catan.resource.ResourceManager;
+import com.ucm.dasi.catan.resource.ResourceType;
 import com.ucm.dasi.catan.resource.exception.NegativeNumberException;
-import com.ucm.dasi.catan.resource.production.ResourceProduction;
 import java.util.TreeMap;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
