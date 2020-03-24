@@ -10,13 +10,18 @@ import com.ucm.dasi.catan.board.structure.IBoardStructure;
 import com.ucm.dasi.catan.board.structure.StructureType;
 import com.ucm.dasi.catan.board.terrain.IBoardTerrain;
 import com.ucm.dasi.catan.board.terrain.TerrainType;
+import com.ucm.dasi.catan.resource.provider.ITerrainProductionProvider;
 
 public class CatanEditableBoard extends CatanBoard implements ICatanEditableBoard {
 
-  public CatanEditableBoard(int width, int height, IBoardElement[][] elements)
+  public CatanEditableBoard(
+      int width,
+      int height,
+      IBoardElement[][] elements,
+      ITerrainProductionProvider terrainProductionProvider)
       throws InvalidBoardDimensionsException, InvalidBoardElementException {
 
-    super(width, height, elements);
+    super(width, height, elements, terrainProductionProvider);
   }
 
   @Override
@@ -26,6 +31,8 @@ public class CatanEditableBoard extends CatanBoard implements ICatanEditableBoar
       throw new InvalidBoardElementException(element == null ? null : element.getElementType());
     }
     this.elements[x][y] = element;
+
+    this.buildProductionDictionary();
   }
 
   private boolean isVoidElement(IBoardElement element) {

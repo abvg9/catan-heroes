@@ -17,6 +17,7 @@ import com.ucm.dasi.catan.board.terrain.BoardTerrain;
 import com.ucm.dasi.catan.board.terrain.IBoardTerrain;
 import com.ucm.dasi.catan.board.terrain.TerrainType;
 import com.ucm.dasi.catan.resource.ResourceManager;
+import com.ucm.dasi.catan.resource.provider.TerrainProductionProvider;
 import org.junit.jupiter.api.Test;
 
 public class CatanBoardTest {
@@ -37,7 +38,8 @@ public class CatanBoardTest {
       },
     };
 
-    CatanBoard board = new CatanBoard(3, 3, elements);
+    CatanBoard board =
+        new CatanBoard(3, 3, elements, TerrainProductionProvider.buildDefaultProvider());
 
     assertNotEquals(null, board);
   }
@@ -59,7 +61,8 @@ public class CatanBoardTest {
       },
     };
 
-    CatanBoard board = new CatanBoard(3, 3, elements);
+    CatanBoard board =
+        new CatanBoard(3, 3, elements, TerrainProductionProvider.buildDefaultProvider());
 
     assertEquals(element, board.get(0, 0));
   }
@@ -81,7 +84,8 @@ public class CatanBoardTest {
       },
     };
 
-    CatanBoard board = new CatanBoard(3, 3, elements);
+    CatanBoard board =
+        new CatanBoard(3, 3, elements, TerrainProductionProvider.buildDefaultProvider());
 
     assertEquals(element, board.getStructure(0, 0));
   }
@@ -102,7 +106,9 @@ public class CatanBoardTest {
       },
     };
 
-    assertThrows(InvalidBoardElementException.class, () -> new CatanBoard(3, 3, elements));
+    assertThrows(
+        InvalidBoardElementException.class,
+        () -> new CatanBoard(3, 3, elements, TerrainProductionProvider.buildDefaultProvider()));
   }
 
   @Test()
@@ -121,7 +127,9 @@ public class CatanBoardTest {
       },
     };
 
-    assertThrows(InvalidBoardElementException.class, () -> new CatanBoard(3, 3, elements));
+    assertThrows(
+        InvalidBoardElementException.class,
+        () -> new CatanBoard(3, 3, elements, TerrainProductionProvider.buildDefaultProvider()));
   }
 
   @Test()
@@ -140,7 +148,9 @@ public class CatanBoardTest {
       },
     };
 
-    assertThrows(InvalidBoardElementException.class, () -> new CatanBoard(3, 3, elements));
+    assertThrows(
+        InvalidBoardElementException.class,
+        () -> new CatanBoard(3, 3, elements, TerrainProductionProvider.buildDefaultProvider()));
   }
 
   private IBoardTerrain createNoneTerrain() {
