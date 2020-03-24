@@ -303,10 +303,10 @@ public class CatanGameEngineTest {
     assertSame(BoardElementType.Connection, elementBuilt.getElementType());
     assertSame(ConnectionType.Road, ((IBoardConnection) elementBuilt).getType());
     assertSame(player.getId(), ((IOwnedElement) elementBuilt).getOwner().getId());
-    assertSame(0, player.getWarehouse().getResource(ResourceType.Brick));
-    assertSame(1, player.getWarehouse().getResource(ResourceType.Grain));
-    assertSame(0, player.getWarehouse().getResource(ResourceType.Lumber));
-    assertSame(1, player.getWarehouse().getResource(ResourceType.Wool));
+    assertSame(0, player.getResourceManager().getResource(ResourceType.Brick));
+    assertSame(1, player.getResourceManager().getResource(ResourceType.Grain));
+    assertSame(0, player.getResourceManager().getResource(ResourceType.Lumber));
+    assertSame(1, player.getResourceManager().getResource(ResourceType.Wool));
   }
 
   @DisplayName("It must process a valid build structure request")
@@ -347,10 +347,10 @@ public class CatanGameEngineTest {
     assertSame(BoardElementType.Structure, elementBuilt.getElementType());
     assertSame(StructureType.Settlement, ((IBoardStructure) elementBuilt).getType());
     assertSame(player.getId(), ((IOwnedElement) elementBuilt).getOwner().getId());
-    assertSame(0, player.getWarehouse().getResource(ResourceType.Brick));
-    assertSame(0, player.getWarehouse().getResource(ResourceType.Grain));
-    assertSame(0, player.getWarehouse().getResource(ResourceType.Lumber));
-    assertSame(0, player.getWarehouse().getResource(ResourceType.Wool));
+    assertSame(0, player.getResourceManager().getResource(ResourceType.Brick));
+    assertSame(0, player.getResourceManager().getResource(ResourceType.Grain));
+    assertSame(0, player.getResourceManager().getResource(ResourceType.Lumber));
+    assertSame(0, player.getResourceManager().getResource(ResourceType.Wool));
   }
 
   private IBoardTerrain buildMountainTerrain() {
