@@ -32,7 +32,9 @@ public class CatanEditableBoard extends CatanBoard implements ICatanEditableBoar
     }
     this.elements[x][y] = element;
 
-    this.buildProductionDictionary();
+    if (isProductionDictionaryInitialized()) {
+      this.buildProductionDictionary();
+    }
   }
 
   private boolean isVoidElement(IBoardElement element) {
