@@ -23,6 +23,7 @@ import com.ucm.dasi.catan.player.IPlayer;
 import com.ucm.dasi.catan.player.Player;
 import com.ucm.dasi.catan.resource.ResourceManager;
 import com.ucm.dasi.catan.resource.exception.NegativeNumberException;
+import com.ucm.dasi.catan.resource.provider.TerrainProductionProvider;
 import org.junit.jupiter.api.Test;
 
 public class CatanGameTest {
@@ -141,7 +142,7 @@ public class CatanGameTest {
       },
     };
 
-    return new CatanBoard(3, 3, elements);
+    return new CatanBoard(3, 3, elements, TerrainProductionProvider.buildDefaultProvider());
   }
 
   private IBoardConnection buildVoidConnection() {

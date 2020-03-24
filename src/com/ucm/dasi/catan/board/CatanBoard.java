@@ -4,13 +4,20 @@ import com.ucm.dasi.catan.board.connection.ConnectionDirection;
 import com.ucm.dasi.catan.board.element.IBoardElement;
 import com.ucm.dasi.catan.board.exception.InvalidBoardDimensionsException;
 import com.ucm.dasi.catan.board.exception.InvalidBoardElementException;
+import com.ucm.dasi.catan.board.group.StructureTerrainTypesPair;
 import com.ucm.dasi.catan.board.structure.IBoardStructure;
+import com.ucm.dasi.catan.board.terrain.IBoardTerrain;
+import com.ucm.dasi.catan.board.terrain.TerrainType;
+import com.ucm.dasi.catan.player.IPlayer;
+import com.ucm.dasi.catan.resource.IResourceManager;
+import com.ucm.dasi.catan.resource.ResourceManager;
+import com.ucm.dasi.catan.resource.exception.NegativeNumberException;
+import com.ucm.dasi.catan.resource.production.IResourceProduction;
+import com.ucm.dasi.catan.resource.provider.ITerrainProductionProvider;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class CatanBoard implements ICatanBoard {
-
-  protected int terrainWidth;
-
-  protected int terrainHeight;
 
   protected int width;
 
@@ -18,10 +25,21 @@ public class CatanBoard implements ICatanBoard {
 
   protected IBoardElement[][] elements;
 
-  public CatanBoard(int width, int height, IBoardElement[][] elements)
+  protected TreeMap<Integer, IResourceProduction> productionDictionary;
+
+  protected ITerrainProductionProvider terrainProductionProvider;
+
+  public CatanBoard(
+      int width,
+      int height,
+      IBoardElement[][] elements,
+      ITerrainProductionProvider terrainProductionProvider)
       throws InvalidBoardDimensionsException, InvalidBoardElementException {
+
     setDimensions(width, height);
     setElements(elements);
+
+    this.terrainProductionProvider = terrainProductionProvider;
   }
 
   @Override
@@ -41,6 +59,16 @@ public class CatanBoard implements ICatanBoard {
   @Override
   public int getHeight() {
     return height;
+  }
+
+  @Override
+  public IResourceProduction getProduction(int productionNumber) {
+
+    if (!isProductionDictionaryInitialized()) {
+      buildProductionDictionary();
+    }
+
+    return productionDictionary.get(productionNumber);
   }
 
   @Override
@@ -65,13 +93,106 @@ public class CatanBoard implements ICatanBoard {
     return type == BoardElementType.Terrain;
   }
 
+  protected void buildProductionDictionary() {
+
+    productionDictionary = new TreeMap<Integer, IResourceProduction>();
+
+    TreeMap<Integer, Map<IPlayer, IResourceManager>> innerMap =
+        new TreeMap<Integer, Map<IPlayer, IResourceManager>>();
+
+    for (int i = 0; i < getWidth(); ++i) {
+      for (int j = 0; j < getHeight(); ++j) {
+        analyzeTerrainProduction(innerMap, i, j);
+      }
+    }
+  }
+
+  protected boolean isProductionDictionaryInitialized() {
+    return productionDictionary != null;
+  }
+
+  private IBoardStructure getNWStructureOfTerrain(int x, int y) {
+    return (IBoardStructure) get(x - 1, y - 1);
+  }
+
+  private IBoardStructure getNEStructureOfTerrain(int x, int y) {
+    return (IBoardStructure) get(x + 1, y - 1);
+  }
+
+  private IBoardStructure getSWStructureOfTerrain(int x, int y) {
+    return (IBoardStructure) get(x - 1, y + 1);
+  }
+
+  private IBoardStructure getSEStructureOfTerrain(int x, int y) {
+    return (IBoardStructure) get(x + 1, y + 1);
+  }
+
+  private void analyzeTerrainProduction(
+      TreeMap<Integer, Map<IPlayer, IResourceManager>> innerMap, int x, int y) {
+
+    IBoardElement element = get(x, y);
+
+    if (element.getElementType() != BoardElementType.Terrain) {
+      return;
+    }
+
+    IBoardTerrain terrain = (IBoardTerrain) element;
+    if (terrain.getType() == TerrainType.None) {
+      return;
+    }
+
+    analyzeStructureProduction(innerMap, terrain, getNWStructureOfTerrain(x, y));
+    analyzeStructureProduction(innerMap, terrain, getNEStructureOfTerrain(x, y));
+    analyzeStructureProduction(innerMap, terrain, getSWStructureOfTerrain(x, y));
+    analyzeStructureProduction(innerMap, terrain, getSEStructureOfTerrain(x, y));
+  }
+
+  private void analyzeStructureProduction(
+      TreeMap<Integer, Map<IPlayer, IResourceManager>> innerMap,
+      IBoardTerrain terrain,
+      IBoardStructure structure) {
+
+    if (structure.getOwner() == null) {
+      return;
+    }
+
+    IResourceManager production =
+        terrainProductionProvider.getResourceManager(
+            new StructureTerrainTypesPair(structure.getType(), terrain.getType()));
+    insertProduction(innerMap, terrain.getProductionNumber(), production, structure.getOwner());
+  }
+
+  private void insertProduction(
+      TreeMap<Integer, Map<IPlayer, IResourceManager>> innerMap,
+      int productionNumber,
+      IResourceManager production,
+      IPlayer player) {
+
+    Map<IPlayer, IResourceManager> productionMap = innerMap.get(productionNumber);
+
+    if (productionMap == null) {
+      productionMap = new TreeMap<IPlayer, IResourceManager>();
+      innerMap.put(productionNumber, productionMap);
+    }
+
+    IResourceManager playerProduction = productionMap.get(player);
+
+    if (playerProduction == null) {
+      playerProduction = new ResourceManager();
+      productionMap.put(player, playerProduction);
+    }
+
+    try {
+      playerProduction.add(production);
+    } catch (NegativeNumberException e) {
+      e.printStackTrace();
+    }
+  }
+
   private void setDimensions(int width, int height) throws InvalidBoardDimensionsException {
     if (width % 2 == 0 || height % 2 == 0) {
       throw new InvalidBoardDimensionsException();
     }
-
-    terrainWidth = width / 2;
-    terrainHeight = height / 2;
 
     this.width = width;
     this.height = height;
