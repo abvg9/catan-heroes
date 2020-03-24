@@ -10,13 +10,20 @@ import com.ucm.dasi.catan.board.connection.IBoardConnection;
 import com.ucm.dasi.catan.board.element.IBoardElement;
 import com.ucm.dasi.catan.board.exception.InvalidBoardDimensionsException;
 import com.ucm.dasi.catan.board.exception.InvalidBoardElementException;
+import com.ucm.dasi.catan.board.group.StructureTerrainTypesPair;
 import com.ucm.dasi.catan.board.structure.BoardStructure;
 import com.ucm.dasi.catan.board.structure.IBoardStructure;
 import com.ucm.dasi.catan.board.structure.StructureType;
 import com.ucm.dasi.catan.board.terrain.BoardTerrain;
 import com.ucm.dasi.catan.board.terrain.IBoardTerrain;
 import com.ucm.dasi.catan.board.terrain.TerrainType;
+import com.ucm.dasi.catan.player.IPlayer;
+import com.ucm.dasi.catan.player.Player;
 import com.ucm.dasi.catan.resource.ResourceManager;
+import com.ucm.dasi.catan.resource.exception.NegativeNumberException;
+import com.ucm.dasi.catan.resource.production.IResourceProduction;
+import com.ucm.dasi.catan.resource.provider.ITerrainProductionProvider;
+import com.ucm.dasi.catan.resource.provider.TerrainProductionProvider;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -41,7 +48,8 @@ public class CatanBoardTest {
       },
     };
 
-    CatanBoard board = new CatanBoard(3, 3, elements);
+    CatanBoard board =
+        new CatanBoard(3, 3, elements, TerrainProductionProvider.buildDefaultProvider());
 
     assertNotEquals(null, board);
   }
@@ -65,7 +73,8 @@ public class CatanBoardTest {
       },
     };
 
-    CatanBoard board = new CatanBoard(3, 3, elements);
+    CatanBoard board =
+        new CatanBoard(3, 3, elements, TerrainProductionProvider.buildDefaultProvider());
 
     assertEquals(element, board.get(0, 0));
   }
@@ -89,9 +98,47 @@ public class CatanBoardTest {
       },
     };
 
-    CatanBoard board = new CatanBoard(3, 3, elements);
+    CatanBoard board =
+        new CatanBoard(3, 3, elements, TerrainProductionProvider.buildDefaultProvider());
 
     assertEquals(element, board.getStructure(0, 0));
+  }
+
+  @DisplayName("It must get a player's production")
+  @Tag("CatanBoard")
+  @Test
+  public void itMustGetAPlayerProduction()
+      throws InvalidBoardDimensionsException, InvalidBoardElementException,
+          NegativeNumberException {
+
+    int targetProductionNumber = 3;
+    IPlayer player = new Player(1, new ResourceManager());
+
+    IBoardElement[][] elements = {
+      {
+        createNoneStructure(), createVoidConnection(), createSettlementStructure(player),
+      },
+      {
+        createVoidConnection(),
+        createMountainsTerrain(targetProductionNumber),
+        createVoidConnection(),
+      },
+      {
+        createNoneStructure(), createVoidConnection(), createNoneStructure(),
+      },
+    };
+
+    ITerrainProductionProvider terrainProductionProvider =
+        TerrainProductionProvider.buildDefaultProvider();
+
+    CatanBoard board = new CatanBoard(3, 3, elements, terrainProductionProvider);
+
+    IResourceProduction production = board.getProduction(targetProductionNumber);
+
+    assertEquals(
+        terrainProductionProvider.getResourceManager(
+            new StructureTerrainTypesPair(StructureType.Settlement, TerrainType.Mountains)),
+        production.getProduction(player));
   }
 
   @DisplayName("It must fail if a false connection is provided")
@@ -112,7 +159,9 @@ public class CatanBoardTest {
       },
     };
 
-    assertThrows(InvalidBoardElementException.class, () -> new CatanBoard(3, 3, elements));
+    assertThrows(
+        InvalidBoardElementException.class,
+        () -> new CatanBoard(3, 3, elements, TerrainProductionProvider.buildDefaultProvider()));
   }
 
   @DisplayName("It must fail if a false terrain is provided")
@@ -133,7 +182,9 @@ public class CatanBoardTest {
       },
     };
 
-    assertThrows(InvalidBoardElementException.class, () -> new CatanBoard(3, 3, elements));
+    assertThrows(
+        InvalidBoardElementException.class,
+        () -> new CatanBoard(3, 3, elements, TerrainProductionProvider.buildDefaultProvider()));
   }
 
   @DisplayName("It must fail if a false structure is provided")
@@ -154,15 +205,25 @@ public class CatanBoardTest {
       },
     };
 
-    assertThrows(InvalidBoardElementException.class, () -> new CatanBoard(3, 3, elements));
+    assertThrows(
+        InvalidBoardElementException.class,
+        () -> new CatanBoard(3, 3, elements, TerrainProductionProvider.buildDefaultProvider()));
   }
 
   private IBoardTerrain createNoneTerrain() {
     return new BoardTerrain(0, TerrainType.None);
   }
 
+  private IBoardTerrain createMountainsTerrain(int productionNumber) {
+    return new BoardTerrain(productionNumber, TerrainType.Mountains);
+  }
+
   private IBoardStructure createNoneStructure() {
     return new BoardStructure(null, new ResourceManager(), StructureType.None);
+  }
+
+  private IBoardStructure createSettlementStructure(IPlayer owner) {
+    return new BoardStructure(owner, new ResourceManager(), StructureType.Settlement);
   }
 
   private IBoardConnection createVoidConnection() {

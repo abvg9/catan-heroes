@@ -16,6 +16,11 @@ public class Player implements IPlayer {
   }
 
   @Override
+  public int compareTo(IPlayer other) {
+    return getId() - other.getId();
+  }
+
+  @Override
   public int getId() {
     return id;
   }
