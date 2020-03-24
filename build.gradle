@@ -1,0 +1,61 @@
+
+plugins {
+	id 'com.diffplug.gradle.spotless' version '3.28.0'
+	id 'eclipse'
+    id 'jacoco'
+    id 'java'
+}
+
+group 'com.ucm.catan.dasi'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.11
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+	implementation('com.diffplug.spotless:spotless-plugin-gradle:3.28.0')
+    testImplementation('org.junit.jupiter:junit-jupiter:5.5.2')
+}
+
+jacoco {
+    toolVersion = "0.8.4"
+    reportsDir = file("$buildDir/reports/jacoco")
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled false
+        csv.enabled false
+        html.destination file("${buildDir}/reports/jacoco/jacocoHtml")
+    }
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ["src"]
+        }
+    }
+    test {
+    	java {
+            srcDirs = ["test"]
+        }
+    }
+}
+
+spotless {
+  java {
+    googleJavaFormat()
+  }
+}
+
+test {
+
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}

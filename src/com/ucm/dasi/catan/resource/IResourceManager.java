@@ -5,14 +5,13 @@ import com.ucm.dasi.catan.resource.exception.NotEnoughtResourcesException;
 
 public interface IResourceManager {
 
-    /* Methods */
+  /* Methods */
 
-    void add(IResourceManager resourcesToPay) throws NegativeNumberException;
+  void add(IResourceManager resourcesToPay) throws NegativeNumberException;
 
-    int getQuantityResource();
+  int getQuantityResource();
 
-    int getResource(ResourceType resource);
+  int getResource(ResourceType resource);
 
-    void substract(IResourceManager resourcesToPay) throws NotEnoughtResourcesException;
-
+  void substract(IResourceManager resourcesToPay) throws NotEnoughtResourcesException;
 }
