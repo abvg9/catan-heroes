@@ -5,5 +5,5 @@ import com.ucm.dasi.catan.resource.IResourceManager;
 public interface IPlayer extends Comparable<IPlayer> {
   int getId();
 
-  IResourceManager getWarehouse();
+  IResourceManager getResourceManager();
 }

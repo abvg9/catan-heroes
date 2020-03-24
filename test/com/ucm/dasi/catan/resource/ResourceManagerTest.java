@@ -5,12 +5,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import com.ucm.dasi.catan.resource.exception.NegativeNumberException;
 import com.ucm.dasi.catan.resource.exception.NotEnoughtResourcesException;
 import java.util.Map;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 public class ResourceManagerTest {
 
-  /* CHECK QUANTITY TESTS */
-
+  @DisplayName("It must get the total amount of resources")
+  @Tag(value = "ResourceManager")
   @Test
   public void checkQuantityNoEmptyConstructor() throws NegativeNumberException {
 
@@ -32,6 +34,8 @@ public class ResourceManagerTest {
     assertEquals(warehouse.getQuantityResource(), 10, 0);
   }
 
+  @DisplayName("It must get the total amount of resources of an empty resource manager")
+  @Tag(value = "ResourceManager")
   @Test
   public void checkQuantityEmptyConstructor() {
 
@@ -40,6 +44,8 @@ public class ResourceManagerTest {
     assertEquals(warehouse.getQuantityResource(), 0, 0);
   }
 
+  @DisplayName("It must add a resource manager")
+  @Tag(value = "ResourceManager")
   @Test
   public void checkQuantityAdd() throws NegativeNumberException {
 
@@ -63,6 +69,8 @@ public class ResourceManagerTest {
     assertEquals(warehouse.getQuantityResource(), 10, 0);
   }
 
+  @DisplayName("It must substract a resource manager")
+  @Tag(value = "ResourceManager")
   @Test
   public void checkQuantitySubstract()
       throws NegativeNumberException, NotEnoughtResourcesException {
@@ -101,8 +109,8 @@ public class ResourceManagerTest {
     assertEquals(warehouse2.getQuantityResource(), 1, 0);
   }
 
-  /* COHERENCE WAREHOSE TESTS */
-
+  @DisplayName("It must add a resource manager and return the resulting values")
+  @Tag(value = "ResourceManager")
   @Test
   public void checkResources() throws NegativeNumberException {
 
