@@ -33,12 +33,17 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 public class CatanGameEngineTest {
 
+  @DisplayName(
+      "It must not process a valid build connection request if the player has not enought resources")
+  @Tag(value = "CatanBoardEngine")
   @Test
-  public void itMustNotProcessAValidBuildConnectionRequestIfThePlayerHasNotEnoughtResources()
+  public void itMustNotProcessAValidBuildConnectionRequestI()
       throws NegativeNumberException, InvalidBoardDimensionsException, InvalidBoardElementException,
           NonNullInputException, NonVoidCollectionException {
 
@@ -68,8 +73,11 @@ public class CatanGameEngineTest {
     assertSame(true, requestFailed.get());
   }
 
+  @DisplayName(
+      "It must not process a valid build connection request if the player is not the active one")
+  @Tag(value = "CatanBoardEngine")
   @Test
-  public void itMustNotProcessAValidBuildConnectionRequestIfThePlayerIsNotTheActiveOne()
+  public void itMustNotProcessAValidBuildConnectionRequestII()
       throws NegativeNumberException, InvalidBoardDimensionsException, InvalidBoardElementException,
           NonNullInputException, NonVoidCollectionException {
 
@@ -105,8 +113,10 @@ public class CatanGameEngineTest {
     assertSame(true, requestFailed.get());
   }
 
+  @DisplayName("It must not process a valid build connection request if the turn is not started")
+  @Tag(value = "CatanBoardEngine")
   @Test
-  public void itMustNotProcessAValidBuildConnectionRequestIfTheTurnIsNotStarted()
+  public void itMustNotProcessAValidBuildConnectionRequestIII()
       throws NegativeNumberException, InvalidBoardDimensionsException, InvalidBoardElementException,
           NonNullInputException, NonVoidCollectionException {
 
@@ -141,8 +151,11 @@ public class CatanGameEngineTest {
     assertSame(true, requestFailed.get());
   }
 
+  @DisplayName(
+      "It must not process a valid build structure request if the player has not enought resources")
+  @Tag(value = "CatanBoardEngine")
   @Test
-  public void itMustNotProcessAValidBuildStructureRequestIfThePlayerHasNotEnoughtResources()
+  public void itMustNotProcessAValidBuildStructureRequestI()
       throws InvalidBoardDimensionsException, InvalidBoardElementException, NegativeNumberException,
           NonNullInputException, NonVoidCollectionException {
 
@@ -173,8 +186,11 @@ public class CatanGameEngineTest {
     assertSame(true, requestFailed.get());
   }
 
+  @DisplayName(
+      "It must not process a valid build structure request if the player is not the active one")
+  @Tag(value = "CatanBoardEngine")
   @Test
-  public void itMustNotProcessAValidBuildStructureRequestIfThePlayerIsNotTheActiveOne()
+  public void itMustNotProcessAValidBuildStructureRequestII()
       throws InvalidBoardDimensionsException, InvalidBoardElementException, NegativeNumberException,
           NonNullInputException, NonVoidCollectionException {
 
@@ -211,8 +227,10 @@ public class CatanGameEngineTest {
     assertSame(true, requestFailed.get());
   }
 
+  @DisplayName("It must not process a valid build structure request if the turn is not started")
+  @Tag(value = "CatanBoardEngine")
   @Test
-  public void itMustNotProcessAValidBuildStructureRequestIfTheTurnIsNotStarted()
+  public void itMustNotProcessAValidBuildStructureRequestIII()
       throws InvalidBoardDimensionsException, InvalidBoardElementException, NegativeNumberException,
           NonNullInputException, NonVoidCollectionException {
 
@@ -248,6 +266,8 @@ public class CatanGameEngineTest {
     assertSame(true, requestFailed.get());
   }
 
+  @DisplayName("It must process a valid build connection request")
+  @Tag(value = "CatanBoardEngine")
   @Test
   public void itMustProcessAValidBuildConnectionRequest()
       throws NegativeNumberException, InvalidBoardDimensionsException, InvalidBoardElementException,
@@ -289,6 +309,8 @@ public class CatanGameEngineTest {
     assertSame(1, player.getResourceManager().getResource(ResourceType.Wool));
   }
 
+  @DisplayName("It must process a valid build structure request")
+  @Tag(value = "CatanBoardEngine")
   @Test
   public void itMustProcessAValidBuildStructureRequest()
       throws InvalidBoardDimensionsException, InvalidBoardElementException, NegativeNumberException,
