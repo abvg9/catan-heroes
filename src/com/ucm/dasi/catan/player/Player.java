@@ -6,13 +6,13 @@ import com.ucm.dasi.catan.resource.exception.NegativeNumberException;
 
 public class Player implements IPlayer {
 
-  protected int id;
+  private int id;
 
-  protected IResourceManager warehouse;
+  private IResourceManager resourceManager;
 
-  public Player(int id, IResourceManager warehouse) throws NegativeNumberException {
+  public Player(int id, IResourceManager resourceManager) throws NegativeNumberException {
     this.id = id;
-    this.warehouse = new ResourceManager(warehouse);
+    this.resourceManager = new ResourceManager(resourceManager);
   }
 
   @Override
@@ -22,6 +22,6 @@ public class Player implements IPlayer {
 
   @Override
   public IResourceManager getResourceManager() {
-    return warehouse;
+    return resourceManager;
   }
 }
