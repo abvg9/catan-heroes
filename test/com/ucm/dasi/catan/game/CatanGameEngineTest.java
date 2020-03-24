@@ -29,6 +29,7 @@ import com.ucm.dasi.catan.request.IRequest;
 import com.ucm.dasi.catan.resource.ResourceManager;
 import com.ucm.dasi.catan.resource.ResourceType;
 import com.ucm.dasi.catan.resource.exception.NegativeNumberException;
+import com.ucm.dasi.catan.resource.provider.TerrainProductionProvider;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -409,7 +410,7 @@ public class CatanGameEngineTest {
       },
     };
 
-    return new CatanEditableBoard(5, 5, elements);
+    return new CatanEditableBoard(5, 5, elements, TerrainProductionProvider.buildDefaultProvider());
   }
 
   private IBoardConnection buildVoidConnection() {
