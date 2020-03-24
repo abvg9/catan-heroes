@@ -2,6 +2,8 @@ package com.ucm.dasi.catan.resource.production;
 
 import com.ucm.dasi.catan.player.IPlayer;
 import com.ucm.dasi.catan.resource.IResourceManager;
+import com.ucm.dasi.catan.resource.ResourceManager;
+import com.ucm.dasi.catan.resource.exception.NegativeNumberException;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -20,7 +22,17 @@ public class ResourceProduction implements IResourceProduction {
 
   @Override
   public IResourceManager getProduction(IPlayer player) {
-    return resourceManagerMap.get(player);
+    IResourceManager playerProduction = resourceManagerMap.get(player);
+
+    if (playerProduction == null) {
+      return new ResourceManager();
+    } else {
+      try {
+        return new ResourceManager(playerProduction);
+      } catch (NegativeNumberException e) {
+        return new ResourceManager();
+      }
+    }
   }
 
   @Override
