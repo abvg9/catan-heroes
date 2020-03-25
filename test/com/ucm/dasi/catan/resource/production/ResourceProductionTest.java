@@ -8,7 +8,6 @@ import com.ucm.dasi.catan.player.Player;
 import com.ucm.dasi.catan.resource.IResourceManager;
 import com.ucm.dasi.catan.resource.ResourceManager;
 import com.ucm.dasi.catan.resource.ResourceType;
-import com.ucm.dasi.catan.resource.exception.NegativeNumberException;
 import java.util.TreeMap;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -30,7 +29,7 @@ public class ResourceProductionTest {
   @DisplayName("It must store get a player production")
   @Tag("ResourceProduction")
   @Test
-  public void itMustGetAPlayerProduction() throws NegativeNumberException {
+  public void itMustGetAPlayerProduction() {
 
     IPlayer player = new Player(0, new ResourceManager());
 
