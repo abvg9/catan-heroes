@@ -4,7 +4,7 @@ import com.ucm.dasi.catan.resource.exception.NegativeNumberException;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class ResourceStorage {
+public class ResourceStorage implements IResourceStorage {
 
   protected int resourceQuantity;
 
@@ -42,12 +42,12 @@ public class ResourceStorage {
 
   @Override
   public boolean equals(Object object) {
-    if (!(object instanceof IResourceManager)) {
+    if (!(object instanceof IResourceStorage)) {
       return false;
     }
 
     for (ResourceType resourceType : ResourceType.values()) {
-      if (this.getResource(resourceType) != ((IResourceManager) object).getResource(resourceType)) {
+      if (this.getResource(resourceType) != ((IResourceStorage) object).getResource(resourceType)) {
         return false;
       }
     }
