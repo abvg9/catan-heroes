@@ -59,7 +59,7 @@ public class ResourceStorage implements IResourceStorage {
     return resources.get(type);
   }
 
-  public int getQuantityResource() {
+  public int getResourcesQuantity() {
     return resourceQuantity;
   }
 

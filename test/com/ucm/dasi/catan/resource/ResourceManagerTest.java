@@ -33,7 +33,7 @@ public class ResourceManagerTest {
 
     warehouse.add(new ResourceManager(resources));
 
-    assertSame(10, warehouse.getQuantityResource());
+    assertSame(10, warehouse.getResourcesQuantity());
   }
 
   @DisplayName("It must substract a resource manager")
@@ -73,7 +73,7 @@ public class ResourceManagerTest {
 
     warehouse2.substract(warehouse1);
 
-    assertSame(1, warehouse2.getQuantityResource());
+    assertSame(1, warehouse2.getResourcesQuantity());
   }
 
   @DisplayName("It must add a resource manager and return the resulting values")
