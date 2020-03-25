@@ -4,7 +4,6 @@ import com.ucm.dasi.catan.player.IPlayer;
 import com.ucm.dasi.catan.resource.IResourceStorage;
 import com.ucm.dasi.catan.resource.ResourceManager;
 import com.ucm.dasi.catan.resource.ResourceStorage;
-import com.ucm.dasi.catan.resource.exception.NegativeNumberException;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
@@ -43,11 +42,7 @@ public class ResourceProduction implements IResourceProduction {
     this.resourceStorageMap = new TreeMap<IPlayer, IResourceStorage>();
 
     for (Entry<IPlayer, ? extends IResourceStorage> entry : resourceStorageMap.entrySet()) {
-      try {
-        this.resourceStorageMap.put(entry.getKey(), new ResourceStorage(entry.getValue()));
-      } catch (NegativeNumberException e) {
-        e.printStackTrace();
-      }
+      this.resourceStorageMap.put(entry.getKey(), new ResourceStorage(entry.getValue()));
     }
   }
 }
