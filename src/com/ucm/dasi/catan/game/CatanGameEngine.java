@@ -17,6 +17,7 @@ import com.ucm.dasi.catan.request.IBuildStructureRequest;
 import com.ucm.dasi.catan.request.IEndTurnRequest;
 import com.ucm.dasi.catan.request.IRequest;
 import com.ucm.dasi.catan.request.IStartTurnRequest;
+import com.ucm.dasi.catan.request.IUpgradeStructureRequest;
 import com.ucm.dasi.catan.request.RequestType;
 import com.ucm.dasi.catan.resource.exception.NotEnoughtResourcesException;
 import com.ucm.dasi.catan.resource.provider.ConnectionCostProvider;
@@ -139,6 +140,9 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
         (IBuildStructureRequest request) -> handleBuildStructureRequest(request));
     map.put(RequestType.EndTurn, (IEndTurnRequest request) -> handleEndTurnRequest(request));
     map.put(RequestType.StartTurn, (IStartTurnRequest request) -> handleStartTurnRequest(request));
+    map.put(
+        RequestType.UpgradeStructure,
+        (IUpgradeStructureRequest request) -> handleUpgradeStructureRequest(request));
 
     return map;
   }
@@ -230,5 +234,30 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
     }
 
     switchTurnStarted();
+  }
+
+  private void handleUpgradeStructureRequest(IUpgradeStructureRequest request) {
+    if (request.getPlayer().getId() != getActivePlayer().getId()) {
+      handleRequestError(request);
+      return;
+    }
+
+    if (!isTurnStarted()) {
+      handleRequestError(request);
+      return;
+    }
+
+    BoardStructure element =
+        new BoardStructure(
+            request.getPlayer(),
+            structureCostProvider.getResourceManager(request.getStructureType()),
+            request.getStructureType());
+
+    try {
+      getBoard().upgrade(element, request.getX(), request.getY());
+      getActivePlayer().getResourceManager().substract(element.getCost());
+    } catch (InvalidBoardElementException | NotEnoughtResourcesException e) {
+      handleRequestError(request);
+    }
   }
 }

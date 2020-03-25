@@ -4,5 +4,6 @@ public enum RequestType {
   BuildConnection,
   BuildStructure,
   EndTurn,
-  StartTurn
+  StartTurn,
+  UpgradeStructure,
 }
