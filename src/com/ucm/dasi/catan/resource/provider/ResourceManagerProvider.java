@@ -2,7 +2,6 @@ package com.ucm.dasi.catan.resource.provider;
 
 import com.ucm.dasi.catan.resource.IResourceManager;
 import com.ucm.dasi.catan.resource.ResourceManager;
-import com.ucm.dasi.catan.resource.exception.NegativeNumberException;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -19,10 +18,6 @@ public class ResourceManagerProvider<TType extends Comparable<TType>>
   public IResourceManager getResourceManager(TType type) {
     IResourceManager storedCost = this.costMap.get(type);
 
-    try {
-      return storedCost == null ? new ResourceManager() : new ResourceManager(storedCost);
-    } catch (NegativeNumberException e) {
-      return new ResourceManager();
-    }
+    return storedCost == null ? new ResourceManager() : new ResourceManager(storedCost);
   }
 }
