@@ -54,7 +54,7 @@ public class ResourceStorageTest {
 
     ResourceStorage storage = new ResourceStorage(resources);
 
-    assertSame(10, storage.getQuantityResource());
+    assertSame(10, storage.getResourcesQuantity());
   }
 
   @DisplayName("It must get the total amount of resources of an empty resource manager")
@@ -64,6 +64,6 @@ public class ResourceStorageTest {
 
     ResourceStorage storage = new ResourceStorage();
 
-    assertSame(0, storage.getQuantityResource());
+    assertSame(0, storage.getResourcesQuantity());
   }
 }
