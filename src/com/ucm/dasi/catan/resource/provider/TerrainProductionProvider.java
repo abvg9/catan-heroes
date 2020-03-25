@@ -7,7 +7,6 @@ import com.ucm.dasi.catan.board.terrain.TerrainType;
 import com.ucm.dasi.catan.resource.IResourceManager;
 import com.ucm.dasi.catan.resource.ResourceManager;
 import com.ucm.dasi.catan.resource.ResourceType;
-import com.ucm.dasi.catan.resource.exception.NegativeNumberException;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -65,11 +64,7 @@ public class TerrainProductionProvider extends ResourceManagerProvider<IStructur
       resourceMap.put(resourceType, production);
     }
 
-    try {
-      return new ResourceManager(resourceMap);
-    } catch (NegativeNumberException e) {
-      return new ResourceManager();
-    }
+    return new ResourceManager(resourceMap);
   }
 
   private static IResourceManager buildSettlementProduction(TerrainType type) {

@@ -20,7 +20,7 @@ public class ResourceStorage implements IResourceStorage {
     }
   }
 
-  public ResourceStorage(Map<ResourceType, Integer> resources) throws NegativeNumberException {
+  public ResourceStorage(Map<ResourceType, Integer> resources) {
     this();
 
     for (ResourceType resourceType : ResourceType.values()) {
@@ -32,7 +32,7 @@ public class ResourceStorage implements IResourceStorage {
     }
   }
 
-  public ResourceStorage(IResourceStorage resourceManager) throws NegativeNumberException {
+  public ResourceStorage(IResourceStorage resourceManager) {
     this();
 
     for (ResourceType resourceType : ResourceType.values()) {
@@ -63,7 +63,7 @@ public class ResourceStorage implements IResourceStorage {
     return resourceQuantity;
   }
 
-  protected void setResource(ResourceType type, int newQuantity) throws NegativeNumberException {
+  protected void setResource(ResourceType type, int newQuantity) {
 
     if (newQuantity < 0) {
       throw new NegativeNumberException(type.toString());
