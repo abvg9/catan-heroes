@@ -2,7 +2,7 @@ package com.ucm.dasi.catan.resource;
 
 public interface IResourceStorage {
 
-  int getQuantityResource();
+  int getResourcesQuantity();
 
   int getResource(ResourceType type);
 }
