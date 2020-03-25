@@ -14,8 +14,6 @@ import com.ucm.dasi.catan.resource.ResourceManager;
 import com.ucm.dasi.catan.resource.production.IResourceProduction;
 import com.ucm.dasi.catan.resource.production.ResourceProduction;
 import com.ucm.dasi.catan.resource.provider.ITerrainProductionProvider;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.TreeMap;
 
 public class CatanBoard implements ICatanBoard {
@@ -26,7 +24,7 @@ public class CatanBoard implements ICatanBoard {
 
   protected IBoardElement[][] elements;
 
-  protected TreeMap<Integer, IResourceProduction> productionDictionary;
+  protected TreeMap<Integer, TreeMap<IPlayer, IResourceManager>> productionDictionary;
 
   protected ITerrainProductionProvider terrainProductionProvider;
 
@@ -69,7 +67,14 @@ public class CatanBoard implements ICatanBoard {
       buildProductionDictionary();
     }
 
-    return productionDictionary.get(productionNumber);
+    TreeMap<IPlayer, IResourceManager> numberProduction =
+        productionDictionary.get(productionNumber);
+
+    if (numberProduction == null) {
+      numberProduction = new TreeMap<IPlayer, IResourceManager>();
+    }
+
+    return new ResourceProduction(productionNumber, numberProduction);
   }
 
   @Override
@@ -96,8 +101,8 @@ public class CatanBoard implements ICatanBoard {
 
   protected void buildProductionDictionary() {
 
-    TreeMap<Integer, Map<IPlayer, IResourceManager>> innerMap =
-        new TreeMap<Integer, Map<IPlayer, IResourceManager>>();
+    TreeMap<Integer, TreeMap<IPlayer, IResourceManager>> innerMap =
+        new TreeMap<Integer, TreeMap<IPlayer, IResourceManager>>();
 
     for (int i = 0; i < getWidth(); ++i) {
       for (int j = 0; j < getHeight(); ++j) {
@@ -105,23 +110,7 @@ public class CatanBoard implements ICatanBoard {
       }
     }
 
-    productionDictionary = buildProductionDictionaryFromInnerMap(innerMap);
-  }
-
-  private TreeMap<Integer, IResourceProduction> buildProductionDictionaryFromInnerMap(
-      TreeMap<Integer, Map<IPlayer, IResourceManager>> innerMap) {
-
-    TreeMap<Integer, IResourceProduction> productionDictionary =
-        new TreeMap<Integer, IResourceProduction>();
-
-    for (Entry<Integer, Map<IPlayer, IResourceManager>> entry : innerMap.entrySet()) {
-      int productionNumber = entry.getKey();
-      Map<IPlayer, IResourceManager> playersProduction = entry.getValue();
-      productionDictionary.put(
-          productionNumber, new ResourceProduction(productionNumber, playersProduction));
-    }
-
-    return productionDictionary;
+    productionDictionary = innerMap;
   }
 
   protected boolean isProductionDictionaryInitialized() {
@@ -145,7 +134,7 @@ public class CatanBoard implements ICatanBoard {
   }
 
   private void analyzeTerrainProduction(
-      TreeMap<Integer, Map<IPlayer, IResourceManager>> innerMap, int x, int y) {
+      TreeMap<Integer, TreeMap<IPlayer, IResourceManager>> innerMap, int x, int y) {
 
     IBoardElement element = get(x, y);
 
@@ -165,7 +154,7 @@ public class CatanBoard implements ICatanBoard {
   }
 
   private void analyzeStructureProduction(
-      TreeMap<Integer, Map<IPlayer, IResourceManager>> innerMap,
+      TreeMap<Integer, TreeMap<IPlayer, IResourceManager>> innerMap,
       IBoardTerrain terrain,
       IBoardStructure structure) {
 
@@ -180,12 +169,12 @@ public class CatanBoard implements ICatanBoard {
   }
 
   private void insertProduction(
-      TreeMap<Integer, Map<IPlayer, IResourceManager>> innerMap,
+      TreeMap<Integer, TreeMap<IPlayer, IResourceManager>> innerMap,
       int productionNumber,
       IResourceManager production,
       IPlayer player) {
 
-    Map<IPlayer, IResourceManager> productionMap = innerMap.get(productionNumber);
+    TreeMap<IPlayer, IResourceManager> productionMap = innerMap.get(productionNumber);
 
     if (productionMap == null) {
       productionMap = new TreeMap<IPlayer, IResourceManager>();
