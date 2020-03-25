@@ -22,7 +22,6 @@ import com.ucm.dasi.catan.exception.NonVoidCollectionException;
 import com.ucm.dasi.catan.player.IPlayer;
 import com.ucm.dasi.catan.player.Player;
 import com.ucm.dasi.catan.resource.ResourceManager;
-import com.ucm.dasi.catan.resource.exception.NegativeNumberException;
 import com.ucm.dasi.catan.resource.provider.TerrainProductionProvider;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -47,7 +46,7 @@ public class CatanGameTest {
   @Tag(value = "CatanGame")
   @Test
   public void itMustNotBuildAGameWithANullBoard()
-      throws NonNullInputException, NonVoidCollectionException, NegativeNumberException {
+      throws NonNullInputException, NonVoidCollectionException {
     IPlayer[] players = {new Player(0, new ResourceManager())};
     assertThrows(
         NonNullInputException.class, () -> new CatanGame<ICatanBoard>(null, players, 0, false));
@@ -84,8 +83,8 @@ public class CatanGameTest {
   @Tag(value = "CatanGame")
   @Test
   public void itMustReturnTheActivePlayer()
-      throws NonNullInputException, NonVoidCollectionException, NegativeNumberException,
-          InvalidBoardDimensionsException, InvalidBoardElementException {
+      throws NonNullInputException, NonVoidCollectionException, InvalidBoardDimensionsException,
+          InvalidBoardElementException {
 
     IPlayer activePlayer = new Player(0, new ResourceManager());
     IPlayer[] players = {activePlayer};
@@ -99,8 +98,8 @@ public class CatanGameTest {
   @Tag(value = "CatanGame")
   @Test
   public void itMustReturnTheBoard()
-      throws NonNullInputException, NonVoidCollectionException, NegativeNumberException,
-          InvalidBoardDimensionsException, InvalidBoardElementException {
+      throws NonNullInputException, NonVoidCollectionException, InvalidBoardDimensionsException,
+          InvalidBoardElementException {
 
     IPlayer[] players = {new Player(0, new ResourceManager())};
     ICatanBoard board = buildStandardBoard();
@@ -113,8 +112,8 @@ public class CatanGameTest {
   @Tag(value = "CatanGame")
   @Test
   public void itMustReturnTheStoredPlayersCollection()
-      throws NonNullInputException, NonVoidCollectionException, NegativeNumberException,
-          InvalidBoardDimensionsException, InvalidBoardElementException {
+      throws NonNullInputException, NonVoidCollectionException, InvalidBoardDimensionsException,
+          InvalidBoardElementException {
 
     IPlayer[] players = {new Player(0, new ResourceManager())};
     ICatanBoard board = buildStandardBoard();
@@ -127,8 +126,8 @@ public class CatanGameTest {
   @Tag(value = "CatanGame")
   @Test
   public void itMustReturnTheTurnStartedAttribute()
-      throws NegativeNumberException, InvalidBoardDimensionsException, InvalidBoardElementException,
-          NonNullInputException, NonVoidCollectionException {
+      throws InvalidBoardDimensionsException, InvalidBoardElementException, NonNullInputException,
+          NonVoidCollectionException {
 
     IPlayer[] players = {new Player(0, new ResourceManager())};
     ICatanBoard board = buildStandardBoard();

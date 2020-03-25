@@ -28,7 +28,6 @@ import com.ucm.dasi.catan.request.BuildStructureRequest;
 import com.ucm.dasi.catan.request.IRequest;
 import com.ucm.dasi.catan.resource.ResourceManager;
 import com.ucm.dasi.catan.resource.ResourceType;
-import com.ucm.dasi.catan.resource.exception.NegativeNumberException;
 import com.ucm.dasi.catan.resource.provider.TerrainProductionProvider;
 import java.util.Map;
 import java.util.TreeMap;
@@ -45,8 +44,8 @@ public class CatanGameEngineTest {
   @Tag(value = "CatanBoardEngine")
   @Test
   public void itMustNotProcessAValidBuildConnectionRequestI()
-      throws NegativeNumberException, InvalidBoardDimensionsException, InvalidBoardElementException,
-          NonNullInputException, NonVoidCollectionException {
+      throws InvalidBoardDimensionsException, InvalidBoardElementException, NonNullInputException,
+          NonVoidCollectionException {
 
     Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
 
@@ -79,8 +78,8 @@ public class CatanGameEngineTest {
   @Tag(value = "CatanBoardEngine")
   @Test
   public void itMustNotProcessAValidBuildConnectionRequestII()
-      throws NegativeNumberException, InvalidBoardDimensionsException, InvalidBoardElementException,
-          NonNullInputException, NonVoidCollectionException {
+      throws InvalidBoardDimensionsException, InvalidBoardElementException, NonNullInputException,
+          NonVoidCollectionException {
 
     Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
 
@@ -118,8 +117,8 @@ public class CatanGameEngineTest {
   @Tag(value = "CatanBoardEngine")
   @Test
   public void itMustNotProcessAValidBuildConnectionRequestIII()
-      throws NegativeNumberException, InvalidBoardDimensionsException, InvalidBoardElementException,
-          NonNullInputException, NonVoidCollectionException {
+      throws InvalidBoardDimensionsException, InvalidBoardElementException, NonNullInputException,
+          NonVoidCollectionException {
 
     Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
 
@@ -157,8 +156,8 @@ public class CatanGameEngineTest {
   @Tag(value = "CatanBoardEngine")
   @Test
   public void itMustNotProcessAValidBuildStructureRequestI()
-      throws InvalidBoardDimensionsException, InvalidBoardElementException, NegativeNumberException,
-          NonNullInputException, NonVoidCollectionException {
+      throws InvalidBoardDimensionsException, InvalidBoardElementException, NonNullInputException,
+          NonVoidCollectionException {
 
     Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
 
@@ -192,8 +191,8 @@ public class CatanGameEngineTest {
   @Tag(value = "CatanBoardEngine")
   @Test
   public void itMustNotProcessAValidBuildStructureRequestII()
-      throws InvalidBoardDimensionsException, InvalidBoardElementException, NegativeNumberException,
-          NonNullInputException, NonVoidCollectionException {
+      throws InvalidBoardDimensionsException, InvalidBoardElementException, NonNullInputException,
+          NonVoidCollectionException {
 
     Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
 
@@ -232,8 +231,8 @@ public class CatanGameEngineTest {
   @Tag(value = "CatanBoardEngine")
   @Test
   public void itMustNotProcessAValidBuildStructureRequestIII()
-      throws InvalidBoardDimensionsException, InvalidBoardElementException, NegativeNumberException,
-          NonNullInputException, NonVoidCollectionException {
+      throws InvalidBoardDimensionsException, InvalidBoardElementException, NonNullInputException,
+          NonVoidCollectionException {
 
     Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
 
@@ -271,8 +270,8 @@ public class CatanGameEngineTest {
   @Tag(value = "CatanBoardEngine")
   @Test
   public void itMustProcessAValidBuildConnectionRequest()
-      throws NegativeNumberException, InvalidBoardDimensionsException, InvalidBoardElementException,
-          NonNullInputException, NonVoidCollectionException {
+      throws InvalidBoardDimensionsException, InvalidBoardElementException, NonNullInputException,
+          NonVoidCollectionException {
 
     Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
 
@@ -314,8 +313,8 @@ public class CatanGameEngineTest {
   @Tag(value = "CatanBoardEngine")
   @Test
   public void itMustProcessAValidBuildStructureRequest()
-      throws InvalidBoardDimensionsException, InvalidBoardElementException, NegativeNumberException,
-          NonNullInputException, NonVoidCollectionException {
+      throws InvalidBoardDimensionsException, InvalidBoardElementException, NonNullInputException,
+          NonVoidCollectionException {
 
     Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
 

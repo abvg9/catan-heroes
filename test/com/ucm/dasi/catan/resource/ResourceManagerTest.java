@@ -2,7 +2,6 @@ package com.ucm.dasi.catan.resource;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
 
-import com.ucm.dasi.catan.resource.exception.NegativeNumberException;
 import com.ucm.dasi.catan.resource.exception.NotEnoughtResourcesException;
 import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
@@ -14,7 +13,7 @@ public class ResourceManagerTest {
   @DisplayName("It must add a resource manager")
   @Tag(value = "ResourceManager")
   @Test
-  public void checkQuantityAdd() throws NegativeNumberException {
+  public void checkQuantityAdd() {
 
     Map<ResourceType, Integer> resources =
         Map.of(
@@ -39,8 +38,7 @@ public class ResourceManagerTest {
   @DisplayName("It must substract a resource manager")
   @Tag(value = "ResourceManager")
   @Test
-  public void checkQuantitySubstract()
-      throws NegativeNumberException, NotEnoughtResourcesException {
+  public void checkQuantitySubstract() throws NotEnoughtResourcesException {
 
     Map<ResourceType, Integer> resources1 =
         Map.of(
@@ -79,7 +77,7 @@ public class ResourceManagerTest {
   @DisplayName("It must add a resource manager and return the resulting values")
   @Tag(value = "ResourceManager")
   @Test
-  public void checkResources() throws NegativeNumberException {
+  public void checkResources() {
 
     Map<ResourceType, Integer> resources1 =
         Map.of(

@@ -20,7 +20,6 @@ import com.ucm.dasi.catan.board.terrain.TerrainType;
 import com.ucm.dasi.catan.player.IPlayer;
 import com.ucm.dasi.catan.player.Player;
 import com.ucm.dasi.catan.resource.ResourceManager;
-import com.ucm.dasi.catan.resource.exception.NegativeNumberException;
 import com.ucm.dasi.catan.resource.production.IResourceProduction;
 import com.ucm.dasi.catan.resource.provider.ITerrainProductionProvider;
 import com.ucm.dasi.catan.resource.provider.TerrainProductionProvider;
@@ -108,8 +107,7 @@ public class CatanBoardTest {
   @Tag("CatanBoard")
   @Test
   public void itMustGetAPlayerProduction()
-      throws InvalidBoardDimensionsException, InvalidBoardElementException,
-          NegativeNumberException {
+      throws InvalidBoardDimensionsException, InvalidBoardElementException {
 
     int targetProductionNumber = 3;
     IPlayer player = new Player(1, new ResourceManager());

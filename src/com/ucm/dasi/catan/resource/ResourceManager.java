@@ -10,11 +10,11 @@ public class ResourceManager extends ResourceStorage implements IResourceManager
     super();
   }
 
-  public ResourceManager(Map<ResourceType, Integer> resources) throws NegativeNumberException {
+  public ResourceManager(Map<ResourceType, Integer> resources) {
     super(resources);
   }
 
-  public ResourceManager(IResourceStorage resourceManager) throws NegativeNumberException {
+  public ResourceManager(IResourceStorage resourceManager) {
     super(resourceManager);
   }
 
@@ -30,7 +30,7 @@ public class ResourceManager extends ResourceStorage implements IResourceManager
     }
   }
 
-  public void add(IResourceStorage resourceManager) throws NegativeNumberException {
+  public void add(IResourceStorage resourceManager) {
 
     for (ResourceType resourceType : ResourceType.values()) {
       int resourceQuantity = resourceManager.getResource(resourceType);
