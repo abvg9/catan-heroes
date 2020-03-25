@@ -1,7 +1,7 @@
 package com.ucm.dasi.catan.board.element;
 
 import com.ucm.dasi.catan.player.IPlayer;
-import com.ucm.dasi.catan.resource.IResourceManager;
+import com.ucm.dasi.catan.resource.IResourceStorage;
 
 public interface IOwnedElement extends IBoardElement {
 
@@ -10,7 +10,7 @@ public interface IOwnedElement extends IBoardElement {
    *
    * @return Element's cost.
    */
-  IResourceManager getCost();
+  IResourceStorage getCost();
 
   /**
    * Gets the elemnt's owner
