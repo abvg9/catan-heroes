@@ -102,12 +102,12 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
   private boolean isStructurePointConnectedOrControlled(IPlayer player, int x, int y) {
     return (getBoard().get(x, y).getElementType() == BoardElementType.Structure
             && ((IOwnedElement) getBoard().get(x, y)).getOwner() != null
-            && ((IOwnedElement) getBoard().get(x, y)).getOwner().getId() == player.getId())
+            && ((IOwnedElement) getBoard().get(x, y)).getOwner().equals(player))
         || isStructurePointConnected(player, x, y);
   }
 
   private boolean isStructureConnectedCheckConnection(IPlayer player, IOwnedElement element) {
-    return element.getOwner() != null && element.getOwner().getId() == player.getId();
+    return element.getOwner() != null && element.getOwner().equals(player);
   }
 
   private boolean isVerticalConnectionConnected(IPlayer player, int x, int y) {
@@ -148,7 +148,7 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
   }
 
   private void handleBuildConnectionRequest(IBuildConnectionRequest request) {
-    if (request.getPlayer().getId() != getActivePlayer().getId()) {
+    if (!request.getPlayer().equals(getActivePlayer())) {
       handleRequestError(request);
       return;
     }
@@ -178,7 +178,7 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
   }
 
   private void handleBuildStructureRequest(IBuildStructureRequest request) {
-    if (request.getPlayer().getId() != getActivePlayer().getId()) {
+    if (!request.getPlayer().equals(getActivePlayer())) {
       handleRequestError(request);
       return;
     }
@@ -208,7 +208,7 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
   }
 
   private void handleEndTurnRequest(IEndTurnRequest request) {
-    if (request.getPlayer().getId() != getActivePlayer().getId()) {
+    if (!request.getPlayer().equals(getActivePlayer())) {
       handleRequestError(request);
       return;
     }
@@ -223,7 +223,7 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
   }
 
   private void handleStartTurnRequest(IStartTurnRequest request) {
-    if (request.getPlayer().getId() != getActivePlayer().getId()) {
+    if (!request.getPlayer().equals(getActivePlayer())) {
       handleRequestError(request);
       return;
     }
