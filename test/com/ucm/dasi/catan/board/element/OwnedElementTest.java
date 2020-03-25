@@ -9,7 +9,6 @@ import com.ucm.dasi.catan.player.Player;
 import com.ucm.dasi.catan.resource.IResourceManager;
 import com.ucm.dasi.catan.resource.ResourceManager;
 import com.ucm.dasi.catan.resource.ResourceType;
-import com.ucm.dasi.catan.resource.exception.NegativeNumberException;
 import java.util.Map;
 import java.util.TreeMap;
 import org.junit.jupiter.api.DisplayName;
@@ -21,7 +20,7 @@ public class OwnedElementTest {
   @DisplayName("It must return its cost")
   @Tag(value = "OwnedElement")
   @Test
-  public void itMustReturnItsCost() throws NegativeNumberException {
+  public void itMustReturnItsCost() {
     IPlayer player = new Player(0, new ResourceManager());
 
     Map<ResourceType, Integer> costMap = new TreeMap<ResourceType, Integer>();
@@ -36,7 +35,7 @@ public class OwnedElementTest {
   @DisplayName("It must return its owner")
   @Tag(value = "OwnedElement")
   @Test
-  public void itMustReturnItsOwner() throws NegativeNumberException {
+  public void itMustReturnItsOwner() {
     IPlayer player = new Player(0, new ResourceManager());
     OwnedElement element =
         new MinimunOwnedElement(BoardElementType.Structure, new ResourceManager(), player);
