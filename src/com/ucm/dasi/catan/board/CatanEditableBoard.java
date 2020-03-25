@@ -27,13 +27,44 @@ public class CatanEditableBoard extends CatanBoard implements ICatanEditableBoar
   @Override
   public void build(IBoardElement element, int x, int y) throws InvalidBoardElementException {
 
-    if (null == element || !isValidBuild(element, x, y)) {
-      throw new InvalidBoardElementException(element == null ? null : element.getElementType());
+    if (null == element) {
+      throw new InvalidBoardElementException(null);
     }
+
+    if (!this.checkElementType(element.getElementType(), x, y)) {
+      throw new InvalidBoardElementException(element.getElementType());
+    }
+
+    if (!isValidBuildNew(element, x, y)) {
+      throw new InvalidBoardElementException(element.getElementType());
+    }
+
     this.elements[x][y] = element;
 
     if (isProductionDictionaryInitialized()) {
-      this.buildProductionDictionary();
+      buildProductionDictionary();
+    }
+  }
+
+  @Override
+  public void upgrade(IBoardElement element, int x, int y) throws InvalidBoardElementException {
+
+    if (null == element) {
+      throw new InvalidBoardElementException(null);
+    }
+
+    if (!checkElementType(element.getElementType(), x, y)) {
+      throw new InvalidBoardElementException(element.getElementType());
+    }
+
+    if (!isValidBuildUpgrade(element, elements[x][y])) {
+      throw new InvalidBoardElementException(element.getElementType());
+    }
+
+    elements[x][y] = element;
+
+    if (isProductionDictionaryInitialized()) {
+      buildProductionDictionary();
     }
   }
 
@@ -50,24 +81,14 @@ public class CatanEditableBoard extends CatanBoard implements ICatanEditableBoar
     }
   }
 
-  private boolean isValidBuild(IBoardElement element, int x, int y) {
-
-    if (!this.checkElementType(element.getElementType(), x, y)) {
-      return false;
-    }
-
-    if (isVoidElement(elements[x][y])) {
-      return this.isValidBuildNew(element, x, y);
-    } else {
-      return this.isValidBuildUpgrade(element, elements[x][y]);
-    }
-  }
-
   private boolean isValidBuildNew(IBoardElement element, int x, int y) {
 
-    return element.getElementType() != BoardElementType.Structure
-        || ((IBoardStructure) element).getType() != StructureType.City
-            && this.isNonVoidTerrainCloseTo(x, y);
+    return isVoidElement(elements[x][y])
+        && (element.getElementType() == BoardElementType.Structure
+                && ((IBoardStructure) element).getType() == StructureType.Settlement
+                && this.isNonVoidTerrainCloseTo(x, y)
+            || element.getElementType() == BoardElementType.Connection
+                && ((IBoardConnection) element).getType() == ConnectionType.Road);
   }
 
   private boolean isNonVoidTerrainCloseTo(int x, int y) {
@@ -89,7 +110,8 @@ public class CatanEditableBoard extends CatanBoard implements ICatanEditableBoar
 
   private boolean isValidBuildUpgrade(IBoardElement element, IBoardElement oldElement) {
 
-    return oldElement.getElementType() == BoardElementType.Structure
+    return !isVoidElement(oldElement)
+        && oldElement.getElementType() == BoardElementType.Structure
         && ((IBoardStructure) oldElement).getType() == StructureType.Settlement
         && element.getElementType() == BoardElementType.Structure
         && ((IBoardStructure) element).getType() == StructureType.City
