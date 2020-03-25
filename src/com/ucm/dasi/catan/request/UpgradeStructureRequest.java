@@ -10,7 +10,7 @@ public class UpgradeStructureRequest extends BuildElementRequest
   private StructureType type;
 
   public UpgradeStructureRequest(IPlayer player, StructureType type, int x, int y) {
-    super(player, RequestType.BuildStructure, BoardElementType.Structure, x, y);
+    super(player, RequestType.UpgradeStructure, BoardElementType.Structure, x, y);
 
     this.type = type;
   }

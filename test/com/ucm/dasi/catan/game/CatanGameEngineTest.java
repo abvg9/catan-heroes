@@ -26,6 +26,7 @@ import com.ucm.dasi.catan.player.Player;
 import com.ucm.dasi.catan.request.BuildConnectionRequest;
 import com.ucm.dasi.catan.request.BuildStructureRequest;
 import com.ucm.dasi.catan.request.IRequest;
+import com.ucm.dasi.catan.request.UpgradeStructureRequest;
 import com.ucm.dasi.catan.resource.ResourceManager;
 import com.ucm.dasi.catan.resource.ResourceType;
 import com.ucm.dasi.catan.resource.exception.NegativeNumberException;
@@ -347,6 +348,52 @@ public class CatanGameEngineTest {
 
     assertSame(BoardElementType.Structure, elementBuilt.getElementType());
     assertSame(StructureType.Settlement, ((IBoardStructure) elementBuilt).getType());
+    assertSame(player.getId(), ((IOwnedElement) elementBuilt).getOwner().getId());
+    assertSame(0, player.getResourceManager().getResource(ResourceType.Brick));
+    assertSame(0, player.getResourceManager().getResource(ResourceType.Grain));
+    assertSame(0, player.getResourceManager().getResource(ResourceType.Lumber));
+    assertSame(0, player.getResourceManager().getResource(ResourceType.Wool));
+  }
+
+  @DisplayName("It must process a valid upgrade structure request")
+  @Tag(value = "CatanBoardEngine")
+  @Test
+  public void itMustProcessAValidUpgradeStructureRequest()
+      throws InvalidBoardDimensionsException, InvalidBoardElementException, NegativeNumberException,
+          NonNullInputException, NonVoidCollectionException {
+
+    Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
+
+    playerResources.put(ResourceType.Brick, 1);
+    playerResources.put(ResourceType.Grain, 3);
+    playerResources.put(ResourceType.Lumber, 1);
+    playerResources.put(ResourceType.Wool, 1);
+    playerResources.put(ResourceType.Ore, 3);
+
+    IPlayer player = new Player(0, new ResourceManager(playerResources));
+    IPlayer[] players = {player};
+    ICatanEditableBoard board = buildStandardBoard(player);
+    Consumer<IRequest> errorHandler =
+        (request) -> {
+          fail();
+        };
+
+    CatanGameEngine engine = new CatanGameEngine(board, players, 0, true, errorHandler);
+
+    int requestX = 2;
+    int requestY = 2;
+
+    IRequest[] requests = {
+      new BuildStructureRequest(player, StructureType.Settlement, requestX, requestY),
+      new UpgradeStructureRequest(player, StructureType.City, requestX, requestY)
+    };
+
+    engine.processRequests(requests);
+
+    IBoardElement elementBuilt = board.get(requestX, requestY);
+
+    assertSame(BoardElementType.Structure, elementBuilt.getElementType());
+    assertSame(StructureType.City, ((IBoardStructure) elementBuilt).getType());
     assertSame(player.getId(), ((IOwnedElement) elementBuilt).getOwner().getId());
     assertSame(0, player.getResourceManager().getResource(ResourceType.Brick));
     assertSame(0, player.getResourceManager().getResource(ResourceType.Grain));
