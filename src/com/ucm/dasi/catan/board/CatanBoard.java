@@ -11,7 +11,6 @@ import com.ucm.dasi.catan.board.terrain.TerrainType;
 import com.ucm.dasi.catan.player.IPlayer;
 import com.ucm.dasi.catan.resource.IResourceManager;
 import com.ucm.dasi.catan.resource.ResourceManager;
-import com.ucm.dasi.catan.resource.exception.NegativeNumberException;
 import com.ucm.dasi.catan.resource.production.IResourceProduction;
 import com.ucm.dasi.catan.resource.production.ResourceProduction;
 import com.ucm.dasi.catan.resource.provider.ITerrainProductionProvider;
@@ -200,11 +199,7 @@ public class CatanBoard implements ICatanBoard {
       productionMap.put(player, playerProduction);
     }
 
-    try {
-      playerProduction.add(production);
-    } catch (NegativeNumberException e) {
-      e.printStackTrace();
-    }
+    playerProduction.add(production);
   }
 
   private void setDimensions(int width, int height) throws InvalidBoardDimensionsException {

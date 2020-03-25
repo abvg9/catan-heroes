@@ -1,10 +1,10 @@
 package com.ucm.dasi.catan.resource.exception;
 
-public class NegativeNumberException extends Exception {
+public class NegativeNumberException extends RuntimeException {
 
-  private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = -3979940713503153971L;
 
   public NegativeNumberException(String name) {
-    super("Value of " + name + "can't be negative.");
+    super(String.format("Value of %s can't be negative.", name));
   }
 }

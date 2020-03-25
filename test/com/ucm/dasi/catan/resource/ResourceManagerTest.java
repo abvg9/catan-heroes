@@ -1,8 +1,7 @@
 package com.ucm.dasi.catan.resource;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
-import com.ucm.dasi.catan.resource.exception.NegativeNumberException;
 import com.ucm.dasi.catan.resource.exception.NotEnoughtResourcesException;
 import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
@@ -11,43 +10,10 @@ import org.junit.jupiter.api.Test;
 
 public class ResourceManagerTest {
 
-  @DisplayName("It must get the total amount of resources")
-  @Tag(value = "ResourceManager")
-  @Test
-  public void checkQuantityNoEmptyConstructor() throws NegativeNumberException {
-
-    Map<ResourceType, Integer> resources =
-        Map.of(
-            ResourceType.Ore,
-            2,
-            ResourceType.Brick,
-            2,
-            ResourceType.Wool,
-            2,
-            ResourceType.Lumber,
-            2,
-            ResourceType.Grain,
-            2);
-
-    ResourceManager warehouse = new ResourceManager(resources);
-
-    assertEquals(warehouse.getQuantityResource(), 10, 0);
-  }
-
-  @DisplayName("It must get the total amount of resources of an empty resource manager")
-  @Tag(value = "ResourceManager")
-  @Test
-  public void checkQuantityEmptyConstructor() {
-
-    ResourceManager warehouse = new ResourceManager();
-
-    assertEquals(warehouse.getQuantityResource(), 0, 0);
-  }
-
   @DisplayName("It must add a resource manager")
   @Tag(value = "ResourceManager")
   @Test
-  public void checkQuantityAdd() throws NegativeNumberException {
+  public void checkQuantityAdd() {
 
     Map<ResourceType, Integer> resources =
         Map.of(
@@ -66,14 +32,13 @@ public class ResourceManagerTest {
 
     warehouse.add(new ResourceManager(resources));
 
-    assertEquals(warehouse.getQuantityResource(), 10, 0);
+    assertSame(10, warehouse.getResourcesQuantity());
   }
 
   @DisplayName("It must substract a resource manager")
   @Tag(value = "ResourceManager")
   @Test
-  public void checkQuantitySubstract()
-      throws NegativeNumberException, NotEnoughtResourcesException {
+  public void checkQuantitySubstract() throws NotEnoughtResourcesException {
 
     Map<ResourceType, Integer> resources1 =
         Map.of(
@@ -106,13 +71,13 @@ public class ResourceManagerTest {
 
     warehouse2.substract(warehouse1);
 
-    assertEquals(warehouse2.getQuantityResource(), 1, 0);
+    assertSame(1, warehouse2.getResourcesQuantity());
   }
 
   @DisplayName("It must add a resource manager and return the resulting values")
   @Tag(value = "ResourceManager")
   @Test
-  public void checkResources() throws NegativeNumberException {
+  public void checkResources() {
 
     Map<ResourceType, Integer> resources1 =
         Map.of(
@@ -147,7 +112,7 @@ public class ResourceManagerTest {
     warehouse12.add(warehouse2);
 
     for (ResourceType resourceType : ResourceType.values()) {
-      assertEquals(warehouse12.getResource(resourceType), 10, 0);
+      assertSame(10, warehouse12.getResource(resourceType));
     }
   }
 }
