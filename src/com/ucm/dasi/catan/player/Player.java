@@ -2,7 +2,6 @@ package com.ucm.dasi.catan.player;
 
 import com.ucm.dasi.catan.resource.IResourceManager;
 import com.ucm.dasi.catan.resource.ResourceManager;
-import com.ucm.dasi.catan.resource.exception.NegativeNumberException;
 
 public class Player implements IPlayer {
 
@@ -10,7 +9,7 @@ public class Player implements IPlayer {
 
   private IResourceManager resourceManager;
 
-  public Player(int id, IResourceManager resourceManager) throws NegativeNumberException {
+  public Player(int id, IResourceManager resourceManager) {
     this.id = id;
     this.resourceManager = new ResourceManager(resourceManager);
   }
