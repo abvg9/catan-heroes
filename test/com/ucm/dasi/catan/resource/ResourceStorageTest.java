@@ -2,7 +2,6 @@ package com.ucm.dasi.catan.resource;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
 
-import com.ucm.dasi.catan.resource.exception.NegativeNumberException;
 import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -13,7 +12,7 @@ public class ResourceStorageTest {
   @DisplayName("It must get a resource amount")
   @Tag("ResourceStorage")
   @Test
-  public void itMustGetAResourceAmount() throws NegativeNumberException {
+  public void itMustGetAResourceAmount() {
     Map<ResourceType, Integer> resources =
         Map.of(
             ResourceType.Ore,
@@ -37,7 +36,7 @@ public class ResourceStorageTest {
   @DisplayName("It must get the total amount of resources")
   @Tag(value = "ResourceStorage")
   @Test
-  public void itMustGetResourcesAmountI() throws NegativeNumberException {
+  public void itMustGetResourcesAmountI() {
 
     Map<ResourceType, Integer> resources =
         Map.of(
