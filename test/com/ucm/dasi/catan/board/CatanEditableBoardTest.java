@@ -121,12 +121,12 @@ public class CatanEditableBoardTest {
     CatanEditableBoard board = buildStandardBoard(player, productionProvider);
 
     int productionNumber = 6;
-    
+
     int requestX = 2;
     int requestY = 2;
 
     IResourceStorage productionBefore = board.getProduction(productionNumber).getProduction(player);
-    
+
     board.build(
         new BoardStructure(player, new ResourceManager(), StructureType.Settlement),
         requestX,
@@ -140,7 +140,7 @@ public class CatanEditableBoardTest {
     assertEquals(new ResourceStorage(), productionBefore);
     assertEquals(standardSettlementAtMountainProduction, productionAfter);
   }
-  
+
   @DisplayName("it must sync the production after a structure update")
   @Tag("CatanEditableBoard")
   @Test
@@ -154,21 +154,19 @@ public class CatanEditableBoardTest {
     CatanEditableBoard board = buildStandardBoard(player, productionProvider);
 
     int productionNumber = 6;
-    
+
     int requestX = 2;
     int requestY = 2;
 
     IResourceStorage productionBefore = board.getProduction(productionNumber).getProduction(player);
-    
+
     board.build(
         new BoardStructure(player, new ResourceManager(), StructureType.Settlement),
         requestX,
         requestY);
-    
+
     board.upgrade(
-        new BoardStructure(player, new ResourceManager(), StructureType.City),
-        requestX,
-        requestY);
+        new BoardStructure(player, new ResourceManager(), StructureType.City), requestX, requestY);
 
     IResourceStorage standardCityAtMountainProduction =
         productionProvider.getResourceManager(
