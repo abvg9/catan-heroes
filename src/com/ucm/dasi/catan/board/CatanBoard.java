@@ -145,39 +145,11 @@ public class CatanBoard implements ICatanBoard {
     productionDictionary = innerMap;
   }
 
-  private IBoardStructure getNWStructureOfTerrain(int x, int y) {
-    return (IBoardStructure) get(x - 1, y - 1);
-  }
-
-  private IBoardTerrain getNWTerrainOfStructure(int x, int y) {
-    return (x > 0 && y > 0) ? (IBoardTerrain) get(x - 1, y - 1) : null;
-  }
-
-  private IBoardStructure getNEStructureOfTerrain(int x, int y) {
-    return (IBoardStructure) get(x + 1, y - 1);
-  }
-
-  private IBoardTerrain getNETerrainOfStructure(int x, int y) {
-    return (x + 1 < getWidth() && y > 0) ? (IBoardTerrain) get(x + 1, y - 1) : null;
-  }
-
-  private TreeMap<Integer, IResourceManager> getProductionOfStructure(
-      IBoardStructure structure, int x, int y) {
-
-    TreeMap<Integer, IResourceManager> productionMap = new TreeMap<Integer, IResourceManager>();
-
-    addProductionOfStructureOverTerrain(productionMap, structure, getNWTerrainOfStructure(x, y));
-    addProductionOfStructureOverTerrain(productionMap, structure, getNETerrainOfStructure(x, y));
-    addProductionOfStructureOverTerrain(productionMap, structure, getSWTerrainOfStructure(x, y));
-    addProductionOfStructureOverTerrain(productionMap, structure, getSETerrainOfStructure(x, y));
-
-    return productionMap;
-  }
-
   private void addProductionOfStructureOverTerrain(
       TreeMap<Integer, IResourceManager> productionMap,
       IBoardStructure structure,
       IBoardTerrain terrain) {
+
     if (terrain == null) {
       return;
     }
@@ -230,6 +202,35 @@ public class CatanBoard implements ICatanBoard {
     analyzeStructureProduction(innerMap, terrain, getNEStructureOfTerrain(x, y));
     analyzeStructureProduction(innerMap, terrain, getSWStructureOfTerrain(x, y));
     analyzeStructureProduction(innerMap, terrain, getSEStructureOfTerrain(x, y));
+  }
+
+  private IBoardStructure getNWStructureOfTerrain(int x, int y) {
+    return (IBoardStructure) get(x - 1, y - 1);
+  }
+
+  private IBoardTerrain getNWTerrainOfStructure(int x, int y) {
+    return (x > 0 && y > 0) ? (IBoardTerrain) get(x - 1, y - 1) : null;
+  }
+
+  private IBoardStructure getNEStructureOfTerrain(int x, int y) {
+    return (IBoardStructure) get(x + 1, y - 1);
+  }
+
+  private IBoardTerrain getNETerrainOfStructure(int x, int y) {
+    return (x + 1 < getWidth() && y > 0) ? (IBoardTerrain) get(x + 1, y - 1) : null;
+  }
+
+  private TreeMap<Integer, IResourceManager> getProductionOfStructure(
+      IBoardStructure structure, int x, int y) {
+
+    TreeMap<Integer, IResourceManager> productionMap = new TreeMap<Integer, IResourceManager>();
+
+    addProductionOfStructureOverTerrain(productionMap, structure, getNWTerrainOfStructure(x, y));
+    addProductionOfStructureOverTerrain(productionMap, structure, getNETerrainOfStructure(x, y));
+    addProductionOfStructureOverTerrain(productionMap, structure, getSWTerrainOfStructure(x, y));
+    addProductionOfStructureOverTerrain(productionMap, structure, getSETerrainOfStructure(x, y));
+
+    return productionMap;
   }
 
   private IBoardStructure getSWStructureOfTerrain(int x, int y) {
