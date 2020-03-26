@@ -1,5 +1,6 @@
 package com.ucm.dasi.catan.board;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
 import com.ucm.dasi.catan.board.connection.BoardConnection;
@@ -8,6 +9,7 @@ import com.ucm.dasi.catan.board.connection.IBoardConnection;
 import com.ucm.dasi.catan.board.element.IBoardElement;
 import com.ucm.dasi.catan.board.exception.InvalidBoardDimensionsException;
 import com.ucm.dasi.catan.board.exception.InvalidBoardElementException;
+import com.ucm.dasi.catan.board.group.StructureTerrainTypesPair;
 import com.ucm.dasi.catan.board.structure.BoardStructure;
 import com.ucm.dasi.catan.board.structure.IBoardStructure;
 import com.ucm.dasi.catan.board.structure.StructureType;
@@ -16,8 +18,10 @@ import com.ucm.dasi.catan.board.terrain.IBoardTerrain;
 import com.ucm.dasi.catan.board.terrain.TerrainType;
 import com.ucm.dasi.catan.player.IPlayer;
 import com.ucm.dasi.catan.player.Player;
+import com.ucm.dasi.catan.resource.IResourceStorage;
 import com.ucm.dasi.catan.resource.ResourceManager;
 import com.ucm.dasi.catan.resource.exception.NegativeNumberException;
+import com.ucm.dasi.catan.resource.provider.ITerrainProductionProvider;
 import com.ucm.dasi.catan.resource.provider.TerrainProductionProvider;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -34,7 +38,8 @@ public class CatanEditableBoardTest {
 
     IPlayer player = new Player(0, new ResourceManager());
 
-    CatanEditableBoard board = buildStandardBoard(player);
+    CatanEditableBoard board =
+        buildStandardBoard(player, TerrainProductionProvider.buildDefaultProvider());
 
     int requestX = 3;
     int requestY = 2;
@@ -58,7 +63,8 @@ public class CatanEditableBoardTest {
 
     IPlayer player = new Player(0, new ResourceManager());
 
-    CatanEditableBoard board = buildStandardBoard(player);
+    CatanEditableBoard board =
+        buildStandardBoard(player, TerrainProductionProvider.buildDefaultProvider());
 
     int requestX = 2;
     int requestY = 2;
@@ -82,7 +88,8 @@ public class CatanEditableBoardTest {
 
     IPlayer player = new Player(0, new ResourceManager());
 
-    CatanEditableBoard board = buildStandardBoard(player);
+    CatanEditableBoard board =
+        buildStandardBoard(player, TerrainProductionProvider.buildDefaultProvider());
 
     int requestX = 2;
     int requestY = 2;
@@ -98,6 +105,36 @@ public class CatanEditableBoardTest {
 
     assertSame(BoardElementType.Structure, elementBuilt.getElementType());
     assertSame(StructureType.City, ((IBoardStructure) elementBuilt).getType());
+  }
+
+  @DisplayName("it must sync the production after a structure build")
+  @Tag("CatanEditableBoard")
+  @Test
+  public void itMustSyncTheProductionAfterAStructureBuild()
+      throws InvalidBoardDimensionsException, InvalidBoardElementException {
+
+    IPlayer player = new Player(0, new ResourceManager());
+
+    ITerrainProductionProvider productionProvider =
+        TerrainProductionProvider.buildDefaultProvider();
+    CatanEditableBoard board = buildStandardBoard(player, productionProvider);
+
+    int requestX = 2;
+    int requestY = 2;
+
+    board.build(
+        new BoardStructure(player, new ResourceManager(), StructureType.Settlement),
+        requestX,
+        requestY);
+
+    int productionNumber = 6;
+
+    IResourceStorage standardSettlementAtMountainProduction =
+        productionProvider.getResourceManager(
+            new StructureTerrainTypesPair(StructureType.Settlement, TerrainType.Mountains));
+    IResourceStorage production = board.getProduction(productionNumber).getProduction(player);
+
+    assertEquals(standardSettlementAtMountainProduction, production);
   }
 
   private IBoardTerrain buildMountainTerrain() {
@@ -116,7 +153,8 @@ public class CatanEditableBoardTest {
     return new BoardConnection(player, new ResourceManager(), ConnectionType.Road);
   }
 
-  private CatanEditableBoard buildStandardBoard(IPlayer player1)
+  private CatanEditableBoard buildStandardBoard(
+      IPlayer player1, ITerrainProductionProvider productionProvider)
       throws InvalidBoardDimensionsException, InvalidBoardElementException {
     IBoardElement[][] elements = {
       {
@@ -144,7 +182,7 @@ public class CatanEditableBoardTest {
         buildVoidConnection(),
         buildNoneTerrain(),
         buildVoidConnection(),
-        buildMountainTerrain(),
+        buildNoneTerrain(),
         buildVoidConnection(),
       },
       {
@@ -156,7 +194,7 @@ public class CatanEditableBoardTest {
       },
     };
 
-    return new CatanEditableBoard(5, 5, elements, TerrainProductionProvider.buildDefaultProvider());
+    return new CatanEditableBoard(5, 5, elements, productionProvider);
   }
 
   private IBoardConnection buildVoidConnection() {
