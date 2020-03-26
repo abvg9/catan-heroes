@@ -4,7 +4,7 @@ import java.util.AbstractMap;
 import java.util.Map;
 
 public abstract class CatanGenerator implements INumberGenerator {
-  
+
   private static final float P_2 = 1f / 36f;
   private static final float P_3 = 2f / 36f;
   private static final float P_4 = 3f / 36f;
@@ -33,7 +33,6 @@ public abstract class CatanGenerator implements INumberGenerator {
         new AbstractMap.SimpleEntry<Integer, Float>(9, P_9),
         new AbstractMap.SimpleEntry<Integer, Float>(10, P_10),
         new AbstractMap.SimpleEntry<Integer, Float>(11, P_11),
-        new AbstractMap.SimpleEntry<Integer, Float>(12, P_12)
-    );
+        new AbstractMap.SimpleEntry<Integer, Float>(12, P_12));
   }
 }
