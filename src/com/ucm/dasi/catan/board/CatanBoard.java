@@ -73,6 +73,7 @@ public class CatanBoard implements ICatanBoard {
     IResourceProduction numberProduction = productionDictionary.get(productionNumber);
 
     if (numberProduction == null) {
+      // Create empty production and store it in the dictionary
       Map<IPlayer, IResourceStorage> productionMap = new TreeMap<IPlayer, IResourceStorage>();
       numberProduction = new ResourceProduction(productionNumber, productionMap);
       productionDictionary.put(productionNumber, numberProduction);
