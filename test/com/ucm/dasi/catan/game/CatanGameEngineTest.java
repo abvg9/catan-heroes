@@ -21,6 +21,7 @@ import com.ucm.dasi.catan.board.terrain.IBoardTerrain;
 import com.ucm.dasi.catan.board.terrain.TerrainType;
 import com.ucm.dasi.catan.exception.NonNullInputException;
 import com.ucm.dasi.catan.exception.NonVoidCollectionException;
+import com.ucm.dasi.catan.game.generator.CatanRandomGenerator;
 import com.ucm.dasi.catan.player.IPlayer;
 import com.ucm.dasi.catan.player.Player;
 import com.ucm.dasi.catan.request.BuildConnectionRequest;
@@ -61,7 +62,8 @@ public class CatanGameEngineTest {
           requestFailed.set(true);
         };
 
-    CatanGameEngine engine = new CatanGameEngine(board, players, 0, true, errorHandler);
+    CatanGameEngine engine =
+        new CatanGameEngine(board, players, 0, true, errorHandler, new CatanRandomGenerator());
 
     int requestX = 3;
     int requestY = 2;
@@ -101,7 +103,8 @@ public class CatanGameEngineTest {
           requestFailed.set(true);
         };
 
-    CatanGameEngine engine = new CatanGameEngine(board, players, 0, true, errorHandler);
+    CatanGameEngine engine =
+        new CatanGameEngine(board, players, 0, true, errorHandler, new CatanRandomGenerator());
 
     int requestX = 3;
     int requestY = 2;
@@ -139,7 +142,8 @@ public class CatanGameEngineTest {
           requestFailed.set(true);
         };
 
-    CatanGameEngine engine = new CatanGameEngine(board, players, 0, false, errorHandler);
+    CatanGameEngine engine =
+        new CatanGameEngine(board, players, 0, false, errorHandler, new CatanRandomGenerator());
 
     int requestX = 3;
     int requestY = 2;
@@ -173,7 +177,8 @@ public class CatanGameEngineTest {
           requestFailed.set(true);
         };
 
-    CatanGameEngine engine = new CatanGameEngine(board, players, 0, true, errorHandler);
+    CatanGameEngine engine =
+        new CatanGameEngine(board, players, 0, true, errorHandler, new CatanRandomGenerator());
 
     int requestX = 2;
     int requestY = 2;
@@ -214,7 +219,8 @@ public class CatanGameEngineTest {
           requestFailed.set(true);
         };
 
-    CatanGameEngine engine = new CatanGameEngine(board, players, 0, true, errorHandler);
+    CatanGameEngine engine =
+        new CatanGameEngine(board, players, 0, true, errorHandler, new CatanRandomGenerator());
 
     int requestX = 2;
     int requestY = 2;
@@ -253,7 +259,8 @@ public class CatanGameEngineTest {
           requestFailed.set(true);
         };
 
-    CatanGameEngine engine = new CatanGameEngine(board, players, 0, false, errorHandler);
+    CatanGameEngine engine =
+        new CatanGameEngine(board, players, 0, false, errorHandler, new CatanRandomGenerator());
 
     int requestX = 2;
     int requestY = 2;
@@ -289,7 +296,8 @@ public class CatanGameEngineTest {
           fail();
         };
 
-    CatanGameEngine engine = new CatanGameEngine(board, players, 0, true, errorHandler);
+    CatanGameEngine engine =
+        new CatanGameEngine(board, players, 0, true, errorHandler, new CatanRandomGenerator());
 
     int requestX = 3;
     int requestY = 2;
@@ -332,7 +340,8 @@ public class CatanGameEngineTest {
           fail();
         };
 
-    CatanGameEngine engine = new CatanGameEngine(board, players, 0, true, errorHandler);
+    CatanGameEngine engine =
+        new CatanGameEngine(board, players, 0, true, errorHandler, new CatanRandomGenerator());
 
     int requestX = 2;
     int requestY = 2;
@@ -377,7 +386,8 @@ public class CatanGameEngineTest {
           fail();
         };
 
-    CatanGameEngine engine = new CatanGameEngine(board, players, 0, true, errorHandler);
+    CatanGameEngine engine =
+        new CatanGameEngine(board, players, 0, true, errorHandler, new CatanRandomGenerator());
 
     int requestX = 2;
     int requestY = 2;
