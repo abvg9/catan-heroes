@@ -20,6 +20,7 @@ import com.ucm.dasi.catan.player.IPlayer;
 import com.ucm.dasi.catan.player.Player;
 import com.ucm.dasi.catan.resource.IResourceStorage;
 import com.ucm.dasi.catan.resource.ResourceManager;
+import com.ucm.dasi.catan.resource.ResourceStorage;
 import com.ucm.dasi.catan.resource.exception.NegativeNumberException;
 import com.ucm.dasi.catan.resource.provider.ITerrainProductionProvider;
 import com.ucm.dasi.catan.resource.provider.TerrainProductionProvider;
@@ -119,22 +120,63 @@ public class CatanEditableBoardTest {
         TerrainProductionProvider.buildDefaultProvider();
     CatanEditableBoard board = buildStandardBoard(player, productionProvider);
 
+    int productionNumber = 6;
+    
     int requestX = 2;
     int requestY = 2;
 
+    IResourceStorage productionBefore = board.getProduction(productionNumber).getProduction(player);
+    
     board.build(
         new BoardStructure(player, new ResourceManager(), StructureType.Settlement),
         requestX,
         requestY);
 
-    int productionNumber = 6;
-
     IResourceStorage standardSettlementAtMountainProduction =
         productionProvider.getResourceManager(
             new StructureTerrainTypesPair(StructureType.Settlement, TerrainType.Mountains));
-    IResourceStorage production = board.getProduction(productionNumber).getProduction(player);
+    IResourceStorage productionAfter = board.getProduction(productionNumber).getProduction(player);
 
-    assertEquals(standardSettlementAtMountainProduction, production);
+    assertEquals(new ResourceStorage(), productionBefore);
+    assertEquals(standardSettlementAtMountainProduction, productionAfter);
+  }
+  
+  @DisplayName("it must sync the production after a structure update")
+  @Tag("CatanEditableBoard")
+  @Test
+  public void itMustSyncTheProductionAfterAStructureUpdate()
+      throws InvalidBoardDimensionsException, InvalidBoardElementException {
+
+    IPlayer player = new Player(0, new ResourceManager());
+
+    ITerrainProductionProvider productionProvider =
+        TerrainProductionProvider.buildDefaultProvider();
+    CatanEditableBoard board = buildStandardBoard(player, productionProvider);
+
+    int productionNumber = 6;
+    
+    int requestX = 2;
+    int requestY = 2;
+
+    IResourceStorage productionBefore = board.getProduction(productionNumber).getProduction(player);
+    
+    board.build(
+        new BoardStructure(player, new ResourceManager(), StructureType.Settlement),
+        requestX,
+        requestY);
+    
+    board.upgrade(
+        new BoardStructure(player, new ResourceManager(), StructureType.City),
+        requestX,
+        requestY);
+
+    IResourceStorage standardCityAtMountainProduction =
+        productionProvider.getResourceManager(
+            new StructureTerrainTypesPair(StructureType.City, TerrainType.Mountains));
+    IResourceStorage productionAfter = board.getProduction(productionNumber).getProduction(player);
+
+    assertEquals(new ResourceStorage(), productionBefore);
+    assertEquals(standardCityAtMountainProduction, productionAfter);
   }
 
   private IBoardTerrain buildMountainTerrain() {
