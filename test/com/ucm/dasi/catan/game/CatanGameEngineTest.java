@@ -25,7 +25,9 @@ import com.ucm.dasi.catan.player.IPlayer;
 import com.ucm.dasi.catan.player.Player;
 import com.ucm.dasi.catan.request.BuildConnectionRequest;
 import com.ucm.dasi.catan.request.BuildStructureRequest;
+import com.ucm.dasi.catan.request.EndTurnRequest;
 import com.ucm.dasi.catan.request.IRequest;
+import com.ucm.dasi.catan.request.StartTurnRequest;
 import com.ucm.dasi.catan.request.UpgradeStructureRequest;
 import com.ucm.dasi.catan.resource.ResourceManager;
 import com.ucm.dasi.catan.resource.ResourceType;
@@ -354,6 +356,60 @@ public class CatanGameEngineTest {
     assertSame(true, requestFailed.get());
   }
 
+  @DisplayName("It must not process a valid end turn request if the game is ended")
+  @Tag(value = "CatanBoardEngine")
+  @Test
+  private void itMustNotProcessAValidEndTurnRequestIfTheGameIsEnded()
+      throws NonNullInputException, NonVoidCollectionException, InvalidBoardDimensionsException,
+          InvalidBoardElementException {
+
+    IPlayer player = new Player(0, new ResourceManager());
+    IPlayer[] players = {player};
+    ICatanEditableBoard board = buildStandardBoard(player);
+    AtomicBoolean requestFailed = new AtomicBoolean(false);
+
+    Consumer<IRequest> errorHandler =
+        (request) -> {
+          requestFailed.set(true);
+        };
+
+    CatanGameEngine engine =
+        new CatanGameEngine(board, players, GameState.ENDED, 0, true, errorHandler);
+
+    IRequest[] requests = {new EndTurnRequest(player)};
+
+    engine.processRequests(requests);
+
+    assertSame(true, requestFailed.get());
+  }
+
+  @DisplayName("It must not process a valid start turn request if the game is ended")
+  @Tag(value = "CatanBoardEngine")
+  @Test
+  private void itMustNotProcessAValidStartTurnRequestIfTheGameIsEnded()
+      throws NonNullInputException, NonVoidCollectionException, InvalidBoardDimensionsException,
+          InvalidBoardElementException {
+
+    IPlayer player = new Player(0, new ResourceManager());
+    IPlayer[] players = {player};
+    ICatanEditableBoard board = buildStandardBoard(player);
+    AtomicBoolean requestFailed = new AtomicBoolean(false);
+
+    Consumer<IRequest> errorHandler =
+        (request) -> {
+          requestFailed.set(true);
+        };
+
+    CatanGameEngine engine =
+        new CatanGameEngine(board, players, GameState.ENDED, 0, false, errorHandler);
+
+    IRequest[] requests = {new StartTurnRequest(player)};
+
+    engine.processRequests(requests);
+
+    assertSame(true, requestFailed.get());
+  }
+
   @DisplayName("It must process a valid build connection request")
   @Tag(value = "CatanBoardEngine")
   @Test
@@ -443,6 +499,31 @@ public class CatanGameEngineTest {
     assertSame(0, player.getResourceManager().getResource(ResourceType.Wool));
   }
 
+  @DisplayName("It must process a valid ent turn request")
+  @Tag(value = "CatanBoardEngine")
+  @Test
+  private void itMustProcessAValidEndTurnRequest()
+      throws NonNullInputException, NonVoidCollectionException, InvalidBoardDimensionsException,
+          InvalidBoardElementException {
+
+    IPlayer player = new Player(0, new ResourceManager());
+    IPlayer[] players = {player};
+    ICatanEditableBoard board = buildStandardBoard(player);
+    Consumer<IRequest> errorHandler =
+        (request) -> {
+          fail();
+        };
+
+    CatanGameEngine engine =
+        new CatanGameEngine(board, players, GameState.NORMAL, 0, true, errorHandler);
+
+    IRequest[] requests = {new EndTurnRequest(player)};
+
+    engine.processRequests(requests);
+
+    assertSame(false, engine.isTurnStarted());
+  }
+
   @DisplayName("It must process a valid upgrade structure request")
   @Tag(value = "CatanBoardEngine")
   @Test
@@ -488,6 +569,31 @@ public class CatanGameEngineTest {
     assertSame(0, player.getResourceManager().getResource(ResourceType.Grain));
     assertSame(0, player.getResourceManager().getResource(ResourceType.Lumber));
     assertSame(0, player.getResourceManager().getResource(ResourceType.Wool));
+  }
+
+  @DisplayName("It must process a valid start turn request")
+  @Tag(value = "CatanBoardEngine")
+  @Test
+  private void itMustProcessAValidStartTurnRequest()
+      throws NonNullInputException, NonVoidCollectionException, InvalidBoardDimensionsException,
+          InvalidBoardElementException {
+
+    IPlayer player = new Player(0, new ResourceManager());
+    IPlayer[] players = {player};
+    ICatanEditableBoard board = buildStandardBoard(player);
+    Consumer<IRequest> errorHandler =
+        (request) -> {
+          fail();
+        };
+
+    CatanGameEngine engine =
+        new CatanGameEngine(board, players, GameState.NORMAL, 0, false, errorHandler);
+
+    IRequest[] requests = {new StartTurnRequest(player)};
+
+    engine.processRequests(requests);
+
+    assertSame(true, engine.isTurnStarted());
   }
 
   private IBoardTerrain buildMountainTerrain() {
