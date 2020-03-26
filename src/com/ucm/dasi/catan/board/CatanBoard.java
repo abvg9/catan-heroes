@@ -10,6 +10,7 @@ import com.ucm.dasi.catan.board.terrain.IBoardTerrain;
 import com.ucm.dasi.catan.board.terrain.TerrainType;
 import com.ucm.dasi.catan.player.IPlayer;
 import com.ucm.dasi.catan.resource.IResourceManager;
+import com.ucm.dasi.catan.resource.IResourceStorage;
 import com.ucm.dasi.catan.resource.ResourceManager;
 import com.ucm.dasi.catan.resource.production.IResourceProduction;
 import com.ucm.dasi.catan.resource.production.ResourceProduction;
@@ -69,7 +70,15 @@ public class CatanBoard implements ICatanBoard {
       buildProductionDictionary();
     }
 
-    return productionDictionary.get(productionNumber);
+    IResourceProduction numberProduction = productionDictionary.get(productionNumber);
+
+    if (numberProduction == null) {
+      Map<IPlayer, IResourceStorage> productionMap = new TreeMap<IPlayer, IResourceStorage>();
+      numberProduction = new ResourceProduction(productionNumber, productionMap);
+      productionDictionary.put(productionNumber, numberProduction);
+    }
+
+    return numberProduction;
   }
 
   @Override
