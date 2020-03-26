@@ -42,7 +42,7 @@ public class CatanEditableBoard extends CatanBoard implements ICatanEditableBoar
     this.elements[x][y] = element;
 
     if (isProductionDictionaryInitialized()) {
-      buildProductionDictionary();
+      syncProductionOnStructureBuilt(x, y);
     }
   }
 
@@ -61,10 +61,12 @@ public class CatanEditableBoard extends CatanBoard implements ICatanEditableBoar
       throw new InvalidBoardElementException(element.getElementType());
     }
 
+    IBoardStructure oldElement = (IBoardStructure)elements[x][y];
+
     elements[x][y] = element;
 
     if (isProductionDictionaryInitialized()) {
-      buildProductionDictionary();
+      syncProductionOnStructureUpdate(oldElement, x, y);
     }
   }
 
