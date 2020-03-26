@@ -156,6 +156,46 @@ public class CatanGameEngineTest {
   }
 
   @DisplayName(
+      "It must not process a valid build connection request if the game state is not normal")
+  @Tag(value = "CatanBoardEngine")
+  @Test
+  public void itMustNotProcessAValidBuildConnectionRequestIV()
+      throws InvalidBoardDimensionsException, InvalidBoardElementException, NonNullInputException,
+          NonVoidCollectionException {
+
+    Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
+
+    playerResources.put(ResourceType.Brick, 1);
+    playerResources.put(ResourceType.Grain, 1);
+    playerResources.put(ResourceType.Lumber, 1);
+    playerResources.put(ResourceType.Wool, 1);
+
+    IPlayer player = new Player(0, new ResourceManager(playerResources));
+    IPlayer[] players = {player};
+    ICatanEditableBoard board = buildStandardBoard(player);
+
+    AtomicBoolean requestFailed = new AtomicBoolean(false);
+
+    Consumer<IRequest> errorHandler =
+        (request) -> {
+          requestFailed.set(true);
+        };
+
+    CatanGameEngine engine =
+        new CatanGameEngine(board, players, GameState.FOUNDATION, 0, true, errorHandler);
+
+    int requestX = 3;
+    int requestY = 2;
+    IRequest[] requests = {
+      new BuildConnectionRequest(player, ConnectionType.Road, requestX, requestY)
+    };
+
+    engine.processRequests(requests);
+
+    assertSame(true, requestFailed.get());
+  }
+
+  @DisplayName(
       "It must not process a valid build structure request if the player has not enought resources")
   @Tag(value = "CatanBoardEngine")
   @Test
@@ -266,6 +306,47 @@ public class CatanGameEngineTest {
 
     IRequest[] requests = {
       new BuildStructureRequest(player, StructureType.Settlement, requestX, requestY)
+    };
+
+    engine.processRequests(requests);
+
+    assertSame(true, requestFailed.get());
+  }
+
+  @DisplayName(
+      "It must not process a valid build structure request if the game state is not normal")
+  @Tag(value = "CatanBoardEngine")
+  @Test
+  public void itMustNotProcessAValidBuildStructureRequestIV()
+      throws InvalidBoardDimensionsException, InvalidBoardElementException, NonNullInputException,
+          NonVoidCollectionException {
+
+    Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
+
+    playerResources.put(ResourceType.Brick, 1);
+    playerResources.put(ResourceType.Grain, 1);
+    playerResources.put(ResourceType.Lumber, 1);
+    playerResources.put(ResourceType.Wool, 1);
+
+    IPlayer player1 = new Player(0, new ResourceManager(playerResources));
+    IPlayer[] players = {player1};
+    ICatanEditableBoard board = buildStandardBoard(player1);
+
+    AtomicBoolean requestFailed = new AtomicBoolean(false);
+
+    Consumer<IRequest> errorHandler =
+        (request) -> {
+          requestFailed.set(true);
+        };
+
+    CatanGameEngine engine =
+        new CatanGameEngine(board, players, GameState.FOUNDATION, 0, true, errorHandler);
+
+    int requestX = 2;
+    int requestY = 2;
+
+    IRequest[] requests = {
+      new BuildStructureRequest(player1, StructureType.Settlement, requestX, requestY)
     };
 
     engine.processRequests(requests);
