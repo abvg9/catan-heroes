@@ -102,20 +102,6 @@ public class CatanBoard implements ICatanBoard {
     return type == BoardElementType.Terrain;
   }
 
-  protected void buildProductionDictionary() {
-
-    TreeMap<Integer, TreeMap<IPlayer, IResourceManager>> innerMap =
-        new TreeMap<Integer, TreeMap<IPlayer, IResourceManager>>();
-
-    for (int i = 0; i < getWidth(); ++i) {
-      for (int j = 0; j < getHeight(); ++j) {
-        analyzeTerrainProduction(innerMap, i, j);
-      }
-    }
-
-    productionDictionary = innerMap;
-  }
-
   protected boolean isProductionDictionaryInitialized() {
     return productionDictionary != null;
   }
@@ -141,46 +127,22 @@ public class CatanBoard implements ICatanBoard {
 
   private void addProductionOfPlayer(
       IPlayer player, TreeMap<Integer, IResourceManager> production) {
+
     transformProductionOfPlayer(player, production, (total, diff) -> total.add(diff));
   }
 
-  private void removeProductionOfPlayer(
-      IPlayer player, TreeMap<Integer, IResourceManager> production) {
-    transformProductionOfPlayer(
-        player,
-        production,
-        (total, diff) -> {
-          try {
-            total.substract(diff);
-          } catch (NotEnoughtResourcesException e) {
-            e.printStackTrace();
-          }
-        });
-  }
+  private void buildProductionDictionary() {
 
-  private void transformProductionOfPlayer(
-      IPlayer player,
-      TreeMap<Integer, IResourceManager> production,
-      BiConsumer<IResourceManager, IResourceManager> operation) {
-    for (Entry<Integer, IResourceManager> productionEntry : production.entrySet()) {
-      int productionNumber = productionEntry.getKey();
+    TreeMap<Integer, TreeMap<IPlayer, IResourceManager>> innerMap =
+        new TreeMap<Integer, TreeMap<IPlayer, IResourceManager>>();
 
-      TreeMap<IPlayer, IResourceManager> numberProduction =
-          productionDictionary.get(productionNumber);
-      if (numberProduction == null) {
-        numberProduction = new TreeMap<IPlayer, IResourceManager>();
-        productionDictionary.put(productionNumber, numberProduction);
+    for (int i = 0; i < getWidth(); ++i) {
+      for (int j = 0; j < getHeight(); ++j) {
+        analyzeTerrainProduction(innerMap, i, j);
       }
-
-      IResourceManager playerProduction = numberProduction.get(player);
-      if (playerProduction == null) {
-        playerProduction = new ResourceManager();
-        numberProduction.put(player, playerProduction);
-      }
-
-      IResourceManager productionAtNumber = productionEntry.getValue();
-      operation.accept(playerProduction, productionAtNumber);
     }
+
+    productionDictionary = innerMap;
   }
 
   private IBoardStructure getNWStructureOfTerrain(int x, int y) {
@@ -235,20 +197,19 @@ public class CatanBoard implements ICatanBoard {
     numberProduction.add(structureProductionOverTerrain);
   }
 
-  private IBoardStructure getSWStructureOfTerrain(int x, int y) {
-    return (IBoardStructure) get(x - 1, y + 1);
-  }
+  private void analyzeStructureProduction(
+      TreeMap<Integer, TreeMap<IPlayer, IResourceManager>> innerMap,
+      IBoardTerrain terrain,
+      IBoardStructure structure) {
 
-  private IBoardTerrain getSWTerrainOfStructure(int x, int y) {
-    return (x > 0 && y + 1 < getHeight()) ? (IBoardTerrain) get(x - 1, y + 1) : null;
-  }
+    if (structure.getOwner() == null) {
+      return;
+    }
 
-  private IBoardStructure getSEStructureOfTerrain(int x, int y) {
-    return (IBoardStructure) get(x + 1, y + 1);
-  }
-
-  private IBoardTerrain getSETerrainOfStructure(int x, int y) {
-    return (x + 1 < getWidth() && y + 1 < getHeight()) ? (IBoardTerrain) get(x + 1, y + 1) : null;
+    IResourceManager production =
+        terrainProductionProvider.getResourceManager(
+            new StructureTerrainTypesPair(structure.getType(), terrain.getType()));
+    insertProduction(innerMap, terrain.getProductionNumber(), production, structure.getOwner());
   }
 
   private void analyzeTerrainProduction(
@@ -271,19 +232,20 @@ public class CatanBoard implements ICatanBoard {
     analyzeStructureProduction(innerMap, terrain, getSEStructureOfTerrain(x, y));
   }
 
-  private void analyzeStructureProduction(
-      TreeMap<Integer, TreeMap<IPlayer, IResourceManager>> innerMap,
-      IBoardTerrain terrain,
-      IBoardStructure structure) {
+  private IBoardStructure getSWStructureOfTerrain(int x, int y) {
+    return (IBoardStructure) get(x - 1, y + 1);
+  }
 
-    if (structure.getOwner() == null) {
-      return;
-    }
+  private IBoardTerrain getSWTerrainOfStructure(int x, int y) {
+    return (x > 0 && y + 1 < getHeight()) ? (IBoardTerrain) get(x - 1, y + 1) : null;
+  }
 
-    IResourceManager production =
-        terrainProductionProvider.getResourceManager(
-            new StructureTerrainTypesPair(structure.getType(), terrain.getType()));
-    insertProduction(innerMap, terrain.getProductionNumber(), production, structure.getOwner());
+  private IBoardStructure getSEStructureOfTerrain(int x, int y) {
+    return (IBoardStructure) get(x + 1, y + 1);
+  }
+
+  private IBoardTerrain getSETerrainOfStructure(int x, int y) {
+    return (x + 1 < getWidth() && y + 1 < getHeight()) ? (IBoardTerrain) get(x + 1, y + 1) : null;
   }
 
   private void insertProduction(
@@ -307,6 +269,21 @@ public class CatanBoard implements ICatanBoard {
     }
 
     playerProduction.add(production);
+  }
+
+  private void removeProductionOfPlayer(
+      IPlayer player, TreeMap<Integer, IResourceManager> production) {
+
+    transformProductionOfPlayer(
+        player,
+        production,
+        (total, diff) -> {
+          try {
+            total.substract(diff);
+          } catch (NotEnoughtResourcesException e) {
+            e.printStackTrace();
+          }
+        });
   }
 
   private void setDimensions(int width, int height) throws InvalidBoardDimensionsException {
@@ -338,6 +315,32 @@ public class CatanBoard implements ICatanBoard {
         }
         this.elements[i][j] = elements[i][j];
       }
+    }
+  }
+
+  private void transformProductionOfPlayer(
+      IPlayer player,
+      TreeMap<Integer, IResourceManager> production,
+      BiConsumer<IResourceManager, IResourceManager> operation) {
+
+    for (Entry<Integer, IResourceManager> productionEntry : production.entrySet()) {
+      int productionNumber = productionEntry.getKey();
+
+      TreeMap<IPlayer, IResourceManager> numberProduction =
+          productionDictionary.get(productionNumber);
+      if (numberProduction == null) {
+        numberProduction = new TreeMap<IPlayer, IResourceManager>();
+        productionDictionary.put(productionNumber, numberProduction);
+      }
+
+      IResourceManager playerProduction = numberProduction.get(player);
+      if (playerProduction == null) {
+        playerProduction = new ResourceManager();
+        numberProduction.put(player, playerProduction);
+      }
+
+      IResourceManager productionAtNumber = productionEntry.getValue();
+      operation.accept(playerProduction, productionAtNumber);
     }
   }
 }
