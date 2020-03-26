@@ -17,6 +17,7 @@ import com.ucm.dasi.catan.request.IBuildStructureRequest;
 import com.ucm.dasi.catan.request.IEndTurnRequest;
 import com.ucm.dasi.catan.request.IRequest;
 import com.ucm.dasi.catan.request.IStartTurnRequest;
+import com.ucm.dasi.catan.request.IUpgradeStructureRequest;
 import com.ucm.dasi.catan.request.RequestType;
 import com.ucm.dasi.catan.resource.exception.NotEnoughtResourcesException;
 import com.ucm.dasi.catan.resource.provider.ConnectionCostProvider;
@@ -101,12 +102,12 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
   private boolean isStructurePointConnectedOrControlled(IPlayer player, int x, int y) {
     return (getBoard().get(x, y).getElementType() == BoardElementType.Structure
             && ((IOwnedElement) getBoard().get(x, y)).getOwner() != null
-            && ((IOwnedElement) getBoard().get(x, y)).getOwner().getId() == player.getId())
+            && ((IOwnedElement) getBoard().get(x, y)).getOwner().equals(player))
         || isStructurePointConnected(player, x, y);
   }
 
   private boolean isStructureConnectedCheckConnection(IPlayer player, IOwnedElement element) {
-    return element.getOwner() != null && element.getOwner().getId() == player.getId();
+    return element.getOwner() != null && element.getOwner().equals(player);
   }
 
   private boolean isVerticalConnectionConnected(IPlayer player, int x, int y) {
@@ -139,12 +140,15 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
         (IBuildStructureRequest request) -> handleBuildStructureRequest(request));
     map.put(RequestType.EndTurn, (IEndTurnRequest request) -> handleEndTurnRequest(request));
     map.put(RequestType.StartTurn, (IStartTurnRequest request) -> handleStartTurnRequest(request));
+    map.put(
+        RequestType.UpgradeStructure,
+        (IUpgradeStructureRequest request) -> handleUpgradeStructureRequest(request));
 
     return map;
   }
 
   private void handleBuildConnectionRequest(IBuildConnectionRequest request) {
-    if (request.getPlayer().getId() != getActivePlayer().getId()) {
+    if (!request.getPlayer().equals(getActivePlayer())) {
       handleRequestError(request);
       return;
     }
@@ -174,7 +178,7 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
   }
 
   private void handleBuildStructureRequest(IBuildStructureRequest request) {
-    if (request.getPlayer().getId() != getActivePlayer().getId()) {
+    if (!request.getPlayer().equals(getActivePlayer())) {
       handleRequestError(request);
       return;
     }
@@ -204,7 +208,7 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
   }
 
   private void handleEndTurnRequest(IEndTurnRequest request) {
-    if (request.getPlayer().getId() != getActivePlayer().getId()) {
+    if (!request.getPlayer().equals(getActivePlayer())) {
       handleRequestError(request);
       return;
     }
@@ -219,7 +223,7 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
   }
 
   private void handleStartTurnRequest(IStartTurnRequest request) {
-    if (request.getPlayer().getId() != getActivePlayer().getId()) {
+    if (!request.getPlayer().equals(getActivePlayer())) {
       handleRequestError(request);
       return;
     }
@@ -230,5 +234,30 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
     }
 
     switchTurnStarted();
+  }
+
+  private void handleUpgradeStructureRequest(IUpgradeStructureRequest request) {
+    if (request.getPlayer().getId() != getActivePlayer().getId()) {
+      handleRequestError(request);
+      return;
+    }
+
+    if (!isTurnStarted()) {
+      handleRequestError(request);
+      return;
+    }
+
+    BoardStructure element =
+        new BoardStructure(
+            request.getPlayer(),
+            structureCostProvider.getResourceManager(request.getStructureType()),
+            request.getStructureType());
+
+    try {
+      getBoard().upgrade(element, request.getX(), request.getY());
+      getActivePlayer().getResourceManager().substract(element.getCost());
+    } catch (InvalidBoardElementException | NotEnoughtResourcesException e) {
+      handleRequestError(request);
+    }
   }
 }

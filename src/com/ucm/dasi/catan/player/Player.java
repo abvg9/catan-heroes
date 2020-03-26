@@ -15,8 +15,18 @@ public class Player implements IPlayer {
   }
 
   @Override
+  public boolean equals(Object other) {
+
+    if (!(other instanceof IPlayer)) {
+      return false;
+    }
+
+    return id == ((IPlayer) other).getId();
+  }
+
+  @Override
   public int compareTo(IPlayer other) {
-    return getId() - other.getId();
+    return Integer.compare(getId(), other.getId());
   }
 
   @Override
