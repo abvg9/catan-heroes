@@ -359,7 +359,7 @@ public class CatanGameEngineTest {
   @DisplayName("It must not process a valid end turn request if the game is ended")
   @Tag(value = "CatanBoardEngine")
   @Test
-  private void itMustNotProcessAValidEndTurnRequestIfTheGameIsEnded()
+  public void itMustNotProcessAValidEndTurnRequestIfTheGameIsEnded()
       throws NonNullInputException, NonVoidCollectionException, InvalidBoardDimensionsException,
           InvalidBoardElementException {
 
@@ -386,7 +386,7 @@ public class CatanGameEngineTest {
   @DisplayName("It must not process a valid start turn request if the game is ended")
   @Tag(value = "CatanBoardEngine")
   @Test
-  private void itMustNotProcessAValidStartTurnRequestIfTheGameIsEnded()
+  public void itMustNotProcessAValidStartTurnRequestIfTheGameIsEnded()
       throws NonNullInputException, NonVoidCollectionException, InvalidBoardDimensionsException,
           InvalidBoardElementException {
 
@@ -502,7 +502,7 @@ public class CatanGameEngineTest {
   @DisplayName("It must process a valid ent turn request")
   @Tag(value = "CatanBoardEngine")
   @Test
-  private void itMustProcessAValidEndTurnRequest()
+  public void itMustProcessAValidEndTurnRequest()
       throws NonNullInputException, NonVoidCollectionException, InvalidBoardDimensionsException,
           InvalidBoardElementException {
 
@@ -574,7 +574,7 @@ public class CatanGameEngineTest {
   @DisplayName("It must process a valid start turn request")
   @Tag(value = "CatanBoardEngine")
   @Test
-  private void itMustProcessAValidStartTurnRequest()
+  public void itMustProcessAValidStartTurnRequest()
       throws NonNullInputException, NonVoidCollectionException, InvalidBoardDimensionsException,
           InvalidBoardElementException {
 
