@@ -37,12 +37,13 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
   public CatanGameEngine(
       ICatanEditableBoard board,
       IPlayer[] players,
+      GameState state,
       int turnIndex,
       boolean turnStarted,
       Consumer<IRequest> errorHandler)
       throws NonNullInputException, NonVoidCollectionException {
 
-    super(board, players, turnIndex, turnStarted);
+    super(board, players, state, turnIndex, turnStarted);
 
     connectionCostProvider = ConnectionCostProvider.buildDefaultProvider();
     structureCostProvider = StructureCostProvider.buildDefaultProvider();
