@@ -66,7 +66,7 @@ public class CatanEditableBoard extends CatanBoard implements ICatanEditableBoar
     elements[x][y] = element;
 
     if (isProductionDictionaryInitialized()) {
-      syncProductionOnStructureUpdate(oldElement, x, y);
+      syncProductionOnStructureUpgrade(oldElement, x, y);
     }
   }
 

@@ -117,7 +117,7 @@ public class CatanBoard implements ICatanBoard {
     addProductionOfPlayer(structure.getOwner(), production);
   }
 
-  protected void syncProductionOnStructureUpdate(IBoardStructure oldStructure, int x, int y) {
+  protected void syncProductionOnStructureUpgrade(IBoardStructure oldStructure, int x, int y) {
     syncProductionOnStructureBuilt(x, y);
 
     TreeMap<Integer, IResourceManager> production = getProductionOfStructure(oldStructure, x, y);
