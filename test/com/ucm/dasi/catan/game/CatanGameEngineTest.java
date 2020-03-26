@@ -61,7 +61,8 @@ public class CatanGameEngineTest {
           requestFailed.set(true);
         };
 
-    CatanGameEngine engine = new CatanGameEngine(board, players, 0, true, errorHandler);
+    CatanGameEngine engine =
+        new CatanGameEngine(board, players, GameState.NORMAL, 0, true, errorHandler);
 
     int requestX = 3;
     int requestY = 2;
@@ -101,7 +102,8 @@ public class CatanGameEngineTest {
           requestFailed.set(true);
         };
 
-    CatanGameEngine engine = new CatanGameEngine(board, players, 0, true, errorHandler);
+    CatanGameEngine engine =
+        new CatanGameEngine(board, players, GameState.NORMAL, 0, true, errorHandler);
 
     int requestX = 3;
     int requestY = 2;
@@ -139,7 +141,8 @@ public class CatanGameEngineTest {
           requestFailed.set(true);
         };
 
-    CatanGameEngine engine = new CatanGameEngine(board, players, 0, false, errorHandler);
+    CatanGameEngine engine =
+        new CatanGameEngine(board, players, GameState.NORMAL, 0, false, errorHandler);
 
     int requestX = 3;
     int requestY = 2;
@@ -173,7 +176,8 @@ public class CatanGameEngineTest {
           requestFailed.set(true);
         };
 
-    CatanGameEngine engine = new CatanGameEngine(board, players, 0, true, errorHandler);
+    CatanGameEngine engine =
+        new CatanGameEngine(board, players, GameState.NORMAL, 0, true, errorHandler);
 
     int requestX = 2;
     int requestY = 2;
@@ -214,7 +218,8 @@ public class CatanGameEngineTest {
           requestFailed.set(true);
         };
 
-    CatanGameEngine engine = new CatanGameEngine(board, players, 0, true, errorHandler);
+    CatanGameEngine engine =
+        new CatanGameEngine(board, players, GameState.NORMAL, 0, true, errorHandler);
 
     int requestX = 2;
     int requestY = 2;
@@ -253,7 +258,8 @@ public class CatanGameEngineTest {
           requestFailed.set(true);
         };
 
-    CatanGameEngine engine = new CatanGameEngine(board, players, 0, false, errorHandler);
+    CatanGameEngine engine =
+        new CatanGameEngine(board, players, GameState.NORMAL, 0, false, errorHandler);
 
     int requestX = 2;
     int requestY = 2;
@@ -289,7 +295,8 @@ public class CatanGameEngineTest {
           fail();
         };
 
-    CatanGameEngine engine = new CatanGameEngine(board, players, 0, true, errorHandler);
+    CatanGameEngine engine =
+        new CatanGameEngine(board, players, GameState.NORMAL, 0, true, errorHandler);
 
     int requestX = 3;
     int requestY = 2;
@@ -332,7 +339,8 @@ public class CatanGameEngineTest {
           fail();
         };
 
-    CatanGameEngine engine = new CatanGameEngine(board, players, 0, true, errorHandler);
+    CatanGameEngine engine =
+        new CatanGameEngine(board, players, GameState.NORMAL, 0, true, errorHandler);
 
     int requestX = 2;
     int requestY = 2;
@@ -377,7 +385,8 @@ public class CatanGameEngineTest {
           fail();
         };
 
-    CatanGameEngine engine = new CatanGameEngine(board, players, 0, true, errorHandler);
+    CatanGameEngine engine =
+        new CatanGameEngine(board, players, GameState.NORMAL, 0, true, errorHandler);
 
     int requestX = 2;
     int requestY = 2;
