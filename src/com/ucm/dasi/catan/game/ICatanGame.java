@@ -9,4 +9,8 @@ public interface ICatanGame<TBoard extends ICatanBoard> {
   TBoard getBoard();
 
   IPlayer[] getPlayers();
+
+  GameState getState();
+
+  boolean isTurnStarted();
 }
