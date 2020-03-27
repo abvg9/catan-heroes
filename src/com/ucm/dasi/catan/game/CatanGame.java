@@ -4,13 +4,18 @@ import com.ucm.dasi.catan.board.ICatanBoard;
 import com.ucm.dasi.catan.exception.NonNullInputException;
 import com.ucm.dasi.catan.exception.NonVoidCollectionException;
 import com.ucm.dasi.catan.game.exception.InvalidTurnIndexException;
+import com.ucm.dasi.catan.game.point.IPointsCalculator;
+import com.ucm.dasi.catan.game.point.PointsCalculator;
 import com.ucm.dasi.catan.player.IPlayer;
+import java.util.Map;
 
 public class CatanGame<TBoard extends ICatanBoard> implements ICatanGame<TBoard> {
 
   private TBoard board;
 
   private IPlayer[] players;
+
+  private IPointsCalculator pointsCalculator;
 
   private GameState state;
 
@@ -29,6 +34,7 @@ public class CatanGame<TBoard extends ICatanBoard> implements ICatanGame<TBoard>
 
     this.board = board;
     this.players = players;
+    pointsCalculator = new PointsCalculator();
     this.state = state;
     this.turnIndex = turnIndex;
     this.turnStarted = turnStarted;
@@ -47,6 +53,11 @@ public class CatanGame<TBoard extends ICatanBoard> implements ICatanGame<TBoard>
   @Override
   public IPlayer[] getPlayers() {
     return players;
+  }
+
+  @Override
+  public Map<IPlayer, Integer> getPoints() {
+    return pointsCalculator.getPoints(this);
   }
 
   @Override

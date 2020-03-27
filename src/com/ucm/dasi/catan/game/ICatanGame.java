@@ -2,6 +2,7 @@ package com.ucm.dasi.catan.game;
 
 import com.ucm.dasi.catan.board.ICatanBoard;
 import com.ucm.dasi.catan.player.IPlayer;
+import java.util.Map;
 
 public interface ICatanGame<TBoard extends ICatanBoard> {
   IPlayer getActivePlayer();
@@ -9,6 +10,8 @@ public interface ICatanGame<TBoard extends ICatanBoard> {
   TBoard getBoard();
 
   IPlayer[] getPlayers();
+
+  Map<IPlayer, Integer> getPoints();
 
   GameState getState();
 
