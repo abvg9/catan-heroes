@@ -9,6 +9,7 @@ import com.ucm.dasi.catan.board.exception.InvalidBoardElementException;
 import com.ucm.dasi.catan.board.structure.BoardStructure;
 import com.ucm.dasi.catan.exception.NonNullInputException;
 import com.ucm.dasi.catan.exception.NonVoidCollectionException;
+import com.ucm.dasi.catan.game.generator.INumberGenerator;
 import com.ucm.dasi.catan.game.handler.GameEngineHandlersMap;
 import com.ucm.dasi.catan.game.handler.IGameEngineHandlersMap;
 import com.ucm.dasi.catan.player.IPlayer;
@@ -20,6 +21,7 @@ import com.ucm.dasi.catan.request.IStartTurnRequest;
 import com.ucm.dasi.catan.request.IUpgradeStructureRequest;
 import com.ucm.dasi.catan.request.RequestType;
 import com.ucm.dasi.catan.resource.exception.NotEnoughtResourcesException;
+import com.ucm.dasi.catan.resource.production.IResourceProduction;
 import com.ucm.dasi.catan.resource.provider.ConnectionCostProvider;
 import com.ucm.dasi.catan.resource.provider.StructureCostProvider;
 import java.util.function.Consumer;
@@ -28,26 +30,30 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
 
   private ConnectionCostProvider connectionCostProvider;
 
-  private StructureCostProvider structureCostProvider;
-
   private Consumer<IRequest> errorHandler;
 
   private IGameEngineHandlersMap handlersMap;
+
+  private INumberGenerator numberGenerator;
+
+  private StructureCostProvider structureCostProvider;
 
   public CatanGameEngine(
       ICatanEditableBoard board,
       IPlayer[] players,
       int turnIndex,
       boolean turnStarted,
-      Consumer<IRequest> errorHandler)
+      Consumer<IRequest> errorHandler,
+      INumberGenerator numberGenerator)
       throws NonNullInputException, NonVoidCollectionException {
 
     super(board, players, turnIndex, turnStarted);
 
     connectionCostProvider = ConnectionCostProvider.buildDefaultProvider();
-    structureCostProvider = StructureCostProvider.buildDefaultProvider();
     this.errorHandler = errorHandler;
-    this.handlersMap = new GameEngineHandlersMap(generateMap());
+    handlersMap = new GameEngineHandlersMap(generateMap());
+    this.numberGenerator = numberGenerator;
+    structureCostProvider = StructureCostProvider.buildDefaultProvider();
   }
 
   @Override
@@ -233,6 +239,8 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
       return;
     }
 
+    produceResources();
+
     switchTurnStarted();
   }
 
@@ -258,6 +266,16 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
       getActivePlayer().getResourceManager().substract(element.getCost());
     } catch (InvalidBoardElementException | NotEnoughtResourcesException e) {
       handleRequestError(request);
+    }
+  }
+
+  private void produceResources() {
+
+    int productionNumber = numberGenerator.getNextProductionNumber();
+    IResourceProduction production = getBoard().getProduction(productionNumber);
+
+    for (IPlayer player : getPlayers()) {
+      player.getResourceManager().add(production.getProduction(player));
     }
   }
 }
