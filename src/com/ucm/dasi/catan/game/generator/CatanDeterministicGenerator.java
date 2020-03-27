@@ -19,6 +19,10 @@ public class CatanDeterministicGenerator extends CatanGenerator
   private static final int N_11 = 2;
   private static final int N_12 = 1;
 
+  private static final int[] NUMBER_SET = {
+    N_0, N_1, N_2, N_3, N_4, N_5, N_6, N_7, N_8, N_9, N_10, N_11, N_12
+  };
+
   private int innerOffset;
 
   private int[] productionSequence;
@@ -80,9 +84,7 @@ public class CatanDeterministicGenerator extends CatanGenerator
 
   private int[] generateSequence() {
 
-    int[] remaininNumbersSet = {N_0, N_1, N_2, N_3, N_4, N_5, N_6, N_7, N_8, N_9, N_10, N_11, N_12};
-
-    return generateSequence(remaininNumbersSet);
+    return generateSequence(NUMBER_SET);
   }
 
   private int getIndexOfSet(int[] set, int number) {
