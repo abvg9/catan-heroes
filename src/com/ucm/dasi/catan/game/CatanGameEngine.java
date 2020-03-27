@@ -41,13 +41,14 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
   public CatanGameEngine(
       ICatanEditableBoard board,
       IPlayer[] players,
+      GameState state,
       int turnIndex,
       boolean turnStarted,
       Consumer<IRequest> errorHandler,
       INumberGenerator numberGenerator)
       throws NonNullInputException, NonVoidCollectionException {
 
-    super(board, players, turnIndex, turnStarted);
+    super(board, players, state, turnIndex, turnStarted);
 
     connectionCostProvider = ConnectionCostProvider.buildDefaultProvider();
     this.errorHandler = errorHandler;
@@ -154,6 +155,12 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
   }
 
   private void handleBuildConnectionRequest(IBuildConnectionRequest request) {
+
+    if (getState() != GameState.NORMAL) {
+      handleRequestError(request);
+      return;
+    }
+
     if (!request.getPlayer().equals(getActivePlayer())) {
       handleRequestError(request);
       return;
@@ -184,6 +191,12 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
   }
 
   private void handleBuildStructureRequest(IBuildStructureRequest request) {
+
+    if (getState() != GameState.NORMAL) {
+      handleRequestError(request);
+      return;
+    }
+
     if (!request.getPlayer().equals(getActivePlayer())) {
       handleRequestError(request);
       return;
@@ -214,6 +227,12 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
   }
 
   private void handleEndTurnRequest(IEndTurnRequest request) {
+
+    if (getState() == GameState.ENDED) {
+      handleRequestError(request);
+      return;
+    }
+
     if (!request.getPlayer().equals(getActivePlayer())) {
       handleRequestError(request);
       return;
@@ -229,6 +248,12 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
   }
 
   private void handleStartTurnRequest(IStartTurnRequest request) {
+
+    if (getState() == GameState.ENDED) {
+      handleRequestError(request);
+      return;
+    }
+
     if (!request.getPlayer().equals(getActivePlayer())) {
       handleRequestError(request);
       return;
@@ -245,6 +270,12 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
   }
 
   private void handleUpgradeStructureRequest(IUpgradeStructureRequest request) {
+
+    if (getState() != GameState.NORMAL) {
+      handleRequestError(request);
+      return;
+    }
+
     if (request.getPlayer().getId() != getActivePlayer().getId()) {
       handleRequestError(request);
       return;
