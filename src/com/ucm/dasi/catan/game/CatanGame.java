@@ -17,38 +17,52 @@ public class CatanGame<TBoard extends ICatanBoard> implements ICatanGame<TBoard>
 
   private IPointsCalculator pointsCalculator;
 
+  private GameState state;
+
   private int turnIndex;
 
   private boolean turnStarted;
 
-  public CatanGame(TBoard board, IPlayer[] players, int turnIndex, boolean turnStarted)
+  public CatanGame(
+      TBoard board, IPlayer[] players, GameState state, int turnIndex, boolean turnStarted)
       throws NonNullInputException, NonVoidCollectionException {
 
     checkBoard(board);
     checkPlayers(players);
+    checkState(state);
     checkTurnIndex(players, turnIndex);
 
     this.board = board;
     this.players = players;
     pointsCalculator = new PointsCalculator();
+    this.state = state;
     this.turnIndex = turnIndex;
     this.turnStarted = turnStarted;
   }
 
+  @Override
   public IPlayer getActivePlayer() {
     return players[turnIndex];
   }
 
+  @Override
   public TBoard getBoard() {
     return board;
   }
 
+  @Override
   public IPlayer[] getPlayers() {
     return players;
   }
 
+  @Override
   public Map<IPlayer, Integer> getPoints() {
     return pointsCalculator.getPoints(this);
+  }
+
+  @Override
+  public GameState getState() {
+    return state;
   }
 
   public boolean isTurnStarted() {
@@ -88,6 +102,12 @@ public class CatanGame<TBoard extends ICatanBoard> implements ICatanGame<TBoard>
   private void checkTurnIndex(IPlayer[] players, int turnIndex) {
     if (turnIndex < 0 || turnIndex >= players.length) {
       throw new InvalidTurnIndexException(turnIndex, 0, players.length - 1);
+    }
+  }
+
+  private void checkState(GameState state) throws NonNullInputException {
+    if (state == null) {
+      throw new NonNullInputException();
     }
   }
 }
