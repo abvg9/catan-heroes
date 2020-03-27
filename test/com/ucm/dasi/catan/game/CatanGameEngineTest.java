@@ -1,5 +1,6 @@
 package com.ucm.dasi.catan.game;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -13,6 +14,7 @@ import com.ucm.dasi.catan.board.element.IBoardElement;
 import com.ucm.dasi.catan.board.element.IOwnedElement;
 import com.ucm.dasi.catan.board.exception.InvalidBoardDimensionsException;
 import com.ucm.dasi.catan.board.exception.InvalidBoardElementException;
+import com.ucm.dasi.catan.board.group.StructureTerrainTypesPair;
 import com.ucm.dasi.catan.board.structure.BoardStructure;
 import com.ucm.dasi.catan.board.structure.IBoardStructure;
 import com.ucm.dasi.catan.board.structure.StructureType;
@@ -21,12 +23,16 @@ import com.ucm.dasi.catan.board.terrain.IBoardTerrain;
 import com.ucm.dasi.catan.board.terrain.TerrainType;
 import com.ucm.dasi.catan.exception.NonNullInputException;
 import com.ucm.dasi.catan.exception.NonVoidCollectionException;
+import com.ucm.dasi.catan.game.generator.CatanRandomGenerator;
+import com.ucm.dasi.catan.game.generator.ConstantNumberGenerator;
 import com.ucm.dasi.catan.player.IPlayer;
 import com.ucm.dasi.catan.player.Player;
 import com.ucm.dasi.catan.request.BuildConnectionRequest;
 import com.ucm.dasi.catan.request.BuildStructureRequest;
 import com.ucm.dasi.catan.request.IRequest;
+import com.ucm.dasi.catan.request.StartTurnRequest;
 import com.ucm.dasi.catan.request.UpgradeStructureRequest;
+import com.ucm.dasi.catan.resource.IResourceStorage;
 import com.ucm.dasi.catan.resource.ResourceManager;
 import com.ucm.dasi.catan.resource.ResourceType;
 import com.ucm.dasi.catan.resource.provider.TerrainProductionProvider;
@@ -61,7 +67,8 @@ public class CatanGameEngineTest {
           requestFailed.set(true);
         };
 
-    CatanGameEngine engine = new CatanGameEngine(board, players, 0, true, errorHandler);
+    CatanGameEngine engine =
+        new CatanGameEngine(board, players, 0, true, errorHandler, new CatanRandomGenerator());
 
     int requestX = 3;
     int requestY = 2;
@@ -101,7 +108,8 @@ public class CatanGameEngineTest {
           requestFailed.set(true);
         };
 
-    CatanGameEngine engine = new CatanGameEngine(board, players, 0, true, errorHandler);
+    CatanGameEngine engine =
+        new CatanGameEngine(board, players, 0, true, errorHandler, new CatanRandomGenerator());
 
     int requestX = 3;
     int requestY = 2;
@@ -139,7 +147,8 @@ public class CatanGameEngineTest {
           requestFailed.set(true);
         };
 
-    CatanGameEngine engine = new CatanGameEngine(board, players, 0, false, errorHandler);
+    CatanGameEngine engine =
+        new CatanGameEngine(board, players, 0, false, errorHandler, new CatanRandomGenerator());
 
     int requestX = 3;
     int requestY = 2;
@@ -173,7 +182,8 @@ public class CatanGameEngineTest {
           requestFailed.set(true);
         };
 
-    CatanGameEngine engine = new CatanGameEngine(board, players, 0, true, errorHandler);
+    CatanGameEngine engine =
+        new CatanGameEngine(board, players, 0, true, errorHandler, new CatanRandomGenerator());
 
     int requestX = 2;
     int requestY = 2;
@@ -214,7 +224,8 @@ public class CatanGameEngineTest {
           requestFailed.set(true);
         };
 
-    CatanGameEngine engine = new CatanGameEngine(board, players, 0, true, errorHandler);
+    CatanGameEngine engine =
+        new CatanGameEngine(board, players, 0, true, errorHandler, new CatanRandomGenerator());
 
     int requestX = 2;
     int requestY = 2;
@@ -253,7 +264,8 @@ public class CatanGameEngineTest {
           requestFailed.set(true);
         };
 
-    CatanGameEngine engine = new CatanGameEngine(board, players, 0, false, errorHandler);
+    CatanGameEngine engine =
+        new CatanGameEngine(board, players, 0, false, errorHandler, new CatanRandomGenerator());
 
     int requestX = 2;
     int requestY = 2;
@@ -289,7 +301,8 @@ public class CatanGameEngineTest {
           fail();
         };
 
-    CatanGameEngine engine = new CatanGameEngine(board, players, 0, true, errorHandler);
+    CatanGameEngine engine =
+        new CatanGameEngine(board, players, 0, true, errorHandler, new CatanRandomGenerator());
 
     int requestX = 3;
     int requestY = 2;
@@ -332,7 +345,8 @@ public class CatanGameEngineTest {
           fail();
         };
 
-    CatanGameEngine engine = new CatanGameEngine(board, players, 0, true, errorHandler);
+    CatanGameEngine engine =
+        new CatanGameEngine(board, players, 0, true, errorHandler, new CatanRandomGenerator());
 
     int requestX = 2;
     int requestY = 2;
@@ -377,7 +391,8 @@ public class CatanGameEngineTest {
           fail();
         };
 
-    CatanGameEngine engine = new CatanGameEngine(board, players, 0, true, errorHandler);
+    CatanGameEngine engine =
+        new CatanGameEngine(board, players, 0, true, errorHandler, new CatanRandomGenerator());
 
     int requestX = 2;
     int requestY = 2;
@@ -398,6 +413,47 @@ public class CatanGameEngineTest {
     assertSame(0, player.getResourceManager().getResource(ResourceType.Grain));
     assertSame(0, player.getResourceManager().getResource(ResourceType.Lumber));
     assertSame(0, player.getResourceManager().getResource(ResourceType.Wool));
+  }
+
+  @DisplayName("It must produce resources at the start of a turn")
+  @Tag(value = "CatanBoardEngine")
+  @Test
+  public void itMustProduceResourcesAtTheStartOfATurn()
+      throws InvalidBoardDimensionsException, InvalidBoardElementException, NonNullInputException,
+          NonVoidCollectionException {
+
+    Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
+
+    IPlayer player = new Player(0, new ResourceManager(playerResources));
+    IPlayer[] players = {player};
+    ICatanEditableBoard board = buildStandardBoard(player);
+
+    int requestX = 2;
+    int requestY = 2;
+
+    board.build(
+        new BoardStructure(player, new ResourceManager(), StructureType.Settlement),
+        requestX,
+        requestY);
+
+    Consumer<IRequest> errorHandler =
+        (request) -> {
+          fail();
+        };
+
+    CatanGameEngine engine =
+        new CatanGameEngine(board, players, 0, false, errorHandler, new ConstantNumberGenerator(6));
+
+    IRequest[] requests = {new StartTurnRequest(player)};
+
+    engine.processRequests(requests);
+
+    IResourceStorage expectedResources =
+        TerrainProductionProvider.buildDefaultProvider()
+            .getResourceManager(
+                new StructureTerrainTypesPair(StructureType.Settlement, TerrainType.Mountains));
+
+    assertEquals(expectedResources, player.getResourceManager());
   }
 
   private IBoardTerrain buildMountainTerrain() {
@@ -444,7 +500,7 @@ public class CatanGameEngineTest {
         buildVoidConnection(),
         buildNoneTerrain(),
         buildVoidConnection(),
-        buildMountainTerrain(),
+        buildNoneTerrain(),
         buildVoidConnection(),
       },
       {
