@@ -10,6 +10,7 @@ import com.ucm.dasi.catan.board.terrain.IBoardTerrain;
 import com.ucm.dasi.catan.board.terrain.TerrainType;
 import com.ucm.dasi.catan.player.IPlayer;
 import com.ucm.dasi.catan.resource.IResourceManager;
+import com.ucm.dasi.catan.resource.IResourceStorage;
 import com.ucm.dasi.catan.resource.ResourceManager;
 import com.ucm.dasi.catan.resource.exception.NotEnoughtResourcesException;
 import com.ucm.dasi.catan.resource.production.IResourceProduction;
@@ -163,7 +164,7 @@ public class CatanBoard implements ICatanBoard {
       productionMap.put(productionNumber, numberProduction);
     }
 
-    IResourceManager structureProductionOverTerrain =
+    IResourceStorage structureProductionOverTerrain =
         terrainProductionProvider.getResourceManager(
             new StructureTerrainTypesPair(structure.getType(), terrain.getType()));
     numberProduction.add(structureProductionOverTerrain);
@@ -178,7 +179,7 @@ public class CatanBoard implements ICatanBoard {
       return;
     }
 
-    IResourceManager production =
+    IResourceStorage production =
         terrainProductionProvider.getResourceManager(
             new StructureTerrainTypesPair(structure.getType(), terrain.getType()));
     insertProduction(innerMap, terrain.getProductionNumber(), production, structure.getOwner());
@@ -252,7 +253,7 @@ public class CatanBoard implements ICatanBoard {
   private void insertProduction(
       TreeMap<Integer, TreeMap<IPlayer, IResourceManager>> innerMap,
       int productionNumber,
-      IResourceManager production,
+      IResourceStorage production,
       IPlayer player) {
 
     TreeMap<IPlayer, IResourceManager> productionMap = innerMap.get(productionNumber);

@@ -1,7 +1,7 @@
 package com.ucm.dasi.catan.resource.provider;
 
-import com.ucm.dasi.catan.resource.IResourceManager;
+import com.ucm.dasi.catan.resource.IResourceStorage;
 
 public interface IResourceManagerProvider<TType extends Comparable<TType>> {
-  IResourceManager getResourceManager(TType type);
+  IResourceStorage getResourceManager(TType type);
 }
