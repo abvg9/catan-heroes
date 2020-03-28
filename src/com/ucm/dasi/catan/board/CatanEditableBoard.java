@@ -41,9 +41,7 @@ public class CatanEditableBoard extends CatanBoard implements ICatanEditableBoar
 
     this.elements[x][y] = element;
 
-    if (isProductionDictionaryInitialized()) {
-      syncProductionOnStructureBuilt(x, y);
-    }
+    productionManager.syncProductionOnStructureBuilt(this, x, y);
   }
 
   @Override
@@ -65,9 +63,7 @@ public class CatanEditableBoard extends CatanBoard implements ICatanEditableBoar
 
     elements[x][y] = element;
 
-    if (isProductionDictionaryInitialized()) {
-      syncProductionOnStructureUpgrade(oldElement, x, y);
-    }
+    productionManager.syncProductionOnStructureUpgrade(this, oldElement, x, y);
   }
 
   private boolean isVoidElement(IBoardElement element) {
