@@ -15,6 +15,8 @@ public class CatanGame<TBoard extends ICatanBoard> implements ICatanGame<TBoard>
 
   private IPlayer[] players;
 
+  private int pointsToWin;
+
   private IPointsCalculator pointsCalculator;
 
   private GameState state;
@@ -24,7 +26,12 @@ public class CatanGame<TBoard extends ICatanBoard> implements ICatanGame<TBoard>
   private boolean turnStarted;
 
   public CatanGame(
-      TBoard board, IPlayer[] players, GameState state, int turnIndex, boolean turnStarted)
+      TBoard board,
+      IPlayer[] players,
+      int pointsToWin,
+      GameState state,
+      int turnIndex,
+      boolean turnStarted)
       throws NonNullInputException, NonVoidCollectionException {
 
     checkBoard(board);
@@ -35,6 +42,7 @@ public class CatanGame<TBoard extends ICatanBoard> implements ICatanGame<TBoard>
     this.board = board;
     this.players = players;
     pointsCalculator = new PointsCalculator();
+    this.pointsToWin = pointsToWin;
     this.state = state;
     this.turnIndex = turnIndex;
     this.turnStarted = turnStarted;
@@ -56,6 +64,11 @@ public class CatanGame<TBoard extends ICatanBoard> implements ICatanGame<TBoard>
   }
 
   @Override
+  public int getPointsToWin() {
+    return pointsToWin;
+  }
+
+  @Override
   public Map<IPlayer, Integer> getPoints() {
     return pointsCalculator.getPoints(this);
   }
@@ -67,6 +80,18 @@ public class CatanGame<TBoard extends ICatanBoard> implements ICatanGame<TBoard>
 
   public boolean isTurnStarted() {
     return turnStarted;
+  }
+
+  protected void endGame() {
+    state = GameState.ENDED;
+  }
+
+  protected boolean hasActivePlayerWon() {
+
+    if (state == GameState.ENDED) {
+      return true;
+    }
+    return pointsCalculator.getPoints(this).get(getActivePlayer()) >= getPointsToWin();
   }
 
   protected void passTurn() {

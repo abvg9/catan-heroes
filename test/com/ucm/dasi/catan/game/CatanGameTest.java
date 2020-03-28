@@ -40,7 +40,7 @@ public class CatanGameTest {
     ICatanBoard board = buildStandardBoard();
     assertThrows(
         NonNullInputException.class,
-        () -> new CatanGame<ICatanBoard>(board, players, GameState.NORMAL, 0, false));
+        () -> new CatanGame<ICatanBoard>(board, players, 10, GameState.NORMAL, 0, false));
   }
 
   @DisplayName("It must not build a game with a null board")
@@ -51,7 +51,7 @@ public class CatanGameTest {
     IPlayer[] players = {new Player(0, new ResourceManager())};
     assertThrows(
         NonNullInputException.class,
-        () -> new CatanGame<ICatanBoard>(null, players, GameState.NORMAL, 0, false));
+        () -> new CatanGame<ICatanBoard>(null, players, 10, GameState.NORMAL, 0, false));
   }
 
   @DisplayName("It must not build a game with a null collection of players")
@@ -65,7 +65,7 @@ public class CatanGameTest {
     ICatanBoard board = buildStandardBoard();
     assertThrows(
         NonNullInputException.class,
-        () -> new CatanGame<ICatanBoard>(board, players, GameState.NORMAL, 0, false));
+        () -> new CatanGame<ICatanBoard>(board, players, 10, GameState.NORMAL, 0, false));
   }
 
   @DisplayName("It must not build a game with a void collection of players")
@@ -79,7 +79,7 @@ public class CatanGameTest {
     ICatanBoard board = buildStandardBoard();
     assertThrows(
         NonVoidCollectionException.class,
-        () -> new CatanGame<ICatanBoard>(board, players, GameState.NORMAL, 0, false));
+        () -> new CatanGame<ICatanBoard>(board, players, 10, GameState.NORMAL, 0, false));
   }
 
   @DisplayName("It must return the active player")
@@ -93,7 +93,7 @@ public class CatanGameTest {
     IPlayer[] players = {activePlayer};
     ICatanBoard board = buildStandardBoard();
     CatanGame<ICatanBoard> game =
-        new CatanGame<ICatanBoard>(board, players, GameState.NORMAL, 0, false);
+        new CatanGame<ICatanBoard>(board, players, 10, GameState.NORMAL, 0, false);
 
     assertSame(activePlayer, game.getActivePlayer());
   }
@@ -108,7 +108,7 @@ public class CatanGameTest {
     IPlayer[] players = {new Player(0, new ResourceManager())};
     ICatanBoard board = buildStandardBoard();
     CatanGame<ICatanBoard> game =
-        new CatanGame<ICatanBoard>(board, players, GameState.NORMAL, 0, false);
+        new CatanGame<ICatanBoard>(board, players, 10, GameState.NORMAL, 0, false);
 
     assertSame(board, game.getBoard());
   }
@@ -123,7 +123,7 @@ public class CatanGameTest {
     IPlayer[] players = {new Player(0, new ResourceManager())};
     ICatanBoard board = buildStandardBoard();
     CatanGame<ICatanBoard> game =
-        new CatanGame<ICatanBoard>(board, players, GameState.NORMAL, 0, false);
+        new CatanGame<ICatanBoard>(board, players, 10, GameState.NORMAL, 0, false);
 
     assertSame(players, game.getPlayers());
   }
@@ -139,7 +139,7 @@ public class CatanGameTest {
     ICatanBoard board = buildStandardBoard();
     boolean turnStarted = true;
     CatanGame<ICatanBoard> game =
-        new CatanGame<ICatanBoard>(board, players, GameState.NORMAL, 0, turnStarted);
+        new CatanGame<ICatanBoard>(board, players, 10, GameState.NORMAL, 0, turnStarted);
 
     assertSame(turnStarted, game.isTurnStarted());
   }
