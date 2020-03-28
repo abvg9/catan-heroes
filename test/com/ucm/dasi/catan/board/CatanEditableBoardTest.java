@@ -1,7 +1,7 @@
 package com.ucm.dasi.catan.board;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.mockito.Mockito.verify;
 
 import com.ucm.dasi.catan.board.connection.BoardConnection;
 import com.ucm.dasi.catan.board.connection.ConnectionType;
@@ -9,7 +9,8 @@ import com.ucm.dasi.catan.board.connection.IBoardConnection;
 import com.ucm.dasi.catan.board.element.IBoardElement;
 import com.ucm.dasi.catan.board.exception.InvalidBoardDimensionsException;
 import com.ucm.dasi.catan.board.exception.InvalidBoardElementException;
-import com.ucm.dasi.catan.board.group.StructureTerrainTypesPair;
+import com.ucm.dasi.catan.board.production.BoardProductionManager;
+import com.ucm.dasi.catan.board.production.IBoardProductionManager;
 import com.ucm.dasi.catan.board.structure.BoardStructure;
 import com.ucm.dasi.catan.board.structure.IBoardStructure;
 import com.ucm.dasi.catan.board.structure.StructureType;
@@ -18,15 +19,14 @@ import com.ucm.dasi.catan.board.terrain.IBoardTerrain;
 import com.ucm.dasi.catan.board.terrain.TerrainType;
 import com.ucm.dasi.catan.player.IPlayer;
 import com.ucm.dasi.catan.player.Player;
-import com.ucm.dasi.catan.resource.IResourceStorage;
 import com.ucm.dasi.catan.resource.ResourceManager;
-import com.ucm.dasi.catan.resource.ResourceStorage;
 import com.ucm.dasi.catan.resource.exception.NegativeNumberException;
 import com.ucm.dasi.catan.resource.provider.DefaultTerrainProductionProvider;
 import com.ucm.dasi.catan.resource.provider.ITerrainProductionProvider;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 public class CatanEditableBoardTest {
 
@@ -78,6 +78,74 @@ public class CatanEditableBoardTest {
     assertSame(StructureType.SETTLEMENT, ((IBoardStructure) elementBuilt).getType());
   }
 
+  @DisplayName("it must call the production manager to sync the production after a structure build")
+  @Tag("CatanEditableBoard")
+  @Test
+  public void itMustCallProductionManagerI()
+      throws InvalidBoardDimensionsException, InvalidBoardElementException {
+
+    IPlayer player = new Player(0, new ResourceManager());
+
+    ITerrainProductionProvider productionProvider = new DefaultTerrainProductionProvider();
+    CatanEditableBoardForTest board = buildStandardBoard(player, productionProvider);
+
+    IBoardProductionManager productionManager =
+        Mockito.spy(new BoardProductionManager(board, productionProvider));
+
+    board.setProductionManager(productionManager);
+
+    int productionNumber = 6;
+
+    int requestX = 2;
+    int requestY = 2;
+
+    board.getProduction(productionNumber).getProduction(player);
+
+    board.build(
+        new BoardStructure(player, new ResourceManager(), StructureType.SETTLEMENT),
+        requestX,
+        requestY);
+
+    verify(productionManager).syncProductionOnStructureBuilt(requestX, requestY);
+  }
+
+  @DisplayName(
+      "it must call the production manager to sync the production after a structure upgrade")
+  @Tag("CatanEditableBoard")
+  @Test
+  public void itMustCallProductionManagerII()
+      throws InvalidBoardDimensionsException, InvalidBoardElementException {
+
+    IPlayer player = new Player(0, new ResourceManager());
+
+    ITerrainProductionProvider productionProvider = new DefaultTerrainProductionProvider();
+    CatanEditableBoardForTest board = buildStandardBoard(player, productionProvider);
+
+    IBoardProductionManager productionManager =
+        Mockito.spy(new BoardProductionManager(board, productionProvider));
+
+    board.setProductionManager(productionManager);
+
+    int productionNumber = 6;
+
+    int requestX = 2;
+    int requestY = 2;
+
+    board.getProduction(productionNumber).getProduction(player);
+
+    IBoardStructure settlement =
+        new BoardStructure(player, new ResourceManager(), StructureType.SETTLEMENT);
+
+    board.build(settlement, requestX, requestY);
+
+    board.upgrade(
+        new BoardStructure(player, new ResourceManager(), StructureType.CITY), requestX, requestY);
+
+    board.getProduction(productionNumber).getProduction(player);
+
+    verify(productionManager).syncProductionOnStructureUpgrade(settlement, requestX, requestY);
+  }
+
   @DisplayName("it must upgrade a settlement into a city")
   @Tag("CatanEditableBoard")
   @Test
@@ -105,73 +173,6 @@ public class CatanEditableBoardTest {
     assertSame(StructureType.CITY, ((IBoardStructure) elementBuilt).getType());
   }
 
-  @DisplayName("it must sync the production after a structure build")
-  @Tag("CatanEditableBoard")
-  @Test
-  public void itMustSyncTheProductionAfterAStructureBuild()
-      throws InvalidBoardDimensionsException, InvalidBoardElementException {
-
-    IPlayer player = new Player(0, new ResourceManager());
-
-    ITerrainProductionProvider productionProvider = new DefaultTerrainProductionProvider();
-    CatanEditableBoard board = buildStandardBoard(player, productionProvider);
-
-    int productionNumber = 6;
-
-    int requestX = 2;
-    int requestY = 2;
-
-    IResourceStorage productionBefore = board.getProduction(productionNumber).getProduction(player);
-
-    board.build(
-        new BoardStructure(player, new ResourceManager(), StructureType.SETTLEMENT),
-        requestX,
-        requestY);
-
-    IResourceStorage standardSettlementAtMountainProduction =
-        productionProvider.getResourceManager(
-            new StructureTerrainTypesPair(StructureType.SETTLEMENT, TerrainType.MOUNTAINS));
-    IResourceStorage productionAfter = board.getProduction(productionNumber).getProduction(player);
-
-    assertEquals(new ResourceStorage(), productionBefore);
-    assertEquals(standardSettlementAtMountainProduction, productionAfter);
-  }
-
-  @DisplayName("it must sync the production after a structure upgrade")
-  @Tag("CatanEditableBoard")
-  @Test
-  public void itMustSyncTheProductionAfterAStructureUpdate()
-      throws InvalidBoardDimensionsException, InvalidBoardElementException {
-
-    IPlayer player = new Player(0, new ResourceManager());
-
-    ITerrainProductionProvider productionProvider = new DefaultTerrainProductionProvider();
-    CatanEditableBoard board = buildStandardBoard(player, productionProvider);
-
-    int productionNumber = 6;
-
-    int requestX = 2;
-    int requestY = 2;
-
-    IResourceStorage productionBefore = board.getProduction(productionNumber).getProduction(player);
-
-    board.build(
-        new BoardStructure(player, new ResourceManager(), StructureType.SETTLEMENT),
-        requestX,
-        requestY);
-
-    board.upgrade(
-        new BoardStructure(player, new ResourceManager(), StructureType.CITY), requestX, requestY);
-
-    IResourceStorage standardCityAtMountainProduction =
-        productionProvider.getResourceManager(
-            new StructureTerrainTypesPair(StructureType.CITY, TerrainType.MOUNTAINS));
-    IResourceStorage productionAfter = board.getProduction(productionNumber).getProduction(player);
-
-    assertEquals(new ResourceStorage(), productionBefore);
-    assertEquals(standardCityAtMountainProduction, productionAfter);
-  }
-
   private IBoardTerrain buildMountainTerrain() {
     return new BoardTerrain(6, TerrainType.MOUNTAINS);
   }
@@ -188,7 +189,7 @@ public class CatanEditableBoardTest {
     return new BoardConnection(player, new ResourceManager(), ConnectionType.ROAD);
   }
 
-  private CatanEditableBoard buildStandardBoard(
+  private CatanEditableBoardForTest buildStandardBoard(
       IPlayer player1, ITerrainProductionProvider productionProvider)
       throws InvalidBoardDimensionsException, InvalidBoardElementException {
     IBoardElement[][] elements = {
@@ -229,7 +230,7 @@ public class CatanEditableBoardTest {
       },
     };
 
-    return new CatanEditableBoard(5, 5, elements, productionProvider);
+    return new CatanEditableBoardForTest(5, 5, elements, productionProvider);
   }
 
   private IBoardConnection buildVoidConnection() {
