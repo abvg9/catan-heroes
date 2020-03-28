@@ -41,7 +41,7 @@ public class CatanEditableBoard extends CatanBoard implements ICatanEditableBoar
 
     this.elements[x][y] = element;
 
-    productionManager.syncProductionOnStructureBuilt(this, x, y);
+    productionManager.syncProductionOnStructureBuilt(x, y);
   }
 
   @Override
@@ -63,7 +63,7 @@ public class CatanEditableBoard extends CatanBoard implements ICatanEditableBoar
 
     elements[x][y] = element;
 
-    productionManager.syncProductionOnStructureUpgrade(this, oldElement, x, y);
+    productionManager.syncProductionOnStructureUpgrade(oldElement, x, y);
   }
 
   private boolean isVoidElement(IBoardElement element) {

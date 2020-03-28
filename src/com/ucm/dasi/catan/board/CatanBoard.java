@@ -30,7 +30,7 @@ public class CatanBoard implements ICatanBoard {
     setDimensions(width, height);
     setElements(elements);
 
-    productionManager = new BoardProductionManager(terrainProductionProvider);
+    productionManager = new BoardProductionManager(this, terrainProductionProvider);
   }
 
   @Override
@@ -55,7 +55,7 @@ public class CatanBoard implements ICatanBoard {
   @Override
   public IResourceProduction getProduction(int productionNumber) {
 
-    return productionManager.getProduction(this, productionNumber);
+    return productionManager.getProduction(productionNumber);
   }
 
   @Override
