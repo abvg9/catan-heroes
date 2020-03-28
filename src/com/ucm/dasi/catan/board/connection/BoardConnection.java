@@ -10,7 +10,7 @@ public class BoardConnection extends OwnedElement implements IBoardConnection {
   protected ConnectionType type;
 
   public BoardConnection(IPlayer owner, IResourceManager cost, ConnectionType type) {
-    super(BoardElementType.Connection, cost, owner);
+    super(BoardElementType.CONNECTION, cost, owner);
 
     this.type = type;
   }

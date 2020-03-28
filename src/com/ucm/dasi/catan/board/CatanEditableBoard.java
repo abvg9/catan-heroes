@@ -72,12 +72,12 @@ public class CatanEditableBoard extends CatanBoard implements ICatanEditableBoar
 
   private boolean isVoidElement(IBoardElement element) {
     switch (element.getElementType()) {
-      case Connection:
-        return ((IBoardConnection) element).getType() == ConnectionType.Void;
-      case Structure:
-        return ((IBoardStructure) element).getType() == StructureType.None;
-      case Terrain:
-        return ((IBoardTerrain) element).getType() == TerrainType.None;
+      case CONNECTION:
+        return ((IBoardConnection) element).getType() == ConnectionType.VOID;
+      case STRUCTURE:
+        return ((IBoardStructure) element).getType() == StructureType.NONE;
+      case TERRAIN:
+        return ((IBoardTerrain) element).getType() == TerrainType.NONE;
       default:
         return false;
     }
@@ -86,37 +86,37 @@ public class CatanEditableBoard extends CatanBoard implements ICatanEditableBoar
   private boolean isValidBuildNew(IBoardElement element, int x, int y) {
 
     return isVoidElement(elements[x][y])
-        && (element.getElementType() == BoardElementType.Structure
-                && ((IBoardStructure) element).getType() == StructureType.Settlement
+        && (element.getElementType() == BoardElementType.STRUCTURE
+                && ((IBoardStructure) element).getType() == StructureType.SETTLEMENT
                 && this.isNonVoidTerrainCloseTo(x, y)
-            || element.getElementType() == BoardElementType.Connection
-                && ((IBoardConnection) element).getType() == ConnectionType.Road);
+            || element.getElementType() == BoardElementType.CONNECTION
+                && ((IBoardConnection) element).getType() == ConnectionType.ROAD);
   }
 
   private boolean isNonVoidTerrainCloseTo(int x, int y) {
 
-    return get(x, y).getElementType() == BoardElementType.Structure
+    return get(x, y).getElementType() == BoardElementType.STRUCTURE
         && ((x - 1 >= 0
                 && y - 1 >= 0
-                && ((IBoardTerrain) get(x - 1, y - 1)).getType() != TerrainType.None)
+                && ((IBoardTerrain) get(x - 1, y - 1)).getType() != TerrainType.NONE)
             || (x - 1 >= 0
                 && y + 1 < getHeight()
-                && ((IBoardTerrain) get(x - 1, y + 1)).getType() != TerrainType.None)
+                && ((IBoardTerrain) get(x - 1, y + 1)).getType() != TerrainType.NONE)
             || (x + 1 < getWidth()
                 && y - 1 >= 0
-                && ((IBoardTerrain) get(x + 1, y - 1)).getType() != TerrainType.None)
+                && ((IBoardTerrain) get(x + 1, y - 1)).getType() != TerrainType.NONE)
             || (x + 1 < getWidth()
                 && y + 1 < getHeight()
-                && ((IBoardTerrain) get(x + 1, y + 1)).getType() != TerrainType.None));
+                && ((IBoardTerrain) get(x + 1, y + 1)).getType() != TerrainType.NONE));
   }
 
   private boolean isValidBuildUpgrade(IBoardElement element, IBoardElement oldElement) {
 
     return !isVoidElement(oldElement)
-        && oldElement.getElementType() == BoardElementType.Structure
-        && ((IBoardStructure) oldElement).getType() == StructureType.Settlement
-        && element.getElementType() == BoardElementType.Structure
-        && ((IBoardStructure) element).getType() == StructureType.City
+        && oldElement.getElementType() == BoardElementType.STRUCTURE
+        && ((IBoardStructure) oldElement).getType() == StructureType.SETTLEMENT
+        && element.getElementType() == BoardElementType.STRUCTURE
+        && ((IBoardStructure) element).getType() == StructureType.CITY
         && ((OwnedElement) oldElement).getOwner() == ((OwnedElement) element).getOwner();
   }
 }

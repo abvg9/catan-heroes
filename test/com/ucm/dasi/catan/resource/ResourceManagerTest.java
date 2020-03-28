@@ -17,15 +17,15 @@ public class ResourceManagerTest {
 
     Map<ResourceType, Integer> resources =
         Map.of(
-            ResourceType.Ore,
+            ResourceType.ORE,
             2,
-            ResourceType.Brick,
+            ResourceType.BRICK,
             2,
-            ResourceType.Wool,
+            ResourceType.WOOL,
             2,
-            ResourceType.Lumber,
+            ResourceType.LUMBER,
             2,
-            ResourceType.Grain,
+            ResourceType.GRAIN,
             2);
 
     ResourceManager warehouse = new ResourceManager();
@@ -42,28 +42,28 @@ public class ResourceManagerTest {
 
     Map<ResourceType, Integer> resources1 =
         Map.of(
-            ResourceType.Ore,
+            ResourceType.ORE,
             2,
-            ResourceType.Brick,
+            ResourceType.BRICK,
             2,
-            ResourceType.Wool,
+            ResourceType.WOOL,
             2,
-            ResourceType.Lumber,
+            ResourceType.LUMBER,
             2,
-            ResourceType.Grain,
+            ResourceType.GRAIN,
             2);
 
     Map<ResourceType, Integer> resources2 =
         Map.of(
-            ResourceType.Ore,
+            ResourceType.ORE,
             2,
-            ResourceType.Brick,
+            ResourceType.BRICK,
             2,
-            ResourceType.Wool,
+            ResourceType.WOOL,
             3,
-            ResourceType.Lumber,
+            ResourceType.LUMBER,
             2,
-            ResourceType.Grain,
+            ResourceType.GRAIN,
             2);
 
     ResourceManager warehouse1 = new ResourceManager(resources1);
@@ -81,28 +81,28 @@ public class ResourceManagerTest {
 
     Map<ResourceType, Integer> resources1 =
         Map.of(
-            ResourceType.Ore,
+            ResourceType.ORE,
             1,
-            ResourceType.Brick,
+            ResourceType.BRICK,
             2,
-            ResourceType.Wool,
+            ResourceType.WOOL,
             3,
-            ResourceType.Lumber,
+            ResourceType.LUMBER,
             4,
-            ResourceType.Grain,
+            ResourceType.GRAIN,
             5);
 
     Map<ResourceType, Integer> resources2 =
         Map.of(
-            ResourceType.Ore,
+            ResourceType.ORE,
             9,
-            ResourceType.Brick,
+            ResourceType.BRICK,
             8,
-            ResourceType.Wool,
+            ResourceType.WOOL,
             7,
-            ResourceType.Lumber,
+            ResourceType.LUMBER,
             6,
-            ResourceType.Grain,
+            ResourceType.GRAIN,
             5);
 
     ResourceManager warehouse1 = new ResourceManager(resources1);

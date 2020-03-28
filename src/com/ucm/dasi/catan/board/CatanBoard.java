@@ -51,11 +51,11 @@ public class CatanBoard implements ICatanBoard {
 
   @Override
   public ConnectionDirection getConnectionDirection(int x, int y) {
-    if (this.elements[x][y].getElementType() != BoardElementType.Connection) {
+    if (this.elements[x][y].getElementType() != BoardElementType.CONNECTION) {
       return null;
     }
 
-    return y % 2 == 0 ? ConnectionDirection.Horizontal : ConnectionDirection.Vertical;
+    return y % 2 == 0 ? ConnectionDirection.HORIZONTAL : ConnectionDirection.VERTICAL;
   }
 
   @Override
@@ -92,14 +92,14 @@ public class CatanBoard implements ICatanBoard {
 
   protected boolean checkElementType(BoardElementType type, int x, int y) {
     if (1 == (x + y) % 2) {
-      return type == BoardElementType.Connection;
+      return type == BoardElementType.CONNECTION;
     }
 
     if (x % 2 == 0) {
-      return type == BoardElementType.Structure;
+      return type == BoardElementType.STRUCTURE;
     }
 
-    return type == BoardElementType.Terrain;
+    return type == BoardElementType.TERRAIN;
   }
 
   protected boolean isProductionDictionaryInitialized() {
@@ -108,7 +108,7 @@ public class CatanBoard implements ICatanBoard {
 
   protected void syncProductionOnStructureBuilt(int x, int y) {
     IBoardElement element = get(x, y);
-    if (element.getElementType() != BoardElementType.Structure) {
+    if (element.getElementType() != BoardElementType.STRUCTURE) {
       return;
     }
     IBoardStructure structure = (IBoardStructure) element;
@@ -189,12 +189,12 @@ public class CatanBoard implements ICatanBoard {
 
     IBoardElement element = get(x, y);
 
-    if (element.getElementType() != BoardElementType.Terrain) {
+    if (element.getElementType() != BoardElementType.TERRAIN) {
       return;
     }
 
     IBoardTerrain terrain = (IBoardTerrain) element;
-    if (terrain.getType() == TerrainType.None) {
+    if (terrain.getType() == TerrainType.NONE) {
       return;
     }
 

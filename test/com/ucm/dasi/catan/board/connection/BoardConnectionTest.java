@@ -15,16 +15,16 @@ public class BoardConnectionTest {
   @Test
   public void itMustReturnTheRightElementType() {
     BoardConnection connection =
-        new BoardConnection(null, new ResourceManager(), ConnectionType.Void);
+        new BoardConnection(null, new ResourceManager(), ConnectionType.VOID);
 
-    assertEquals(BoardElementType.Connection, connection.getElementType());
+    assertEquals(BoardElementType.CONNECTION, connection.getElementType());
   }
 
   @DisplayName("It must return its connection type")
   @Tag(value = "BoardConnection")
   @Test
   public void itMustGetItsConnectionType() {
-    ConnectionType type = ConnectionType.Void;
+    ConnectionType type = ConnectionType.VOID;
     BoardConnection connection = new BoardConnection(null, new ResourceManager(), type);
 
     assertEquals(type, connection.getType());

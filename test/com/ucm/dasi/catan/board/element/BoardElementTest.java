@@ -13,7 +13,7 @@ public class BoardElementTest {
   @Tag(value = "BoardElement")
   @Test
   public void itMustReturnItsType() {
-    BoardElementType type = BoardElementType.Structure;
+    BoardElementType type = BoardElementType.STRUCTURE;
     BoardElement boardElement = new MinimunBoardElement(type);
 
     assertSame(type, boardElement.getElementType());
