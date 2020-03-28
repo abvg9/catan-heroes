@@ -21,19 +21,23 @@ import java.util.function.BiConsumer;
 
 public class BoardProductionManager implements IBoardProductionManager {
 
+  private ICatanBoard board;
+
   private TreeMap<Integer, TreeMap<IPlayer, IResourceManager>> productionDictionary;
 
-  protected ITerrainProductionProvider terrainProductionProvider;
+  private ITerrainProductionProvider terrainProductionProvider;
 
-  public BoardProductionManager(ITerrainProductionProvider terrainProductionProvider) {
+  public BoardProductionManager(
+      ICatanBoard board, ITerrainProductionProvider terrainProductionProvider) {
 
+    this.board = board;
     this.terrainProductionProvider = terrainProductionProvider;
   }
 
-  public IResourceProduction getProduction(ICatanBoard board, int productionNumber) {
+  public IResourceProduction getProduction(int productionNumber) {
 
     if (!isInitialized()) {
-      buildProductionDictionary(board);
+      buildProductionDictionary();
     }
 
     TreeMap<IPlayer, IResourceManager> numberProduction =
@@ -46,7 +50,7 @@ public class BoardProductionManager implements IBoardProductionManager {
     return new ResourceProduction(productionNumber, numberProduction);
   }
 
-  public void syncProductionOnStructureBuilt(ICatanBoard board, int x, int y) {
+  public void syncProductionOnStructureBuilt(int x, int y) {
 
     if (!isInitialized()) {
       return;
@@ -57,23 +61,20 @@ public class BoardProductionManager implements IBoardProductionManager {
       return;
     }
     IBoardStructure structure = (IBoardStructure) element;
-    TreeMap<Integer, IResourceManager> production =
-        getProductionOfStructure(board, structure, x, y);
+    TreeMap<Integer, IResourceManager> production = getProductionOfStructure(structure, x, y);
 
     addProductionOfPlayer(structure.getOwner(), production);
   }
 
-  public void syncProductionOnStructureUpgrade(
-      ICatanBoard board, IBoardStructure oldStructure, int x, int y) {
+  public void syncProductionOnStructureUpgrade(IBoardStructure oldStructure, int x, int y) {
 
     if (!isInitialized()) {
       return;
     }
 
-    syncProductionOnStructureBuilt(board, x, y);
+    syncProductionOnStructureBuilt(x, y);
 
-    TreeMap<Integer, IResourceManager> production =
-        getProductionOfStructure(board, oldStructure, x, y);
+    TreeMap<Integer, IResourceManager> production = getProductionOfStructure(oldStructure, x, y);
 
     removeProductionOfPlayer(oldStructure.getOwner(), production);
   }
@@ -124,10 +125,7 @@ public class BoardProductionManager implements IBoardProductionManager {
   }
 
   private void analyzeTerrainProduction(
-      ICatanBoard board,
-      TreeMap<Integer, TreeMap<IPlayer, IResourceManager>> innerMap,
-      int x,
-      int y) {
+      TreeMap<Integer, TreeMap<IPlayer, IResourceManager>> innerMap, int x, int y) {
 
     IBoardElement element = board.get(x, y);
 
@@ -140,74 +138,70 @@ public class BoardProductionManager implements IBoardProductionManager {
       return;
     }
 
-    analyzeStructureProduction(innerMap, terrain, getNWStructureOfTerrain(board, x, y));
-    analyzeStructureProduction(innerMap, terrain, getNEStructureOfTerrain(board, x, y));
-    analyzeStructureProduction(innerMap, terrain, getSWStructureOfTerrain(board, x, y));
-    analyzeStructureProduction(innerMap, terrain, getSEStructureOfTerrain(board, x, y));
+    analyzeStructureProduction(innerMap, terrain, getNWStructureOfTerrain(x, y));
+    analyzeStructureProduction(innerMap, terrain, getNEStructureOfTerrain(x, y));
+    analyzeStructureProduction(innerMap, terrain, getSWStructureOfTerrain(x, y));
+    analyzeStructureProduction(innerMap, terrain, getSEStructureOfTerrain(x, y));
   }
 
-  private void buildProductionDictionary(ICatanBoard board) {
+  private void buildProductionDictionary() {
 
     TreeMap<Integer, TreeMap<IPlayer, IResourceManager>> innerMap =
         new TreeMap<Integer, TreeMap<IPlayer, IResourceManager>>();
 
     for (int i = 0; i < board.getWidth(); ++i) {
       for (int j = 0; j < board.getHeight(); ++j) {
-        analyzeTerrainProduction(board, innerMap, i, j);
+        analyzeTerrainProduction(innerMap, i, j);
       }
     }
 
     productionDictionary = innerMap;
   }
 
-  private IBoardStructure getNWStructureOfTerrain(ICatanBoard board, int x, int y) {
+  private IBoardStructure getNWStructureOfTerrain(int x, int y) {
     return (IBoardStructure) board.get(x - 1, y - 1);
   }
 
-  private IBoardTerrain getNWTerrainOfStructure(ICatanBoard board, int x, int y) {
+  private IBoardTerrain getNWTerrainOfStructure(int x, int y) {
     return (x > 0 && y > 0) ? (IBoardTerrain) board.get(x - 1, y - 1) : null;
   }
 
-  private IBoardStructure getNEStructureOfTerrain(ICatanBoard board, int x, int y) {
+  private IBoardStructure getNEStructureOfTerrain(int x, int y) {
     return (IBoardStructure) board.get(x + 1, y - 1);
   }
 
-  private IBoardTerrain getNETerrainOfStructure(ICatanBoard board, int x, int y) {
+  private IBoardTerrain getNETerrainOfStructure(int x, int y) {
     return (x + 1 < board.getWidth() && y > 0) ? (IBoardTerrain) board.get(x + 1, y - 1) : null;
   }
 
   private TreeMap<Integer, IResourceManager> getProductionOfStructure(
-      ICatanBoard board, IBoardStructure structure, int x, int y) {
+      IBoardStructure structure, int x, int y) {
 
     TreeMap<Integer, IResourceManager> productionMap = new TreeMap<Integer, IResourceManager>();
 
-    addProductionOfStructureOverTerrain(
-        productionMap, structure, getNWTerrainOfStructure(board, x, y));
-    addProductionOfStructureOverTerrain(
-        productionMap, structure, getNETerrainOfStructure(board, x, y));
-    addProductionOfStructureOverTerrain(
-        productionMap, structure, getSWTerrainOfStructure(board, x, y));
-    addProductionOfStructureOverTerrain(
-        productionMap, structure, getSETerrainOfStructure(board, x, y));
+    addProductionOfStructureOverTerrain(productionMap, structure, getNWTerrainOfStructure(x, y));
+    addProductionOfStructureOverTerrain(productionMap, structure, getNETerrainOfStructure(x, y));
+    addProductionOfStructureOverTerrain(productionMap, structure, getSWTerrainOfStructure(x, y));
+    addProductionOfStructureOverTerrain(productionMap, structure, getSETerrainOfStructure(x, y));
 
     return productionMap;
   }
 
-  private IBoardStructure getSEStructureOfTerrain(ICatanBoard board, int x, int y) {
+  private IBoardStructure getSEStructureOfTerrain(int x, int y) {
     return (IBoardStructure) board.get(x + 1, y + 1);
   }
 
-  private IBoardTerrain getSETerrainOfStructure(ICatanBoard board, int x, int y) {
+  private IBoardTerrain getSETerrainOfStructure(int x, int y) {
     return (x + 1 < board.getWidth() && y + 1 < board.getHeight())
         ? (IBoardTerrain) board.get(x + 1, y + 1)
         : null;
   }
 
-  private IBoardStructure getSWStructureOfTerrain(ICatanBoard board, int x, int y) {
+  private IBoardStructure getSWStructureOfTerrain(int x, int y) {
     return (IBoardStructure) board.get(x - 1, y + 1);
   }
 
-  private IBoardTerrain getSWTerrainOfStructure(ICatanBoard board, int x, int y) {
+  private IBoardTerrain getSWTerrainOfStructure(int x, int y) {
     return (x > 0 && y + 1 < board.getHeight()) ? (IBoardTerrain) board.get(x - 1, y + 1) : null;
   }
 
