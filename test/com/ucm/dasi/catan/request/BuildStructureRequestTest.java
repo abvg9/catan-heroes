@@ -17,7 +17,7 @@ public class BuildStructureRequestTest {
   @Test
   public void mustStoreStructureType() {
     IPlayer player = new Player(0, new ResourceManager());
-    StructureType type = StructureType.Settlement;
+    StructureType type = StructureType.SETTLEMENT;
 
     BuildStructureRequest request = new BuildStructureRequest(player, type, 0, 1);
 

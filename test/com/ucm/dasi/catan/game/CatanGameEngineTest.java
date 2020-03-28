@@ -75,7 +75,7 @@ public class CatanGameEngineTest {
     int requestX = 3;
     int requestY = 2;
     IRequest[] requests = {
-      new BuildConnectionRequest(player1, ConnectionType.Road, requestX, requestY)
+      new BuildConnectionRequest(player1, ConnectionType.ROAD, requestX, requestY)
     };
 
     engine.processRequests(requests);
@@ -93,10 +93,10 @@ public class CatanGameEngineTest {
 
     Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
 
-    playerResources.put(ResourceType.Brick, 1);
-    playerResources.put(ResourceType.Grain, 1);
-    playerResources.put(ResourceType.Lumber, 1);
-    playerResources.put(ResourceType.Wool, 1);
+    playerResources.put(ResourceType.BRICK, 1);
+    playerResources.put(ResourceType.GRAIN, 1);
+    playerResources.put(ResourceType.LUMBER, 1);
+    playerResources.put(ResourceType.WOOL, 1);
 
     IPlayer player1 = new Player(0, new ResourceManager(playerResources));
     IPlayer player2 = new Player(1, new ResourceManager(playerResources));
@@ -117,7 +117,7 @@ public class CatanGameEngineTest {
     int requestX = 3;
     int requestY = 2;
     IRequest[] requests = {
-      new BuildConnectionRequest(player2, ConnectionType.Road, requestX, requestY)
+      new BuildConnectionRequest(player2, ConnectionType.ROAD, requestX, requestY)
     };
 
     engine.processRequests(requests);
@@ -134,10 +134,10 @@ public class CatanGameEngineTest {
 
     Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
 
-    playerResources.put(ResourceType.Brick, 1);
-    playerResources.put(ResourceType.Grain, 1);
-    playerResources.put(ResourceType.Lumber, 1);
-    playerResources.put(ResourceType.Wool, 1);
+    playerResources.put(ResourceType.BRICK, 1);
+    playerResources.put(ResourceType.GRAIN, 1);
+    playerResources.put(ResourceType.LUMBER, 1);
+    playerResources.put(ResourceType.WOOL, 1);
 
     IPlayer player = new Player(0, new ResourceManager(playerResources));
     IPlayer[] players = {player};
@@ -157,7 +157,7 @@ public class CatanGameEngineTest {
     int requestX = 3;
     int requestY = 2;
     IRequest[] requests = {
-      new BuildConnectionRequest(player, ConnectionType.Road, requestX, requestY)
+      new BuildConnectionRequest(player, ConnectionType.ROAD, requestX, requestY)
     };
 
     engine.processRequests(requests);
@@ -175,10 +175,10 @@ public class CatanGameEngineTest {
 
     Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
 
-    playerResources.put(ResourceType.Brick, 1);
-    playerResources.put(ResourceType.Grain, 1);
-    playerResources.put(ResourceType.Lumber, 1);
-    playerResources.put(ResourceType.Wool, 1);
+    playerResources.put(ResourceType.BRICK, 1);
+    playerResources.put(ResourceType.GRAIN, 1);
+    playerResources.put(ResourceType.LUMBER, 1);
+    playerResources.put(ResourceType.WOOL, 1);
 
     IPlayer player = new Player(0, new ResourceManager(playerResources));
     IPlayer[] players = {player};
@@ -204,7 +204,7 @@ public class CatanGameEngineTest {
     int requestX = 3;
     int requestY = 2;
     IRequest[] requests = {
-      new BuildConnectionRequest(player, ConnectionType.Road, requestX, requestY)
+      new BuildConnectionRequest(player, ConnectionType.ROAD, requestX, requestY)
     };
 
     engine.processRequests(requests);
@@ -241,7 +241,7 @@ public class CatanGameEngineTest {
     int requestY = 2;
 
     IRequest[] requests = {
-      new BuildStructureRequest(player1, StructureType.Settlement, requestX, requestY)
+      new BuildStructureRequest(player1, StructureType.SETTLEMENT, requestX, requestY)
     };
 
     engine.processRequests(requests);
@@ -259,10 +259,10 @@ public class CatanGameEngineTest {
 
     Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
 
-    playerResources.put(ResourceType.Brick, 1);
-    playerResources.put(ResourceType.Grain, 1);
-    playerResources.put(ResourceType.Lumber, 1);
-    playerResources.put(ResourceType.Wool, 1);
+    playerResources.put(ResourceType.BRICK, 1);
+    playerResources.put(ResourceType.GRAIN, 1);
+    playerResources.put(ResourceType.LUMBER, 1);
+    playerResources.put(ResourceType.WOOL, 1);
 
     IPlayer player1 = new Player(0, new ResourceManager(playerResources));
     IPlayer player2 = new Player(1, new ResourceManager(playerResources));
@@ -284,7 +284,7 @@ public class CatanGameEngineTest {
     int requestY = 2;
 
     IRequest[] requests = {
-      new BuildStructureRequest(player2, StructureType.Settlement, requestX, requestY)
+      new BuildStructureRequest(player2, StructureType.SETTLEMENT, requestX, requestY)
     };
 
     engine.processRequests(requests);
@@ -301,10 +301,10 @@ public class CatanGameEngineTest {
 
     Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
 
-    playerResources.put(ResourceType.Brick, 1);
-    playerResources.put(ResourceType.Grain, 1);
-    playerResources.put(ResourceType.Lumber, 1);
-    playerResources.put(ResourceType.Wool, 1);
+    playerResources.put(ResourceType.BRICK, 1);
+    playerResources.put(ResourceType.GRAIN, 1);
+    playerResources.put(ResourceType.LUMBER, 1);
+    playerResources.put(ResourceType.WOOL, 1);
 
     IPlayer player = new Player(0, new ResourceManager(playerResources));
     IPlayer[] players = {player};
@@ -325,7 +325,7 @@ public class CatanGameEngineTest {
     int requestY = 2;
 
     IRequest[] requests = {
-      new BuildStructureRequest(player, StructureType.Settlement, requestX, requestY)
+      new BuildStructureRequest(player, StructureType.SETTLEMENT, requestX, requestY)
     };
 
     engine.processRequests(requests);
@@ -343,10 +343,10 @@ public class CatanGameEngineTest {
 
     Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
 
-    playerResources.put(ResourceType.Brick, 1);
-    playerResources.put(ResourceType.Grain, 1);
-    playerResources.put(ResourceType.Lumber, 1);
-    playerResources.put(ResourceType.Wool, 1);
+    playerResources.put(ResourceType.BRICK, 1);
+    playerResources.put(ResourceType.GRAIN, 1);
+    playerResources.put(ResourceType.LUMBER, 1);
+    playerResources.put(ResourceType.WOOL, 1);
 
     IPlayer player1 = new Player(0, new ResourceManager(playerResources));
     IPlayer[] players = {player1};
@@ -373,7 +373,7 @@ public class CatanGameEngineTest {
     int requestY = 2;
 
     IRequest[] requests = {
-      new BuildStructureRequest(player1, StructureType.Settlement, requestX, requestY)
+      new BuildStructureRequest(player1, StructureType.SETTLEMENT, requestX, requestY)
     };
 
     engine.processRequests(requests);
@@ -446,10 +446,10 @@ public class CatanGameEngineTest {
 
     Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
 
-    playerResources.put(ResourceType.Brick, 1);
-    playerResources.put(ResourceType.Grain, 1);
-    playerResources.put(ResourceType.Lumber, 1);
-    playerResources.put(ResourceType.Wool, 1);
+    playerResources.put(ResourceType.BRICK, 1);
+    playerResources.put(ResourceType.GRAIN, 1);
+    playerResources.put(ResourceType.LUMBER, 1);
+    playerResources.put(ResourceType.WOOL, 1);
 
     IPlayer player = new Player(0, new ResourceManager(playerResources));
     IPlayer[] players = {player};
@@ -466,20 +466,20 @@ public class CatanGameEngineTest {
     int requestX = 3;
     int requestY = 2;
     IRequest[] requests = {
-      new BuildConnectionRequest(player, ConnectionType.Road, requestX, requestY)
+      new BuildConnectionRequest(player, ConnectionType.ROAD, requestX, requestY)
     };
 
     engine.processRequests(requests);
 
     IBoardElement elementBuilt = board.get(requestX, requestY);
 
-    assertSame(BoardElementType.Connection, elementBuilt.getElementType());
-    assertSame(ConnectionType.Road, ((IBoardConnection) elementBuilt).getType());
+    assertSame(BoardElementType.CONNECTION, elementBuilt.getElementType());
+    assertSame(ConnectionType.ROAD, ((IBoardConnection) elementBuilt).getType());
     assertSame(player.getId(), ((IOwnedElement) elementBuilt).getOwner().getId());
-    assertSame(0, player.getResourceManager().getResource(ResourceType.Brick));
-    assertSame(1, player.getResourceManager().getResource(ResourceType.Grain));
-    assertSame(0, player.getResourceManager().getResource(ResourceType.Lumber));
-    assertSame(1, player.getResourceManager().getResource(ResourceType.Wool));
+    assertSame(0, player.getResourceManager().getResource(ResourceType.BRICK));
+    assertSame(1, player.getResourceManager().getResource(ResourceType.GRAIN));
+    assertSame(0, player.getResourceManager().getResource(ResourceType.LUMBER));
+    assertSame(1, player.getResourceManager().getResource(ResourceType.WOOL));
   }
 
   @DisplayName("It must process a valid build structure request")
@@ -491,10 +491,10 @@ public class CatanGameEngineTest {
 
     Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
 
-    playerResources.put(ResourceType.Brick, 1);
-    playerResources.put(ResourceType.Grain, 1);
-    playerResources.put(ResourceType.Lumber, 1);
-    playerResources.put(ResourceType.Wool, 1);
+    playerResources.put(ResourceType.BRICK, 1);
+    playerResources.put(ResourceType.GRAIN, 1);
+    playerResources.put(ResourceType.LUMBER, 1);
+    playerResources.put(ResourceType.WOOL, 1);
 
     IPlayer player = new Player(0, new ResourceManager(playerResources));
     IPlayer[] players = {player};
@@ -512,20 +512,20 @@ public class CatanGameEngineTest {
     int requestY = 2;
 
     IRequest[] requests = {
-      new BuildStructureRequest(player, StructureType.Settlement, requestX, requestY)
+      new BuildStructureRequest(player, StructureType.SETTLEMENT, requestX, requestY)
     };
 
     engine.processRequests(requests);
 
     IBoardElement elementBuilt = board.get(requestX, requestY);
 
-    assertSame(BoardElementType.Structure, elementBuilt.getElementType());
-    assertSame(StructureType.Settlement, ((IBoardStructure) elementBuilt).getType());
+    assertSame(BoardElementType.STRUCTURE, elementBuilt.getElementType());
+    assertSame(StructureType.SETTLEMENT, ((IBoardStructure) elementBuilt).getType());
     assertSame(player.getId(), ((IOwnedElement) elementBuilt).getOwner().getId());
-    assertSame(0, player.getResourceManager().getResource(ResourceType.Brick));
-    assertSame(0, player.getResourceManager().getResource(ResourceType.Grain));
-    assertSame(0, player.getResourceManager().getResource(ResourceType.Lumber));
-    assertSame(0, player.getResourceManager().getResource(ResourceType.Wool));
+    assertSame(0, player.getResourceManager().getResource(ResourceType.BRICK));
+    assertSame(0, player.getResourceManager().getResource(ResourceType.GRAIN));
+    assertSame(0, player.getResourceManager().getResource(ResourceType.LUMBER));
+    assertSame(0, player.getResourceManager().getResource(ResourceType.WOOL));
   }
 
   @DisplayName("It must process a valid ent turn request")
@@ -563,11 +563,11 @@ public class CatanGameEngineTest {
 
     Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
 
-    playerResources.put(ResourceType.Brick, 1);
-    playerResources.put(ResourceType.Grain, 3);
-    playerResources.put(ResourceType.Lumber, 1);
-    playerResources.put(ResourceType.Wool, 1);
-    playerResources.put(ResourceType.Ore, 3);
+    playerResources.put(ResourceType.BRICK, 1);
+    playerResources.put(ResourceType.GRAIN, 3);
+    playerResources.put(ResourceType.LUMBER, 1);
+    playerResources.put(ResourceType.WOOL, 1);
+    playerResources.put(ResourceType.ORE, 3);
 
     IPlayer player = new Player(0, new ResourceManager(playerResources));
     IPlayer[] players = {player};
@@ -585,21 +585,21 @@ public class CatanGameEngineTest {
     int requestY = 2;
 
     IRequest[] requests = {
-      new BuildStructureRequest(player, StructureType.Settlement, requestX, requestY),
-      new UpgradeStructureRequest(player, StructureType.City, requestX, requestY)
+      new BuildStructureRequest(player, StructureType.SETTLEMENT, requestX, requestY),
+      new UpgradeStructureRequest(player, StructureType.CITY, requestX, requestY)
     };
 
     engine.processRequests(requests);
 
     IBoardElement elementBuilt = board.get(requestX, requestY);
 
-    assertSame(BoardElementType.Structure, elementBuilt.getElementType());
-    assertSame(StructureType.City, ((IBoardStructure) elementBuilt).getType());
+    assertSame(BoardElementType.STRUCTURE, elementBuilt.getElementType());
+    assertSame(StructureType.CITY, ((IBoardStructure) elementBuilt).getType());
     assertSame(player.getId(), ((IOwnedElement) elementBuilt).getOwner().getId());
-    assertSame(0, player.getResourceManager().getResource(ResourceType.Brick));
-    assertSame(0, player.getResourceManager().getResource(ResourceType.Grain));
-    assertSame(0, player.getResourceManager().getResource(ResourceType.Lumber));
-    assertSame(0, player.getResourceManager().getResource(ResourceType.Wool));
+    assertSame(0, player.getResourceManager().getResource(ResourceType.BRICK));
+    assertSame(0, player.getResourceManager().getResource(ResourceType.GRAIN));
+    assertSame(0, player.getResourceManager().getResource(ResourceType.LUMBER));
+    assertSame(0, player.getResourceManager().getResource(ResourceType.WOOL));
   }
 
   @DisplayName("It must process a valid start turn request")
@@ -652,7 +652,7 @@ public class CatanGameEngineTest {
     int requestY = 2;
 
     board.build(
-        new BoardStructure(player, new ResourceManager(), StructureType.Settlement),
+        new BoardStructure(player, new ResourceManager(), StructureType.SETTLEMENT),
         requestX,
         requestY);
 
@@ -678,25 +678,25 @@ public class CatanGameEngineTest {
     IResourceStorage expectedResources =
         TerrainProductionProvider.buildDefaultProvider()
             .getResourceManager(
-                new StructureTerrainTypesPair(StructureType.Settlement, TerrainType.Mountains));
+                new StructureTerrainTypesPair(StructureType.SETTLEMENT, TerrainType.MOUNTAINS));
 
     assertEquals(expectedResources, player.getResourceManager());
   }
 
   private IBoardTerrain buildMountainTerrain() {
-    return new BoardTerrain(6, TerrainType.Mountains);
+    return new BoardTerrain(6, TerrainType.MOUNTAINS);
   }
 
   private IBoardStructure buildNoneStructure() {
-    return new BoardStructure(null, new ResourceManager(), StructureType.None);
+    return new BoardStructure(null, new ResourceManager(), StructureType.NONE);
   }
 
   private IBoardTerrain buildNoneTerrain() {
-    return new BoardTerrain(0, TerrainType.None);
+    return new BoardTerrain(0, TerrainType.NONE);
   }
 
   private IBoardConnection buildPlayerConnection(IPlayer player) {
-    return new BoardConnection(player, new ResourceManager(), ConnectionType.Road);
+    return new BoardConnection(player, new ResourceManager(), ConnectionType.ROAD);
   }
 
   private ICatanEditableBoard buildStandardBoard(IPlayer player1)
@@ -743,6 +743,6 @@ public class CatanGameEngineTest {
   }
 
   private IBoardConnection buildVoidConnection() {
-    return new BoardConnection(null, new ResourceManager(), ConnectionType.Void);
+    return new BoardConnection(null, new ResourceManager(), ConnectionType.VOID);
   }
 }

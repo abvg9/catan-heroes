@@ -17,12 +17,12 @@ public class BuildElementRequestTest {
   @Test
   public void mustStoreInitialValues() {
     IPlayer player = new Player(0, new ResourceManager());
-    BoardElementType type = BoardElementType.Connection;
+    BoardElementType type = BoardElementType.CONNECTION;
     int x = 0;
     int y = 1;
 
     MinimunBuildElementRequest request =
-        new MinimunBuildElementRequest(player, RequestType.BuildConnection, type, x, y);
+        new MinimunBuildElementRequest(player, RequestType.BUILD_CONNECTION, type, x, y);
 
     assertSame(type, request.getElementType());
     assertSame(x, request.getX());

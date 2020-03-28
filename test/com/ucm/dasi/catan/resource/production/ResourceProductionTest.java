@@ -34,7 +34,7 @@ public class ResourceProductionTest {
     IPlayer player = new Player(0, new ResourceManager());
 
     TreeMap<ResourceType, Integer> playerProductionMap = new TreeMap<ResourceType, Integer>();
-    playerProductionMap.put(ResourceType.Wool, 3);
+    playerProductionMap.put(ResourceType.WOOL, 3);
 
     IResourceManager playerProduction = new ResourceManager(playerProductionMap);
 

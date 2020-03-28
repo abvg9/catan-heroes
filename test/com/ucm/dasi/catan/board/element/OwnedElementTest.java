@@ -24,10 +24,10 @@ public class OwnedElementTest {
     IPlayer player = new Player(0, new ResourceManager());
 
     Map<ResourceType, Integer> costMap = new TreeMap<ResourceType, Integer>();
-    costMap.put(ResourceType.Wool, 4);
+    costMap.put(ResourceType.WOOL, 4);
 
     IResourceManager cost = new ResourceManager(costMap);
-    OwnedElement element = new MinimunOwnedElement(BoardElementType.Structure, cost, player);
+    OwnedElement element = new MinimunOwnedElement(BoardElementType.STRUCTURE, cost, player);
 
     assertEquals(cost, element.getCost());
   }
@@ -38,7 +38,7 @@ public class OwnedElementTest {
   public void itMustReturnItsOwner() {
     IPlayer player = new Player(0, new ResourceManager());
     OwnedElement element =
-        new MinimunOwnedElement(BoardElementType.Structure, new ResourceManager(), player);
+        new MinimunOwnedElement(BoardElementType.STRUCTURE, new ResourceManager(), player);
 
     assertSame(player, element.getOwner());
   }

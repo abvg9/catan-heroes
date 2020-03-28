@@ -145,11 +145,11 @@ public class CatanGameTest {
   }
 
   private IBoardStructure buildNoneStructure() {
-    return new BoardStructure(null, new ResourceManager(), StructureType.None);
+    return new BoardStructure(null, new ResourceManager(), StructureType.NONE);
   }
 
   private IBoardTerrain buildNoneTerrain() {
-    return new BoardTerrain(0, TerrainType.None);
+    return new BoardTerrain(0, TerrainType.NONE);
   }
 
   private ICatanBoard buildStandardBoard()
@@ -170,6 +170,6 @@ public class CatanGameTest {
   }
 
   private IBoardConnection buildVoidConnection() {
-    return new BoardConnection(null, new ResourceManager(), ConnectionType.Void);
+    return new BoardConnection(null, new ResourceManager(), ConnectionType.VOID);
   }
 }

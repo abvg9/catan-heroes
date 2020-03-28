@@ -45,9 +45,9 @@ public class TerrainProductionProvider extends ResourceManagerProvider<IStructur
       TerrainType terrainType, StructureType structureType) {
 
     switch (structureType) {
-      case City:
+      case CITY:
         return buildCityProduction(terrainType);
-      case Settlement:
+      case SETTLEMENT:
         return buildSettlementProduction(terrainType);
       default:
         return new ResourceManager();
@@ -74,16 +74,16 @@ public class TerrainProductionProvider extends ResourceManagerProvider<IStructur
   private static ResourceType getResourceAssociatedTo(TerrainType type) {
 
     switch (type) {
-      case Fields:
-        return ResourceType.Grain;
-      case Forest:
-        return ResourceType.Lumber;
-      case Hills:
-        return ResourceType.Brick;
-      case Mountains:
-        return ResourceType.Ore;
-      case Pasture:
-        return ResourceType.Wool;
+      case FIELDS:
+        return ResourceType.GRAIN;
+      case FOREST:
+        return ResourceType.LUMBER;
+      case HILLS:
+        return ResourceType.BRICK;
+      case MOUNTAINS:
+        return ResourceType.ORE;
+      case PASTURE:
+        return ResourceType.WOOL;
       default:
         return null;
     }

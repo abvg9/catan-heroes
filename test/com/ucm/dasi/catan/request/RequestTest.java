@@ -17,7 +17,7 @@ public class RequestTest {
   public void itMustStoreItsPlayer() {
     IPlayer player = new Player(0, new ResourceManager());
 
-    MinimunRequest request = new MinimunRequest(player, RequestType.BuildConnection);
+    MinimunRequest request = new MinimunRequest(player, RequestType.BUILD_CONNECTION);
 
     assertSame(player, request.getPlayer());
   }
@@ -26,7 +26,7 @@ public class RequestTest {
   @Tag(value = "Request")
   @Test
   public void itMustStoreItsRequestType() {
-    RequestType requestType = RequestType.BuildConnection;
+    RequestType requestType = RequestType.BUILD_CONNECTION;
 
     MinimunRequest request = new MinimunRequest(new Player(0, new ResourceManager()), requestType);
 
