@@ -4,9 +4,11 @@ import com.ucm.dasi.catan.board.BoardElementType;
 import com.ucm.dasi.catan.board.ICatanEditableBoard;
 import com.ucm.dasi.catan.board.connection.BoardConnection;
 import com.ucm.dasi.catan.board.connection.ConnectionDirection;
+import com.ucm.dasi.catan.board.connection.ConnectionType;
 import com.ucm.dasi.catan.board.element.IOwnedElement;
 import com.ucm.dasi.catan.board.exception.InvalidBoardElementException;
 import com.ucm.dasi.catan.board.structure.BoardStructure;
+import com.ucm.dasi.catan.board.structure.StructureType;
 import com.ucm.dasi.catan.exception.NonNullInputException;
 import com.ucm.dasi.catan.exception.NonVoidCollectionException;
 import com.ucm.dasi.catan.game.generator.INumberGenerator;
@@ -22,13 +24,14 @@ import com.ucm.dasi.catan.request.IUpgradeStructureRequest;
 import com.ucm.dasi.catan.request.RequestType;
 import com.ucm.dasi.catan.resource.exception.NotEnoughtResourcesException;
 import com.ucm.dasi.catan.resource.production.IResourceProduction;
-import com.ucm.dasi.catan.resource.provider.ConnectionCostProvider;
-import com.ucm.dasi.catan.resource.provider.StructureCostProvider;
+import com.ucm.dasi.catan.resource.provider.DefaultConnectionCostProvider;
+import com.ucm.dasi.catan.resource.provider.DefaultStructureCostProvider;
+import com.ucm.dasi.catan.resource.provider.IResourceManagerProvider;
 import java.util.function.Consumer;
 
 public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements ICatanGameEngine {
 
-  private ConnectionCostProvider connectionCostProvider;
+  private IResourceManagerProvider<ConnectionType> connectionCostProvider;
 
   private Consumer<IRequest> errorHandler;
 
@@ -36,7 +39,7 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
 
   private INumberGenerator numberGenerator;
 
-  private StructureCostProvider structureCostProvider;
+  private IResourceManagerProvider<StructureType> structureCostProvider;
 
   public CatanGameEngine(
       ICatanEditableBoard board,
@@ -50,11 +53,11 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
 
     super(board, players, state, turnIndex, turnStarted);
 
-    connectionCostProvider = ConnectionCostProvider.buildDefaultProvider();
+    connectionCostProvider = new DefaultConnectionCostProvider();
     this.errorHandler = errorHandler;
     handlersMap = new GameEngineHandlersMap(generateMap());
     this.numberGenerator = numberGenerator;
-    structureCostProvider = StructureCostProvider.buildDefaultProvider();
+    structureCostProvider = new DefaultStructureCostProvider();
   }
 
   @Override
