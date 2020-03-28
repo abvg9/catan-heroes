@@ -137,7 +137,7 @@ public class CatanEditableBoardTest {
     assertEquals(standardSettlementAtMountainProduction, productionAfter);
   }
 
-  @DisplayName("it must sync the production after a structure update")
+  @DisplayName("it must sync the production after a structure upgrade")
   @Tag("CatanEditableBoard")
   @Test
   public void itMustSyncTheProductionAfterAStructureUpdate()
