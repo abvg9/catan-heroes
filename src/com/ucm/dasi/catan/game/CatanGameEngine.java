@@ -126,14 +126,6 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
         || isStructurePointConnectedOrControlled(player, x, y + 1);
   }
 
-  private void processTurnRequest(IRequest request) {
-
-    Consumer<? extends IRequest> consumer = handlersMap.get(request.getType());
-    if (consumer != null) {
-      consumeRequest(consumer, request);
-    }
-  }
-
   @SuppressWarnings("unchecked")
   private <T extends IRequest> void consumeRequest(Consumer<T> consumer, IRequest request) {
     consumer.accept((T) request);
@@ -300,6 +292,14 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
       getActivePlayer().getResourceManager().substract(element.getCost());
     } catch (InvalidBoardElementException | NotEnoughtResourcesException e) {
       handleRequestError(request);
+    }
+  }
+
+  private void processTurnRequest(IRequest request) {
+
+    Consumer<? extends IRequest> consumer = handlersMap.get(request.getType());
+    if (consumer != null) {
+      consumeRequest(consumer, request);
     }
   }
 

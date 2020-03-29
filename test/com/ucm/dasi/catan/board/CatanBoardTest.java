@@ -3,6 +3,7 @@ package com.ucm.dasi.catan.board;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.verify;
 
 import com.ucm.dasi.catan.board.connection.BoardConnection;
 import com.ucm.dasi.catan.board.connection.ConnectionType;
@@ -10,7 +11,8 @@ import com.ucm.dasi.catan.board.connection.IBoardConnection;
 import com.ucm.dasi.catan.board.element.IBoardElement;
 import com.ucm.dasi.catan.board.exception.InvalidBoardDimensionsException;
 import com.ucm.dasi.catan.board.exception.InvalidBoardElementException;
-import com.ucm.dasi.catan.board.group.StructureTerrainTypesPair;
+import com.ucm.dasi.catan.board.production.BoardProductionManager;
+import com.ucm.dasi.catan.board.production.IBoardProductionManager;
 import com.ucm.dasi.catan.board.structure.BoardStructure;
 import com.ucm.dasi.catan.board.structure.IBoardStructure;
 import com.ucm.dasi.catan.board.structure.StructureType;
@@ -20,12 +22,12 @@ import com.ucm.dasi.catan.board.terrain.TerrainType;
 import com.ucm.dasi.catan.player.IPlayer;
 import com.ucm.dasi.catan.player.Player;
 import com.ucm.dasi.catan.resource.ResourceManager;
-import com.ucm.dasi.catan.resource.production.IResourceProduction;
 import com.ucm.dasi.catan.resource.provider.DefaultTerrainProductionProvider;
 import com.ucm.dasi.catan.resource.provider.ITerrainProductionProvider;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 public class CatanBoardTest {
 
@@ -50,6 +52,41 @@ public class CatanBoardTest {
     CatanBoard board = new CatanBoard(3, 3, elements, new DefaultTerrainProductionProvider());
 
     assertNotEquals(null, board);
+  }
+
+  @DisplayName("It must call its manager to get a player's production")
+  @Tag("CatanBoard")
+  @Test
+  public void itMustCallItsManagerToGetAPlayerProduction()
+      throws InvalidBoardDimensionsException, InvalidBoardElementException {
+
+    int targetProductionNumber = 3;
+    IPlayer player = new Player(1, new ResourceManager());
+
+    IBoardElement[][] elements = {
+      {
+        createNoneStructure(), createVoidConnection(), createSettlementStructure(player),
+      },
+      {
+        createVoidConnection(),
+        createMountainsTerrain(targetProductionNumber),
+        createVoidConnection(),
+      },
+      {
+        createNoneStructure(), createVoidConnection(), createNoneStructure(),
+      },
+    };
+
+    ITerrainProductionProvider terrainProductionProvider = new DefaultTerrainProductionProvider();
+
+    CatanBoardForTest board = new CatanBoardForTest(3, 3, elements, terrainProductionProvider);
+    IBoardProductionManager productionManager =
+        Mockito.spy(new BoardProductionManager(board, terrainProductionProvider));
+    board.setProductionManager(productionManager);
+
+    board.getProduction(targetProductionNumber);
+
+    verify(productionManager).getProduction(targetProductionNumber);
   }
 
   @DisplayName("It must get an element by its position")
@@ -98,41 +135,6 @@ public class CatanBoardTest {
     CatanBoard board = new CatanBoard(3, 3, elements, new DefaultTerrainProductionProvider());
 
     assertEquals(element, board.getStructure(0, 0));
-  }
-
-  @DisplayName("It must get a player's production")
-  @Tag("CatanBoard")
-  @Test
-  public void itMustGetAPlayerProduction()
-      throws InvalidBoardDimensionsException, InvalidBoardElementException {
-
-    int targetProductionNumber = 3;
-    IPlayer player = new Player(1, new ResourceManager());
-
-    IBoardElement[][] elements = {
-      {
-        createNoneStructure(), createVoidConnection(), createSettlementStructure(player),
-      },
-      {
-        createVoidConnection(),
-        createMountainsTerrain(targetProductionNumber),
-        createVoidConnection(),
-      },
-      {
-        createNoneStructure(), createVoidConnection(), createNoneStructure(),
-      },
-    };
-
-    ITerrainProductionProvider terrainProductionProvider = new DefaultTerrainProductionProvider();
-
-    CatanBoard board = new CatanBoard(3, 3, elements, terrainProductionProvider);
-
-    IResourceProduction production = board.getProduction(targetProductionNumber);
-
-    assertEquals(
-        terrainProductionProvider.getResourceManager(
-            new StructureTerrainTypesPair(StructureType.SETTLEMENT, TerrainType.MOUNTAINS)),
-        production.getProduction(player));
   }
 
   @DisplayName("It must fail if a false connection is provided")
