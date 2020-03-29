@@ -22,7 +22,7 @@ import com.ucm.dasi.catan.exception.NonVoidCollectionException;
 import com.ucm.dasi.catan.player.IPlayer;
 import com.ucm.dasi.catan.player.Player;
 import com.ucm.dasi.catan.resource.ResourceManager;
-import com.ucm.dasi.catan.resource.provider.TerrainProductionProvider;
+import com.ucm.dasi.catan.resource.provider.DefaultTerrainProductionProvider;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -166,7 +166,7 @@ public class CatanGameTest {
       },
     };
 
-    return new CatanBoard(3, 3, elements, TerrainProductionProvider.buildDefaultProvider());
+    return new CatanBoard(3, 3, elements, new DefaultTerrainProductionProvider());
   }
 
   private IBoardConnection buildVoidConnection() {

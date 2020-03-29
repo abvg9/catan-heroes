@@ -36,7 +36,7 @@ import com.ucm.dasi.catan.request.UpgradeStructureRequest;
 import com.ucm.dasi.catan.resource.IResourceStorage;
 import com.ucm.dasi.catan.resource.ResourceManager;
 import com.ucm.dasi.catan.resource.ResourceType;
-import com.ucm.dasi.catan.resource.provider.TerrainProductionProvider;
+import com.ucm.dasi.catan.resource.provider.DefaultTerrainProductionProvider;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -676,7 +676,7 @@ public class CatanGameEngineTest {
     engine.processRequests(requests);
 
     IResourceStorage expectedResources =
-        TerrainProductionProvider.buildDefaultProvider()
+        new DefaultTerrainProductionProvider()
             .getResourceManager(
                 new StructureTerrainTypesPair(StructureType.SETTLEMENT, TerrainType.MOUNTAINS));
 
@@ -739,7 +739,7 @@ public class CatanGameEngineTest {
       },
     };
 
-    return new CatanEditableBoard(5, 5, elements, TerrainProductionProvider.buildDefaultProvider());
+    return new CatanEditableBoard(5, 5, elements, new DefaultTerrainProductionProvider());
   }
 
   private IBoardConnection buildVoidConnection() {
