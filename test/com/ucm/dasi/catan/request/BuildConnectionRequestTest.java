@@ -17,7 +17,7 @@ public class BuildConnectionRequestTest {
   @Test
   public void mustStoreConnectionType() {
     IPlayer player = new Player(0, new ResourceManager());
-    ConnectionType type = ConnectionType.Road;
+    ConnectionType type = ConnectionType.ROAD;
 
     BuildConnectionRequest request = new BuildConnectionRequest(player, type, 0, 1);
 

@@ -135,7 +135,7 @@ public class CatanBoardTest {
 
     assertEquals(
         terrainProductionProvider.getResourceManager(
-            new StructureTerrainTypesPair(StructureType.Settlement, TerrainType.Mountains)),
+            new StructureTerrainTypesPair(StructureType.SETTLEMENT, TerrainType.MOUNTAINS)),
         production.getProduction(player));
   }
 
@@ -209,22 +209,22 @@ public class CatanBoardTest {
   }
 
   private IBoardTerrain createNoneTerrain() {
-    return new BoardTerrain(0, TerrainType.None);
+    return new BoardTerrain(0, TerrainType.NONE);
   }
 
   private IBoardTerrain createMountainsTerrain(int productionNumber) {
-    return new BoardTerrain(productionNumber, TerrainType.Mountains);
+    return new BoardTerrain(productionNumber, TerrainType.MOUNTAINS);
   }
 
   private IBoardStructure createNoneStructure() {
-    return new BoardStructure(null, new ResourceManager(), StructureType.None);
+    return new BoardStructure(null, new ResourceManager(), StructureType.NONE);
   }
 
   private IBoardStructure createSettlementStructure(IPlayer owner) {
-    return new BoardStructure(owner, new ResourceManager(), StructureType.Settlement);
+    return new BoardStructure(owner, new ResourceManager(), StructureType.SETTLEMENT);
   }
 
   private IBoardConnection createVoidConnection() {
-    return new BoardConnection(null, new ResourceManager(), ConnectionType.Void);
+    return new BoardConnection(null, new ResourceManager(), ConnectionType.VOID);
   }
 }

@@ -18,8 +18,8 @@ public class StructureCostProvider extends ResourceManagerProvider<StructureType
     TreeMap<StructureType, IResourceManager> costMap =
         new TreeMap<StructureType, IResourceManager>();
 
-    costMap.put(StructureType.City, buildCityCost());
-    costMap.put(StructureType.Settlement, buildSettlementCost());
+    costMap.put(StructureType.CITY, buildCityCost());
+    costMap.put(StructureType.SETTLEMENT, buildSettlementCost());
 
     return new StructureCostProvider(costMap);
   }
@@ -28,8 +28,8 @@ public class StructureCostProvider extends ResourceManagerProvider<StructureType
 
     Map<ResourceType, Integer> costMap = new TreeMap<ResourceType, Integer>();
 
-    costMap.put(ResourceType.Grain, 2);
-    costMap.put(ResourceType.Ore, 3);
+    costMap.put(ResourceType.GRAIN, 2);
+    costMap.put(ResourceType.ORE, 3);
 
     return new ResourceManager(costMap);
   }
@@ -38,10 +38,10 @@ public class StructureCostProvider extends ResourceManagerProvider<StructureType
 
     Map<ResourceType, Integer> costMap = new TreeMap<ResourceType, Integer>();
 
-    costMap.put(ResourceType.Brick, 1);
-    costMap.put(ResourceType.Grain, 1);
-    costMap.put(ResourceType.Lumber, 1);
-    costMap.put(ResourceType.Wool, 1);
+    costMap.put(ResourceType.BRICK, 1);
+    costMap.put(ResourceType.GRAIN, 1);
+    costMap.put(ResourceType.LUMBER, 1);
+    costMap.put(ResourceType.WOOL, 1);
 
     return new ResourceManager(costMap);
   }

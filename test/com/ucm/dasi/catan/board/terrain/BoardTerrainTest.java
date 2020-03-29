@@ -13,9 +13,9 @@ public class BoardTerrainTest {
   @Tag(value = "BoardTerrain")
   @Test
   public void itMustReturnTheRightElementType() {
-    BoardTerrain terrain = new BoardTerrain(1, TerrainType.None);
+    BoardTerrain terrain = new BoardTerrain(1, TerrainType.NONE);
 
-    assertEquals(BoardElementType.Terrain, terrain.getElementType());
+    assertEquals(BoardElementType.TERRAIN, terrain.getElementType());
   }
 
   @DisplayName("It must get its production number")
@@ -23,7 +23,7 @@ public class BoardTerrainTest {
   @Test
   public void itMustGetItsProductionNumber() {
     int productionNumber = 1;
-    BoardTerrain terrain = new BoardTerrain(productionNumber, TerrainType.None);
+    BoardTerrain terrain = new BoardTerrain(productionNumber, TerrainType.NONE);
 
     assertEquals(productionNumber, terrain.getProductionNumber());
   }
@@ -32,7 +32,7 @@ public class BoardTerrainTest {
   @Tag(value = "BoardTerrain")
   @Test
   public void itMustGetItsStructureType() {
-    TerrainType type = TerrainType.None;
+    TerrainType type = TerrainType.NONE;
     BoardTerrain terrain = new BoardTerrain(1, type);
 
     assertEquals(type, terrain.getType());

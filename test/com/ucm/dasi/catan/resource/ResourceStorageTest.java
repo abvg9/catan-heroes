@@ -15,22 +15,22 @@ public class ResourceStorageTest {
   public void itMustGetAResourceAmount() {
     Map<ResourceType, Integer> resources =
         Map.of(
-            ResourceType.Ore,
+            ResourceType.ORE,
             1,
-            ResourceType.Brick,
+            ResourceType.BRICK,
             2,
-            ResourceType.Wool,
+            ResourceType.WOOL,
             3,
-            ResourceType.Lumber,
+            ResourceType.LUMBER,
             4);
 
     ResourceStorage storage = new ResourceStorage(resources);
 
-    assertSame(1, storage.getResource(ResourceType.Ore));
-    assertSame(2, storage.getResource(ResourceType.Brick));
-    assertSame(3, storage.getResource(ResourceType.Wool));
-    assertSame(4, storage.getResource(ResourceType.Lumber));
-    assertSame(0, storage.getResource(ResourceType.Grain));
+    assertSame(1, storage.getResource(ResourceType.ORE));
+    assertSame(2, storage.getResource(ResourceType.BRICK));
+    assertSame(3, storage.getResource(ResourceType.WOOL));
+    assertSame(4, storage.getResource(ResourceType.LUMBER));
+    assertSame(0, storage.getResource(ResourceType.GRAIN));
   }
 
   @DisplayName("It must get the total amount of resources")
@@ -40,15 +40,15 @@ public class ResourceStorageTest {
 
     Map<ResourceType, Integer> resources =
         Map.of(
-            ResourceType.Ore,
+            ResourceType.ORE,
             2,
-            ResourceType.Brick,
+            ResourceType.BRICK,
             2,
-            ResourceType.Wool,
+            ResourceType.WOOL,
             2,
-            ResourceType.Lumber,
+            ResourceType.LUMBER,
             2,
-            ResourceType.Grain,
+            ResourceType.GRAIN,
             2);
 
     ResourceStorage storage = new ResourceStorage(resources);
