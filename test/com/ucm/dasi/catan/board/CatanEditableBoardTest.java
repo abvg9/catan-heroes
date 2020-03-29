@@ -22,8 +22,8 @@ import com.ucm.dasi.catan.resource.IResourceStorage;
 import com.ucm.dasi.catan.resource.ResourceManager;
 import com.ucm.dasi.catan.resource.ResourceStorage;
 import com.ucm.dasi.catan.resource.exception.NegativeNumberException;
+import com.ucm.dasi.catan.resource.provider.DefaultTerrainProductionProvider;
 import com.ucm.dasi.catan.resource.provider.ITerrainProductionProvider;
-import com.ucm.dasi.catan.resource.provider.TerrainProductionProvider;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -39,8 +39,7 @@ public class CatanEditableBoardTest {
 
     IPlayer player = new Player(0, new ResourceManager());
 
-    CatanEditableBoard board =
-        buildStandardBoard(player, TerrainProductionProvider.buildDefaultProvider());
+    CatanEditableBoard board = buildStandardBoard(player, new DefaultTerrainProductionProvider());
 
     int requestX = 3;
     int requestY = 2;
@@ -64,8 +63,7 @@ public class CatanEditableBoardTest {
 
     IPlayer player = new Player(0, new ResourceManager());
 
-    CatanEditableBoard board =
-        buildStandardBoard(player, TerrainProductionProvider.buildDefaultProvider());
+    CatanEditableBoard board = buildStandardBoard(player, new DefaultTerrainProductionProvider());
 
     int requestX = 2;
     int requestY = 2;
@@ -89,8 +87,7 @@ public class CatanEditableBoardTest {
 
     IPlayer player = new Player(0, new ResourceManager());
 
-    CatanEditableBoard board =
-        buildStandardBoard(player, TerrainProductionProvider.buildDefaultProvider());
+    CatanEditableBoard board = buildStandardBoard(player, new DefaultTerrainProductionProvider());
 
     int requestX = 2;
     int requestY = 2;
@@ -116,8 +113,7 @@ public class CatanEditableBoardTest {
 
     IPlayer player = new Player(0, new ResourceManager());
 
-    ITerrainProductionProvider productionProvider =
-        TerrainProductionProvider.buildDefaultProvider();
+    ITerrainProductionProvider productionProvider = new DefaultTerrainProductionProvider();
     CatanEditableBoard board = buildStandardBoard(player, productionProvider);
 
     int productionNumber = 6;
@@ -149,8 +145,7 @@ public class CatanEditableBoardTest {
 
     IPlayer player = new Player(0, new ResourceManager());
 
-    ITerrainProductionProvider productionProvider =
-        TerrainProductionProvider.buildDefaultProvider();
+    ITerrainProductionProvider productionProvider = new DefaultTerrainProductionProvider();
     CatanEditableBoard board = buildStandardBoard(player, productionProvider);
 
     int productionNumber = 6;
