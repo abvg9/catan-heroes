@@ -18,7 +18,7 @@ public class ConnectionCostProvider extends ResourceManagerProvider<ConnectionTy
     TreeMap<ConnectionType, IResourceManager> costMap =
         new TreeMap<ConnectionType, IResourceManager>();
 
-    costMap.put(ConnectionType.Road, buildRoadCost());
+    costMap.put(ConnectionType.ROAD, buildRoadCost());
 
     return new ConnectionCostProvider(costMap);
   }
@@ -27,8 +27,8 @@ public class ConnectionCostProvider extends ResourceManagerProvider<ConnectionTy
 
     Map<ResourceType, Integer> costMap = new TreeMap<ResourceType, Integer>();
 
-    costMap.put(ResourceType.Brick, 1);
-    costMap.put(ResourceType.Lumber, 1);
+    costMap.put(ResourceType.BRICK, 1);
+    costMap.put(ResourceType.LUMBER, 1);
 
     return new ResourceManager(costMap);
   }

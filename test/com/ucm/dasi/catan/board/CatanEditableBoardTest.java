@@ -46,13 +46,13 @@ public class CatanEditableBoardTest {
     int requestY = 2;
 
     board.build(
-        new BoardConnection(player, new ResourceManager(), ConnectionType.Road),
+        new BoardConnection(player, new ResourceManager(), ConnectionType.ROAD),
         requestX,
         requestY);
     IBoardElement elementBuilt = board.get(requestX, requestY);
 
-    assertSame(BoardElementType.Connection, elementBuilt.getElementType());
-    assertSame(ConnectionType.Road, ((IBoardConnection) elementBuilt).getType());
+    assertSame(BoardElementType.CONNECTION, elementBuilt.getElementType());
+    assertSame(ConnectionType.ROAD, ((IBoardConnection) elementBuilt).getType());
   }
 
   @DisplayName("it must build a settlement")
@@ -71,13 +71,13 @@ public class CatanEditableBoardTest {
     int requestY = 2;
 
     board.build(
-        new BoardStructure(player, new ResourceManager(), StructureType.Settlement),
+        new BoardStructure(player, new ResourceManager(), StructureType.SETTLEMENT),
         requestX,
         requestY);
     IBoardElement elementBuilt = board.get(requestX, requestY);
 
-    assertSame(BoardElementType.Structure, elementBuilt.getElementType());
-    assertSame(StructureType.Settlement, ((IBoardStructure) elementBuilt).getType());
+    assertSame(BoardElementType.STRUCTURE, elementBuilt.getElementType());
+    assertSame(StructureType.SETTLEMENT, ((IBoardStructure) elementBuilt).getType());
   }
 
   @DisplayName("it must upgrade a settlement into a city")
@@ -96,16 +96,16 @@ public class CatanEditableBoardTest {
     int requestY = 2;
 
     board.build(
-        new BoardStructure(player, new ResourceManager(), StructureType.Settlement),
+        new BoardStructure(player, new ResourceManager(), StructureType.SETTLEMENT),
         requestX,
         requestY);
     board.upgrade(
-        new BoardStructure(player, new ResourceManager(), StructureType.City), requestX, requestY);
+        new BoardStructure(player, new ResourceManager(), StructureType.CITY), requestX, requestY);
 
     IBoardElement elementBuilt = board.get(requestX, requestY);
 
-    assertSame(BoardElementType.Structure, elementBuilt.getElementType());
-    assertSame(StructureType.City, ((IBoardStructure) elementBuilt).getType());
+    assertSame(BoardElementType.STRUCTURE, elementBuilt.getElementType());
+    assertSame(StructureType.CITY, ((IBoardStructure) elementBuilt).getType());
   }
 
   @DisplayName("it must sync the production after a structure build")
@@ -128,13 +128,13 @@ public class CatanEditableBoardTest {
     IResourceStorage productionBefore = board.getProduction(productionNumber).getProduction(player);
 
     board.build(
-        new BoardStructure(player, new ResourceManager(), StructureType.Settlement),
+        new BoardStructure(player, new ResourceManager(), StructureType.SETTLEMENT),
         requestX,
         requestY);
 
     IResourceStorage standardSettlementAtMountainProduction =
         productionProvider.getResourceManager(
-            new StructureTerrainTypesPair(StructureType.Settlement, TerrainType.Mountains));
+            new StructureTerrainTypesPair(StructureType.SETTLEMENT, TerrainType.MOUNTAINS));
     IResourceStorage productionAfter = board.getProduction(productionNumber).getProduction(player);
 
     assertEquals(new ResourceStorage(), productionBefore);
@@ -161,16 +161,16 @@ public class CatanEditableBoardTest {
     IResourceStorage productionBefore = board.getProduction(productionNumber).getProduction(player);
 
     board.build(
-        new BoardStructure(player, new ResourceManager(), StructureType.Settlement),
+        new BoardStructure(player, new ResourceManager(), StructureType.SETTLEMENT),
         requestX,
         requestY);
 
     board.upgrade(
-        new BoardStructure(player, new ResourceManager(), StructureType.City), requestX, requestY);
+        new BoardStructure(player, new ResourceManager(), StructureType.CITY), requestX, requestY);
 
     IResourceStorage standardCityAtMountainProduction =
         productionProvider.getResourceManager(
-            new StructureTerrainTypesPair(StructureType.City, TerrainType.Mountains));
+            new StructureTerrainTypesPair(StructureType.CITY, TerrainType.MOUNTAINS));
     IResourceStorage productionAfter = board.getProduction(productionNumber).getProduction(player);
 
     assertEquals(new ResourceStorage(), productionBefore);
@@ -178,19 +178,19 @@ public class CatanEditableBoardTest {
   }
 
   private IBoardTerrain buildMountainTerrain() {
-    return new BoardTerrain(6, TerrainType.Mountains);
+    return new BoardTerrain(6, TerrainType.MOUNTAINS);
   }
 
   private IBoardStructure buildNoneStructure() {
-    return new BoardStructure(null, new ResourceManager(), StructureType.None);
+    return new BoardStructure(null, new ResourceManager(), StructureType.NONE);
   }
 
   private IBoardTerrain buildNoneTerrain() {
-    return new BoardTerrain(0, TerrainType.None);
+    return new BoardTerrain(0, TerrainType.NONE);
   }
 
   private IBoardConnection buildPlayerConnection(IPlayer player) {
-    return new BoardConnection(player, new ResourceManager(), ConnectionType.Road);
+    return new BoardConnection(player, new ResourceManager(), ConnectionType.ROAD);
   }
 
   private CatanEditableBoard buildStandardBoard(
@@ -238,6 +238,6 @@ public class CatanEditableBoardTest {
   }
 
   private IBoardConnection buildVoidConnection() {
-    return new BoardConnection(null, new ResourceManager(), ConnectionType.Void);
+    return new BoardConnection(null, new ResourceManager(), ConnectionType.VOID);
   }
 }

@@ -10,7 +10,7 @@ public class BoardStructure extends OwnedElement implements IBoardStructure {
   private StructureType type;
 
   public BoardStructure(IPlayer owner, IResourceManager cost, StructureType type) {
-    super(BoardElementType.Structure, cost, owner);
+    super(BoardElementType.STRUCTURE, cost, owner);
 
     this.type = type;
   }

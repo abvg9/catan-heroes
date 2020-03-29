@@ -35,19 +35,19 @@ public class PointsCalculator implements IPointsCalculator {
   }
 
   private void computePoints(Map<IPlayer, Integer> pointsMap, IBoardElement element) {
-    if (element.getElementType() != BoardElementType.Structure) {
+    if (element.getElementType() != BoardElementType.STRUCTURE) {
       return;
     }
 
     IBoardStructure structure = (IBoardStructure) element;
 
-    if (structure.getType() == StructureType.Settlement) {
+    if (structure.getType() == StructureType.SETTLEMENT) {
       pointsMap.put(
           structure.getOwner(), pointsMap.get(structure.getOwner()) + POINTS_PER_SETTLEMENT);
       return;
     }
 
-    if (structure.getType() == StructureType.City) {
+    if (structure.getType() == StructureType.CITY) {
       pointsMap.put(structure.getOwner(), pointsMap.get(structure.getOwner()) + POINTS_PER_CITY);
       return;
     }

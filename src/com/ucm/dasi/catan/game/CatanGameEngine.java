@@ -69,15 +69,15 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
   }
 
   private boolean isConnectionConnected(IPlayer player, int x, int y) {
-    if (getBoard().get(x, y).getElementType() != BoardElementType.Connection) {
+    if (getBoard().get(x, y).getElementType() != BoardElementType.CONNECTION) {
       return false;
     }
 
     ConnectionDirection direction = getBoard().getConnectionDirection(x, y);
 
-    if (direction == ConnectionDirection.Horizontal) {
+    if (direction == ConnectionDirection.HORIZONTAL) {
       return this.isHorizontalConnectionConnected(player, x, y);
-    } else if (direction == ConnectionDirection.Vertical) {
+    } else if (direction == ConnectionDirection.VERTICAL) {
       return this.isVerticalConnectionConnected(player, x, y);
     } else {
       return false;
@@ -91,7 +91,7 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
   }
 
   private boolean isStructurePointConnected(IPlayer player, int x, int y) {
-    return getBoard().get(x, y).getElementType() == BoardElementType.Structure
+    return getBoard().get(x, y).getElementType() == BoardElementType.STRUCTURE
         && ((x > 0
                 && isStructureConnectedCheckConnection(
                     player, (IOwnedElement) getBoard().get(x - 1, y)))
@@ -107,7 +107,7 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
   }
 
   private boolean isStructurePointConnectedOrControlled(IPlayer player, int x, int y) {
-    return (getBoard().get(x, y).getElementType() == BoardElementType.Structure
+    return (getBoard().get(x, y).getElementType() == BoardElementType.STRUCTURE
             && ((IOwnedElement) getBoard().get(x, y)).getOwner() != null
             && ((IOwnedElement) getBoard().get(x, y)).getOwner().equals(player))
         || isStructurePointConnected(player, x, y);
@@ -140,15 +140,15 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
     IGameEngineHandlersMap map = new GameEngineHandlersMap();
 
     map.put(
-        RequestType.BuildConnection,
+        RequestType.BUILD_CONNECTION,
         (IBuildConnectionRequest request) -> handleBuildConnectionRequest(request));
     map.put(
-        RequestType.BuildStructure,
+        RequestType.BUILD_STRUCTURE,
         (IBuildStructureRequest request) -> handleBuildStructureRequest(request));
-    map.put(RequestType.EndTurn, (IEndTurnRequest request) -> handleEndTurnRequest(request));
-    map.put(RequestType.StartTurn, (IStartTurnRequest request) -> handleStartTurnRequest(request));
+    map.put(RequestType.END_TURN, (IEndTurnRequest request) -> handleEndTurnRequest(request));
+    map.put(RequestType.START_TURN, (IStartTurnRequest request) -> handleStartTurnRequest(request));
     map.put(
-        RequestType.UpgradeStructure,
+        RequestType.UPGRADE_STRUCTURE,
         (IUpgradeStructureRequest request) -> handleUpgradeStructureRequest(request));
 
     return map;

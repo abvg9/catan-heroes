@@ -10,7 +10,7 @@ public class BoardTerrain extends BoardElement implements IBoardTerrain {
   protected TerrainType type;
 
   public BoardTerrain(int productionNumber, TerrainType type) {
-    super(BoardElementType.Terrain);
+    super(BoardElementType.TERRAIN);
 
     this.productionNumber = productionNumber;
     this.type = type;

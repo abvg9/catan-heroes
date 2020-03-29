@@ -20,7 +20,7 @@ public class ResourceManagerProviderTest {
     Map<Integer, IResourceManager> resourcesMap = new TreeMap<Integer, IResourceManager>();
     Integer key = 2;
     Map<ResourceType, Integer> keyResourcesMap = new TreeMap<ResourceType, Integer>();
-    keyResourcesMap.put(ResourceType.Wool, 5);
+    keyResourcesMap.put(ResourceType.WOOL, 5);
     IResourceManager keyResources = new ResourceManager(keyResourcesMap);
     resourcesMap.put(key, keyResources);
 
