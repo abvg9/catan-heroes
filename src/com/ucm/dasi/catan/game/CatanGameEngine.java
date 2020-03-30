@@ -44,6 +44,7 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
   public CatanGameEngine(
       ICatanEditableBoard board,
       IPlayer[] players,
+      int pointsToWin,
       GameState state,
       int turnIndex,
       boolean turnStarted,
@@ -51,7 +52,7 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
       INumberGenerator numberGenerator)
       throws NonNullInputException, NonVoidCollectionException {
 
-    super(board, players, state, turnIndex, turnStarted);
+    super(board, players, pointsToWin, state, turnIndex, turnStarted);
 
     connectionCostProvider = new DefaultConnectionCostProvider();
     this.errorHandler = errorHandler;
@@ -239,7 +240,12 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
     }
 
     switchTurnStarted();
-    passTurn();
+
+    if (hasActivePlayerWon()) {
+      endGame();
+    } else {
+      passTurn();
+    }
   }
 
   private void handleStartTurnRequest(IStartTurnRequest request) {
