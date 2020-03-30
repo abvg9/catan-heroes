@@ -23,8 +23,12 @@ import com.ucm.dasi.catan.board.terrain.IBoardTerrain;
 import com.ucm.dasi.catan.board.terrain.TerrainType;
 import com.ucm.dasi.catan.exception.NonNullInputException;
 import com.ucm.dasi.catan.exception.NonVoidCollectionException;
+import com.ucm.dasi.catan.game.exception.InvalidLogException;
 import com.ucm.dasi.catan.game.generator.CatanRandomGenerator;
 import com.ucm.dasi.catan.game.generator.ConstantNumberGenerator;
+import com.ucm.dasi.catan.game.log.ILogEntry;
+import com.ucm.dasi.catan.game.log.LinearGameLog;
+import com.ucm.dasi.catan.game.log.LogEntry;
 import com.ucm.dasi.catan.player.IPlayer;
 import com.ucm.dasi.catan.player.Player;
 import com.ucm.dasi.catan.request.BuildConnectionRequest;
@@ -37,6 +41,8 @@ import com.ucm.dasi.catan.resource.IResourceStorage;
 import com.ucm.dasi.catan.resource.ResourceManager;
 import com.ucm.dasi.catan.resource.ResourceType;
 import com.ucm.dasi.catan.resource.provider.DefaultTerrainProductionProvider;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -52,7 +58,7 @@ public class CatanGameEngineTest {
   @Test
   public void itMustEndTheGameIfTheActivePlayerWon()
       throws InvalidBoardDimensionsException, InvalidBoardElementException, NonNullInputException,
-          NonVoidCollectionException {
+          NonVoidCollectionException, InvalidLogException {
 
     Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
 
@@ -71,9 +77,23 @@ public class CatanGameEngineTest {
           fail();
         };
 
+    Collection<ILogEntry> entries = new ArrayList<ILogEntry>();
+    ArrayList<IRequest> entryRequests = new ArrayList<IRequest>();
+
+    entryRequests.add(new StartTurnRequest(player1));
+    entries.add(new LogEntry(6, entryRequests));
+
     CatanGameEngine engine =
         new CatanGameEngine(
-            board, players, 1, GameState.NORMAL, 0, true, errorHandler, new CatanRandomGenerator());
+            board,
+            players,
+            1,
+            GameState.NORMAL,
+            0,
+            true,
+            errorHandler,
+            new LinearGameLog(entries),
+            new CatanRandomGenerator());
 
     int requestX = 2;
     int requestY = 2;
@@ -95,7 +115,7 @@ public class CatanGameEngineTest {
   @Test
   public void itMustNotProcessAValidBuildConnectionRequestI()
       throws InvalidBoardDimensionsException, InvalidBoardElementException, NonNullInputException,
-          NonVoidCollectionException {
+          NonVoidCollectionException, InvalidLogException {
 
     IPlayer player1 = new Player(0, new ResourceManager());
     IPlayer[] players = {player1};
@@ -108,6 +128,12 @@ public class CatanGameEngineTest {
           requestFailed.set(true);
         };
 
+    Collection<ILogEntry> entries = new ArrayList<ILogEntry>();
+    ArrayList<IRequest> entryRequests = new ArrayList<IRequest>();
+
+    entryRequests.add(new StartTurnRequest(player1));
+    entries.add(new LogEntry(6, entryRequests));
+
     CatanGameEngine engine =
         new CatanGameEngine(
             board,
@@ -117,6 +143,7 @@ public class CatanGameEngineTest {
             0,
             true,
             errorHandler,
+            new LinearGameLog(entries),
             new CatanRandomGenerator());
 
     int requestX = 3;
@@ -136,7 +163,7 @@ public class CatanGameEngineTest {
   @Test
   public void itMustNotProcessAValidBuildConnectionRequestII()
       throws InvalidBoardDimensionsException, InvalidBoardElementException, NonNullInputException,
-          NonVoidCollectionException {
+          NonVoidCollectionException, InvalidLogException {
 
     Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
 
@@ -157,6 +184,12 @@ public class CatanGameEngineTest {
           requestFailed.set(true);
         };
 
+    Collection<ILogEntry> entries = new ArrayList<ILogEntry>();
+    ArrayList<IRequest> entryRequests = new ArrayList<IRequest>();
+
+    entryRequests.add(new StartTurnRequest(player1));
+    entries.add(new LogEntry(6, entryRequests));
+
     CatanGameEngine engine =
         new CatanGameEngine(
             board,
@@ -166,6 +199,7 @@ public class CatanGameEngineTest {
             0,
             true,
             errorHandler,
+            new LinearGameLog(entries),
             new CatanRandomGenerator());
 
     int requestX = 3;
@@ -184,7 +218,7 @@ public class CatanGameEngineTest {
   @Test
   public void itMustNotProcessAValidBuildConnectionRequestIII()
       throws InvalidBoardDimensionsException, InvalidBoardElementException, NonNullInputException,
-          NonVoidCollectionException {
+          NonVoidCollectionException, InvalidLogException {
 
     Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
 
@@ -213,6 +247,7 @@ public class CatanGameEngineTest {
             0,
             false,
             errorHandler,
+            new LinearGameLog(),
             new CatanRandomGenerator());
 
     int requestX = 3;
@@ -232,7 +267,7 @@ public class CatanGameEngineTest {
   @Test
   public void itMustNotProcessAValidBuildConnectionRequestIV()
       throws InvalidBoardDimensionsException, InvalidBoardElementException, NonNullInputException,
-          NonVoidCollectionException {
+          NonVoidCollectionException, InvalidLogException {
 
     Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
 
@@ -252,6 +287,12 @@ public class CatanGameEngineTest {
           requestFailed.set(true);
         };
 
+    Collection<ILogEntry> entries = new ArrayList<ILogEntry>();
+    ArrayList<IRequest> entryRequests = new ArrayList<IRequest>();
+
+    entryRequests.add(new StartTurnRequest(player));
+    entries.add(new LogEntry(6, entryRequests));
+
     CatanGameEngine engine =
         new CatanGameEngine(
             board,
@@ -259,8 +300,9 @@ public class CatanGameEngineTest {
             10,
             GameState.FOUNDATION,
             0,
-            false,
+            true,
             errorHandler,
+            new LinearGameLog(entries),
             new CatanRandomGenerator());
 
     int requestX = 3;
@@ -280,7 +322,7 @@ public class CatanGameEngineTest {
   @Test
   public void itMustNotProcessAValidBuildStructureRequestI()
       throws InvalidBoardDimensionsException, InvalidBoardElementException, NonNullInputException,
-          NonVoidCollectionException {
+          NonVoidCollectionException, InvalidLogException {
 
     Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
 
@@ -295,6 +337,12 @@ public class CatanGameEngineTest {
           requestFailed.set(true);
         };
 
+    Collection<ILogEntry> entries = new ArrayList<ILogEntry>();
+    ArrayList<IRequest> entryRequests = new ArrayList<IRequest>();
+
+    entryRequests.add(new StartTurnRequest(player1));
+    entries.add(new LogEntry(6, entryRequests));
+
     CatanGameEngine engine =
         new CatanGameEngine(
             board,
@@ -304,6 +352,7 @@ public class CatanGameEngineTest {
             0,
             true,
             errorHandler,
+            new LinearGameLog(entries),
             new CatanRandomGenerator());
 
     int requestX = 2;
@@ -324,7 +373,7 @@ public class CatanGameEngineTest {
   @Test
   public void itMustNotProcessAValidBuildStructureRequestII()
       throws InvalidBoardDimensionsException, InvalidBoardElementException, NonNullInputException,
-          NonVoidCollectionException {
+          NonVoidCollectionException, InvalidLogException {
 
     Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
 
@@ -345,6 +394,12 @@ public class CatanGameEngineTest {
           requestFailed.set(true);
         };
 
+    Collection<ILogEntry> entries = new ArrayList<ILogEntry>();
+    ArrayList<IRequest> entryRequests = new ArrayList<IRequest>();
+
+    entryRequests.add(new StartTurnRequest(player1));
+    entries.add(new LogEntry(6, entryRequests));
+
     CatanGameEngine engine =
         new CatanGameEngine(
             board,
@@ -354,6 +409,7 @@ public class CatanGameEngineTest {
             0,
             true,
             errorHandler,
+            new LinearGameLog(entries),
             new CatanRandomGenerator());
 
     int requestX = 2;
@@ -373,7 +429,7 @@ public class CatanGameEngineTest {
   @Test
   public void itMustNotProcessAValidBuildStructureRequestIII()
       throws InvalidBoardDimensionsException, InvalidBoardElementException, NonNullInputException,
-          NonVoidCollectionException {
+          NonVoidCollectionException, InvalidLogException {
 
     Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
 
@@ -402,6 +458,7 @@ public class CatanGameEngineTest {
             0,
             false,
             errorHandler,
+            new LinearGameLog(),
             new CatanRandomGenerator());
 
     int requestX = 2;
@@ -422,7 +479,7 @@ public class CatanGameEngineTest {
   @Test
   public void itMustNotProcessAValidBuildStructureRequestIV()
       throws InvalidBoardDimensionsException, InvalidBoardElementException, NonNullInputException,
-          NonVoidCollectionException {
+          NonVoidCollectionException, InvalidLogException {
 
     Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
 
@@ -442,6 +499,12 @@ public class CatanGameEngineTest {
           requestFailed.set(true);
         };
 
+    Collection<ILogEntry> entries = new ArrayList<ILogEntry>();
+    ArrayList<IRequest> entryRequests = new ArrayList<IRequest>();
+
+    entryRequests.add(new StartTurnRequest(player1));
+    entries.add(new LogEntry(6, entryRequests));
+
     CatanGameEngine engine =
         new CatanGameEngine(
             board,
@@ -451,6 +514,7 @@ public class CatanGameEngineTest {
             0,
             true,
             errorHandler,
+            new LinearGameLog(entries),
             new CatanRandomGenerator());
 
     int requestX = 2;
@@ -470,7 +534,7 @@ public class CatanGameEngineTest {
   @Test
   public void itMustNotProcessAValidEndTurnRequestIfTheGameIsEnded()
       throws NonNullInputException, NonVoidCollectionException, InvalidBoardDimensionsException,
-          InvalidBoardElementException {
+          InvalidBoardElementException, InvalidLogException {
 
     IPlayer player = new Player(0, new ResourceManager());
     IPlayer[] players = {player};
@@ -482,9 +546,23 @@ public class CatanGameEngineTest {
           requestFailed.set(true);
         };
 
+    Collection<ILogEntry> entries = new ArrayList<ILogEntry>();
+    ArrayList<IRequest> entryRequests = new ArrayList<IRequest>();
+
+    entryRequests.add(new StartTurnRequest(player));
+    entries.add(new LogEntry(6, entryRequests));
+
     CatanGameEngine engine =
         new CatanGameEngine(
-            board, players, 10, GameState.ENDED, 0, true, errorHandler, new CatanRandomGenerator());
+            board,
+            players,
+            10,
+            GameState.ENDED,
+            0,
+            true,
+            errorHandler,
+            new LinearGameLog(entries),
+            new CatanRandomGenerator());
 
     IRequest[] requests = {new EndTurnRequest(player)};
 
@@ -498,7 +576,7 @@ public class CatanGameEngineTest {
   @Test
   public void itMustNotProcessAValidStartTurnRequestIfTheGameIsEnded()
       throws NonNullInputException, NonVoidCollectionException, InvalidBoardDimensionsException,
-          InvalidBoardElementException {
+          InvalidBoardElementException, InvalidLogException {
 
     IPlayer player = new Player(0, new ResourceManager());
     IPlayer[] players = {player};
@@ -519,6 +597,7 @@ public class CatanGameEngineTest {
             0,
             false,
             errorHandler,
+            new LinearGameLog(),
             new CatanRandomGenerator());
 
     IRequest[] requests = {new StartTurnRequest(player)};
@@ -533,7 +612,7 @@ public class CatanGameEngineTest {
   @Test
   public void itMustProcessAValidBuildConnectionRequest()
       throws InvalidBoardDimensionsException, InvalidBoardElementException, NonNullInputException,
-          NonVoidCollectionException {
+          NonVoidCollectionException, InvalidLogException {
 
     Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
 
@@ -550,6 +629,12 @@ public class CatanGameEngineTest {
           fail();
         };
 
+    Collection<ILogEntry> entries = new ArrayList<ILogEntry>();
+    ArrayList<IRequest> entryRequests = new ArrayList<IRequest>();
+
+    entryRequests.add(new StartTurnRequest(player));
+    entries.add(new LogEntry(6, entryRequests));
+
     CatanGameEngine engine =
         new CatanGameEngine(
             board,
@@ -559,6 +644,7 @@ public class CatanGameEngineTest {
             0,
             true,
             errorHandler,
+            new LinearGameLog(entries),
             new CatanRandomGenerator());
 
     int requestX = 3;
@@ -585,7 +671,7 @@ public class CatanGameEngineTest {
   @Test
   public void itMustProcessAValidBuildStructureRequest()
       throws InvalidBoardDimensionsException, InvalidBoardElementException, NonNullInputException,
-          NonVoidCollectionException {
+          NonVoidCollectionException, InvalidLogException {
 
     Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
 
@@ -602,6 +688,12 @@ public class CatanGameEngineTest {
           fail();
         };
 
+    Collection<ILogEntry> entries = new ArrayList<ILogEntry>();
+    ArrayList<IRequest> entryRequests = new ArrayList<IRequest>();
+
+    entryRequests.add(new StartTurnRequest(player));
+    entries.add(new LogEntry(6, entryRequests));
+
     CatanGameEngine engine =
         new CatanGameEngine(
             board,
@@ -611,6 +703,7 @@ public class CatanGameEngineTest {
             0,
             true,
             errorHandler,
+            new LinearGameLog(entries),
             new CatanRandomGenerator());
 
     int requestX = 2;
@@ -638,7 +731,7 @@ public class CatanGameEngineTest {
   @Test
   public void itMustProcessAValidEndTurnRequest()
       throws NonNullInputException, NonVoidCollectionException, InvalidBoardDimensionsException,
-          InvalidBoardElementException {
+          InvalidBoardElementException, InvalidLogException {
 
     IPlayer player = new Player(0, new ResourceManager());
     IPlayer[] players = {player};
@@ -647,6 +740,12 @@ public class CatanGameEngineTest {
         (request) -> {
           fail();
         };
+
+    Collection<ILogEntry> entries = new ArrayList<ILogEntry>();
+    ArrayList<IRequest> entryRequests = new ArrayList<IRequest>();
+
+    entryRequests.add(new StartTurnRequest(player));
+    entries.add(new LogEntry(6, entryRequests));
 
     CatanGameEngine engine =
         new CatanGameEngine(
@@ -657,6 +756,7 @@ public class CatanGameEngineTest {
             0,
             true,
             errorHandler,
+            new LinearGameLog(entries),
             new CatanRandomGenerator());
 
     IRequest[] requests = {new EndTurnRequest(player)};
@@ -671,7 +771,7 @@ public class CatanGameEngineTest {
   @Test
   public void itMustProcessAValidUpgradeStructureRequest()
       throws InvalidBoardDimensionsException, InvalidBoardElementException, NonNullInputException,
-          NonVoidCollectionException {
+          NonVoidCollectionException, InvalidLogException {
 
     Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
 
@@ -689,6 +789,12 @@ public class CatanGameEngineTest {
           fail();
         };
 
+    Collection<ILogEntry> entries = new ArrayList<ILogEntry>();
+    ArrayList<IRequest> entryRequests = new ArrayList<IRequest>();
+
+    entryRequests.add(new StartTurnRequest(player));
+    entries.add(new LogEntry(6, entryRequests));
+
     CatanGameEngine engine =
         new CatanGameEngine(
             board,
@@ -698,6 +804,7 @@ public class CatanGameEngineTest {
             0,
             true,
             errorHandler,
+            new LinearGameLog(entries),
             new CatanRandomGenerator());
 
     int requestX = 2;
@@ -726,7 +833,7 @@ public class CatanGameEngineTest {
   @Test
   public void itMustProcessAValidStartTurnRequest()
       throws NonNullInputException, NonVoidCollectionException, InvalidBoardDimensionsException,
-          InvalidBoardElementException {
+          InvalidBoardElementException, InvalidLogException {
 
     IPlayer player = new Player(0, new ResourceManager());
     IPlayer[] players = {player};
@@ -746,6 +853,7 @@ public class CatanGameEngineTest {
             0,
             false,
             errorHandler,
+            new LinearGameLog(),
             new ConstantNumberGenerator(6));
 
     IRequest[] requests = {new StartTurnRequest(player)};
@@ -760,7 +868,7 @@ public class CatanGameEngineTest {
   @Test
   public void itMustProduceResourcesAtTheStartOfATurn()
       throws InvalidBoardDimensionsException, InvalidBoardElementException, NonNullInputException,
-          NonVoidCollectionException {
+          NonVoidCollectionException, InvalidLogException {
 
     Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
 
@@ -790,6 +898,7 @@ public class CatanGameEngineTest {
             0,
             false,
             errorHandler,
+            new LinearGameLog(),
             new ConstantNumberGenerator(6));
 
     IRequest[] requests = {new StartTurnRequest(player)};
