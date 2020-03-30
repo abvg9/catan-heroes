@@ -7,7 +7,7 @@ plugins {
 }
 
 group 'com.ucm.catan.dasi'
-version '1.0-SNAPSHOT'
+version '0.1.0'
 
 sourceCompatibility = 1.11
 
