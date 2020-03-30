@@ -47,6 +47,48 @@ import org.junit.jupiter.api.Test;
 
 public class CatanGameEngineTest {
 
+  @DisplayName("it must end the game if the active player won")
+  @Tag("CatanBoardEngine")
+  @Test
+  public void itMustEndTheGameIfTheActivePlayerWon()
+      throws InvalidBoardDimensionsException, InvalidBoardElementException, NonNullInputException,
+          NonVoidCollectionException {
+
+    Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
+
+    playerResources.put(ResourceType.BRICK, 1);
+    playerResources.put(ResourceType.GRAIN, 1);
+    playerResources.put(ResourceType.LUMBER, 1);
+    playerResources.put(ResourceType.WOOL, 1);
+
+    IPlayer player1 = new Player(0, new ResourceManager(playerResources));
+    IPlayer[] players = {player1};
+
+    ICatanEditableBoard board = buildStandardBoard(player1);
+
+    Consumer<IRequest> errorHandler =
+        (request) -> {
+          fail();
+        };
+
+    CatanGameEngine engine =
+        new CatanGameEngine(
+            board, players, 1, GameState.NORMAL, 0, true, errorHandler, new CatanRandomGenerator());
+
+    int requestX = 2;
+    int requestY = 2;
+
+    IRequest[] requests = {
+      new BuildStructureRequest(player1, StructureType.SETTLEMENT, requestX, requestY),
+      new EndTurnRequest(player1)
+    };
+
+    engine.processRequests(requests);
+
+    assertSame(GameState.ENDED, engine.getState());
+    assertSame(player1, engine.getActivePlayer());
+  }
+
   @DisplayName(
       "It must not process a valid build connection request if the player has not enought resources")
   @Tag(value = "CatanBoardEngine")
@@ -55,9 +97,7 @@ public class CatanGameEngineTest {
       throws InvalidBoardDimensionsException, InvalidBoardElementException, NonNullInputException,
           NonVoidCollectionException {
 
-    Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
-
-    IPlayer player1 = new Player(0, new ResourceManager(playerResources));
+    IPlayer player1 = new Player(0, new ResourceManager());
     IPlayer[] players = {player1};
     ICatanEditableBoard board = buildStandardBoard(player1);
 
@@ -70,7 +110,14 @@ public class CatanGameEngineTest {
 
     CatanGameEngine engine =
         new CatanGameEngine(
-            board, players, GameState.NORMAL, 0, true, errorHandler, new CatanRandomGenerator());
+            board,
+            players,
+            10,
+            GameState.NORMAL,
+            0,
+            true,
+            errorHandler,
+            new CatanRandomGenerator());
 
     int requestX = 3;
     int requestY = 2;
@@ -112,7 +159,14 @@ public class CatanGameEngineTest {
 
     CatanGameEngine engine =
         new CatanGameEngine(
-            board, players, GameState.NORMAL, 0, true, errorHandler, new CatanRandomGenerator());
+            board,
+            players,
+            10,
+            GameState.NORMAL,
+            0,
+            true,
+            errorHandler,
+            new CatanRandomGenerator());
 
     int requestX = 3;
     int requestY = 2;
@@ -152,7 +206,14 @@ public class CatanGameEngineTest {
 
     CatanGameEngine engine =
         new CatanGameEngine(
-            board, players, GameState.NORMAL, 0, false, errorHandler, new CatanRandomGenerator());
+            board,
+            players,
+            10,
+            GameState.NORMAL,
+            0,
+            false,
+            errorHandler,
+            new CatanRandomGenerator());
 
     int requestX = 3;
     int requestY = 2;
@@ -195,6 +256,7 @@ public class CatanGameEngineTest {
         new CatanGameEngine(
             board,
             players,
+            10,
             GameState.FOUNDATION,
             0,
             false,
@@ -235,7 +297,14 @@ public class CatanGameEngineTest {
 
     CatanGameEngine engine =
         new CatanGameEngine(
-            board, players, GameState.NORMAL, 0, true, errorHandler, new CatanRandomGenerator());
+            board,
+            players,
+            10,
+            GameState.NORMAL,
+            0,
+            true,
+            errorHandler,
+            new CatanRandomGenerator());
 
     int requestX = 2;
     int requestY = 2;
@@ -278,7 +347,14 @@ public class CatanGameEngineTest {
 
     CatanGameEngine engine =
         new CatanGameEngine(
-            board, players, GameState.NORMAL, 0, true, errorHandler, new CatanRandomGenerator());
+            board,
+            players,
+            10,
+            GameState.NORMAL,
+            0,
+            true,
+            errorHandler,
+            new CatanRandomGenerator());
 
     int requestX = 2;
     int requestY = 2;
@@ -319,7 +395,14 @@ public class CatanGameEngineTest {
 
     CatanGameEngine engine =
         new CatanGameEngine(
-            board, players, GameState.NORMAL, 0, false, errorHandler, new CatanRandomGenerator());
+            board,
+            players,
+            10,
+            GameState.NORMAL,
+            0,
+            false,
+            errorHandler,
+            new CatanRandomGenerator());
 
     int requestX = 2;
     int requestY = 2;
@@ -363,6 +446,7 @@ public class CatanGameEngineTest {
         new CatanGameEngine(
             board,
             players,
+            10,
             GameState.FOUNDATION,
             0,
             true,
@@ -400,7 +484,7 @@ public class CatanGameEngineTest {
 
     CatanGameEngine engine =
         new CatanGameEngine(
-            board, players, GameState.ENDED, 0, true, errorHandler, new CatanRandomGenerator());
+            board, players, 10, GameState.ENDED, 0, true, errorHandler, new CatanRandomGenerator());
 
     IRequest[] requests = {new EndTurnRequest(player)};
 
@@ -428,7 +512,14 @@ public class CatanGameEngineTest {
 
     CatanGameEngine engine =
         new CatanGameEngine(
-            board, players, GameState.ENDED, 0, false, errorHandler, new CatanRandomGenerator());
+            board,
+            players,
+            10,
+            GameState.ENDED,
+            0,
+            false,
+            errorHandler,
+            new CatanRandomGenerator());
 
     IRequest[] requests = {new StartTurnRequest(player)};
 
@@ -461,7 +552,14 @@ public class CatanGameEngineTest {
 
     CatanGameEngine engine =
         new CatanGameEngine(
-            board, players, GameState.NORMAL, 0, true, errorHandler, new CatanRandomGenerator());
+            board,
+            players,
+            10,
+            GameState.NORMAL,
+            0,
+            true,
+            errorHandler,
+            new CatanRandomGenerator());
 
     int requestX = 3;
     int requestY = 2;
@@ -506,7 +604,14 @@ public class CatanGameEngineTest {
 
     CatanGameEngine engine =
         new CatanGameEngine(
-            board, players, GameState.NORMAL, 0, true, errorHandler, new CatanRandomGenerator());
+            board,
+            players,
+            10,
+            GameState.NORMAL,
+            0,
+            true,
+            errorHandler,
+            new CatanRandomGenerator());
 
     int requestX = 2;
     int requestY = 2;
@@ -545,7 +650,14 @@ public class CatanGameEngineTest {
 
     CatanGameEngine engine =
         new CatanGameEngine(
-            board, players, GameState.NORMAL, 0, true, errorHandler, new CatanRandomGenerator());
+            board,
+            players,
+            10,
+            GameState.NORMAL,
+            0,
+            true,
+            errorHandler,
+            new CatanRandomGenerator());
 
     IRequest[] requests = {new EndTurnRequest(player)};
 
@@ -579,7 +691,14 @@ public class CatanGameEngineTest {
 
     CatanGameEngine engine =
         new CatanGameEngine(
-            board, players, GameState.NORMAL, 0, true, errorHandler, new CatanRandomGenerator());
+            board,
+            players,
+            10,
+            GameState.NORMAL,
+            0,
+            true,
+            errorHandler,
+            new CatanRandomGenerator());
 
     int requestX = 2;
     int requestY = 2;
@@ -622,6 +741,7 @@ public class CatanGameEngineTest {
         new CatanGameEngine(
             board,
             players,
+            10,
             GameState.NORMAL,
             0,
             false,
@@ -665,6 +785,7 @@ public class CatanGameEngineTest {
         new CatanGameEngine(
             board,
             players,
+            10,
             GameState.NORMAL,
             0,
             false,
