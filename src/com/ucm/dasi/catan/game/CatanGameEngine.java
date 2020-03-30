@@ -11,9 +11,12 @@ import com.ucm.dasi.catan.board.structure.BoardStructure;
 import com.ucm.dasi.catan.board.structure.StructureType;
 import com.ucm.dasi.catan.exception.NonNullInputException;
 import com.ucm.dasi.catan.exception.NonVoidCollectionException;
+import com.ucm.dasi.catan.game.exception.InvalidLogException;
 import com.ucm.dasi.catan.game.generator.INumberGenerator;
 import com.ucm.dasi.catan.game.handler.GameEngineHandlersMap;
 import com.ucm.dasi.catan.game.handler.IGameEngineHandlersMap;
+import com.ucm.dasi.catan.game.log.IGameLog;
+import com.ucm.dasi.catan.game.log.ILogEntry;
 import com.ucm.dasi.catan.player.IPlayer;
 import com.ucm.dasi.catan.request.IBuildConnectionRequest;
 import com.ucm.dasi.catan.request.IBuildStructureRequest;
@@ -35,6 +38,8 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
 
   private Consumer<IRequest> errorHandler;
 
+  private IGameLog gameLog;
+
   private IGameEngineHandlersMap handlersMap;
 
   private INumberGenerator numberGenerator;
@@ -49,16 +54,25 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
       int turnIndex,
       boolean turnStarted,
       Consumer<IRequest> errorHandler,
+      IGameLog gameLog,
       INumberGenerator numberGenerator)
-      throws NonNullInputException, NonVoidCollectionException {
+      throws NonNullInputException, NonVoidCollectionException, InvalidLogException {
 
     super(board, players, pointsToWin, state, turnIndex, turnStarted);
 
+    checkLog(gameLog);
+
     connectionCostProvider = new DefaultConnectionCostProvider();
     this.errorHandler = errorHandler;
+    this.gameLog = gameLog;
     handlersMap = new GameEngineHandlersMap(generateMap());
     this.numberGenerator = numberGenerator;
     structureCostProvider = new DefaultStructureCostProvider();
+  }
+
+  @Override
+  public ILogEntry getLog(int turn) {
+    return gameLog.get(turn);
   }
 
   @Override
@@ -70,6 +84,15 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
 
   protected void handleRequestError(IRequest request) {
     errorHandler.accept(request);
+  }
+
+  private void checkLog(IGameLog log) throws InvalidLogException {
+    int entries = log.size();
+    int expectedEntries = isTurnStarted() ? getTurnNumber() + 1 : getTurnNumber();
+
+    if (entries != expectedEntries) {
+      throw new InvalidLogException(expectedEntries);
+    }
   }
 
   private boolean isConnectionConnected(IPlayer player, int x, int y) {
