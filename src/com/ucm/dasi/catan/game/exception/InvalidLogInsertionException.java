@@ -7,8 +7,10 @@ public class InvalidLogInsertionException extends RuntimeException {
   public InvalidLogInsertionException(int entries) {
     super(composeMessage(entries));
   }
-  
+
   private static String composeMessage(int entries) {
-    return String.format("It's not allowed to insert an entry in a turn greater than %d. The log entry for the turn %d is missing.", entries, entries);
+    return String.format(
+        "It's not allowed to insert an entry in a turn greater than %d. The log entry for the turn %d is missing.",
+        entries, entries);
   }
 }

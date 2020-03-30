@@ -20,7 +20,7 @@ public class CatanGame<TBoard extends ICatanBoard> implements ICatanGame<TBoard>
   private IPointsCalculator pointsCalculator;
 
   private GameState state;
-  
+
   private int turnNumber;
 
   private boolean turnStarted;
@@ -77,7 +77,7 @@ public class CatanGame<TBoard extends ICatanBoard> implements ICatanGame<TBoard>
   public GameState getState() {
     return state;
   }
-  
+
   @Override
   public int getTurnNumber() {
     return turnNumber;
@@ -141,7 +141,7 @@ public class CatanGame<TBoard extends ICatanBoard> implements ICatanGame<TBoard>
       throw new NonNullInputException();
     }
   }
-  
+
   private int getTurnIndex() {
     return turnNumber % players.length;
   }
