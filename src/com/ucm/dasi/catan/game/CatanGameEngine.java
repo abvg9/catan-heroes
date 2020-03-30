@@ -17,6 +17,7 @@ import com.ucm.dasi.catan.game.handler.GameEngineHandlersMap;
 import com.ucm.dasi.catan.game.handler.IGameEngineHandlersMap;
 import com.ucm.dasi.catan.game.log.IGameLog;
 import com.ucm.dasi.catan.game.log.ILogEntry;
+import com.ucm.dasi.catan.game.log.LogEntry;
 import com.ucm.dasi.catan.player.IPlayer;
 import com.ucm.dasi.catan.request.IBuildConnectionRequest;
 import com.ucm.dasi.catan.request.IBuildStructureRequest;
@@ -30,6 +31,7 @@ import com.ucm.dasi.catan.resource.production.IResourceProduction;
 import com.ucm.dasi.catan.resource.provider.DefaultConnectionCostProvider;
 import com.ucm.dasi.catan.resource.provider.DefaultStructureCostProvider;
 import com.ucm.dasi.catan.resource.provider.IResourceManagerProvider;
+import java.util.ArrayList;
 import java.util.function.Consumer;
 
 public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements ICatanGameEngine {
@@ -207,6 +209,8 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
     } catch (InvalidBoardElementException | NotEnoughtResourcesException e) {
       handleRequestError(request);
     }
+
+    gameLog.get(getTurnNumber()).add(request);
   }
 
   private void handleBuildStructureRequest(IBuildStructureRequest request) {
@@ -243,6 +247,8 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
     } catch (InvalidBoardElementException | NotEnoughtResourcesException e) {
       handleRequestError(request);
     }
+
+    gameLog.get(getTurnNumber()).add(request);
   }
 
   private void handleEndTurnRequest(IEndTurnRequest request) {
@@ -263,6 +269,8 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
     }
 
     switchTurnStarted();
+
+    gameLog.get(getTurnNumber()).add(request);
 
     if (hasActivePlayerWon()) {
       endGame();
@@ -288,9 +296,15 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
       return;
     }
 
-    produceResources();
-
     switchTurnStarted();
+
+    int productionNumber = numberGenerator.getNextProductionNumber();
+    produceResources(productionNumber);
+
+    ArrayList<IRequest> requestList = new ArrayList<IRequest>();
+    requestList.add(request);
+
+    gameLog.set(getTurnNumber(), new LogEntry(productionNumber, requestList));
   }
 
   private void handleUpgradeStructureRequest(IUpgradeStructureRequest request) {
@@ -322,6 +336,8 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
     } catch (InvalidBoardElementException | NotEnoughtResourcesException e) {
       handleRequestError(request);
     }
+
+    gameLog.get(getTurnNumber()).add(request);
   }
 
   private void processTurnRequest(IRequest request) {
@@ -332,9 +348,13 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
     }
   }
 
-  private void produceResources() {
+  /**
+   * Produces resources
+   *
+   * @param productionNumber Production number to use
+   */
+  private void produceResources(int productionNumber) {
 
-    int productionNumber = numberGenerator.getNextProductionNumber();
     IResourceProduction production = getBoard().getProduction(productionNumber);
 
     for (IPlayer player : getPlayers()) {
