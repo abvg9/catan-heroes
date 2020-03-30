@@ -1,6 +1,7 @@
 package com.ucm.dasi.catan.game.log;
 
 import com.ucm.dasi.catan.request.IRequest;
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class LogEntry implements ILogEntry {
@@ -12,7 +13,7 @@ public class LogEntry implements ILogEntry {
   public LogEntry(int productionNumber, Collection<IRequest> requests) {
 
     this.productionNumber = productionNumber;
-    this.requests = requests;
+    this.requests = new ArrayList<IRequest>(requests);
   }
 
   @Override
