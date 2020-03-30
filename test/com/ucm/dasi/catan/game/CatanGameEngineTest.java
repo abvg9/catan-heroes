@@ -77,9 +77,9 @@ public class CatanGameEngineTest {
 
     int requestX = 2;
     int requestY = 2;
-    
+
     IRequest[] requests = {
-        new BuildStructureRequest(player1, StructureType.SETTLEMENT, requestX, requestY),
+      new BuildStructureRequest(player1, StructureType.SETTLEMENT, requestX, requestY),
       new EndTurnRequest(player1)
     };
 
