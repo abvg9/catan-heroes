@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.TreeMap;
 
 import com.ucm.dasi.catan.exception.NonNullInputException;
+import com.ucm.dasi.catan.game.exception.InvalidLogInsertionException;
 
 public class LinearGameLog implements IGameLog {
   
@@ -39,6 +40,12 @@ public class LinearGameLog implements IGameLog {
 
   @Override
   public void set(int turn, ILogEntry entry) {
+    int size = size();
+    
+    if (turn > size) {
+      throw new InvalidLogInsertionException(size);
+    }
+    
     entries.put(turn, entry);
   }
   
