@@ -21,7 +21,7 @@ public class CatanGame<TBoard extends ICatanBoard> implements ICatanGame<TBoard>
 
   private GameState state;
 
-  private int turnIndex;
+  private int turnNumber;
 
   private boolean turnStarted;
 
@@ -30,27 +30,27 @@ public class CatanGame<TBoard extends ICatanBoard> implements ICatanGame<TBoard>
       IPlayer[] players,
       int pointsToWin,
       GameState state,
-      int turnIndex,
+      int turnNumber,
       boolean turnStarted)
       throws NonNullInputException, NonVoidCollectionException {
 
     checkBoard(board);
     checkPlayers(players);
     checkState(state);
-    checkTurnIndex(players, turnIndex);
+    checkTurnIndex(players, turnNumber);
 
     this.board = board;
     this.players = players;
     pointsCalculator = new PointsCalculator();
     this.pointsToWin = pointsToWin;
     this.state = state;
-    this.turnIndex = turnIndex;
+    this.turnNumber = turnNumber;
     this.turnStarted = turnStarted;
   }
 
   @Override
   public IPlayer getActivePlayer() {
-    return players[turnIndex];
+    return players[getTurnIndex()];
   }
 
   @Override
@@ -78,6 +78,12 @@ public class CatanGame<TBoard extends ICatanBoard> implements ICatanGame<TBoard>
     return state;
   }
 
+  @Override
+  public int getTurnNumber() {
+    return turnNumber;
+  }
+
+  @Override
   public boolean isTurnStarted() {
     return turnStarted;
   }
@@ -95,7 +101,7 @@ public class CatanGame<TBoard extends ICatanBoard> implements ICatanGame<TBoard>
   }
 
   protected void passTurn() {
-    turnIndex = (turnIndex + 1) % players.length;
+    ++turnNumber;
   }
 
   protected void switchTurnStarted() {
@@ -125,7 +131,7 @@ public class CatanGame<TBoard extends ICatanBoard> implements ICatanGame<TBoard>
   }
 
   private void checkTurnIndex(IPlayer[] players, int turnIndex) {
-    if (turnIndex < 0 || turnIndex >= players.length) {
+    if (turnIndex < 0) {
       throw new InvalidTurnIndexException(turnIndex, 0, players.length - 1);
     }
   }
@@ -134,5 +140,9 @@ public class CatanGame<TBoard extends ICatanBoard> implements ICatanGame<TBoard>
     if (state == null) {
       throw new NonNullInputException();
     }
+  }
+
+  private int getTurnIndex() {
+    return turnNumber % players.length;
   }
 }
