@@ -3,6 +3,9 @@ package com.ucm.dasi.catan.game;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
 
 import com.ucm.dasi.catan.board.BoardElementType;
 import com.ucm.dasi.catan.board.CatanEditableBoard;
@@ -26,6 +29,7 @@ import com.ucm.dasi.catan.exception.NonVoidCollectionException;
 import com.ucm.dasi.catan.game.exception.InvalidLogException;
 import com.ucm.dasi.catan.game.generator.CatanRandomGenerator;
 import com.ucm.dasi.catan.game.generator.ConstantNumberGenerator;
+import com.ucm.dasi.catan.game.log.IGameLog;
 import com.ucm.dasi.catan.game.log.ILogEntry;
 import com.ucm.dasi.catan.game.log.LinearGameLog;
 import com.ucm.dasi.catan.game.log.LogEntry;
@@ -39,6 +43,7 @@ import com.ucm.dasi.catan.request.StartTurnRequest;
 import com.ucm.dasi.catan.request.UpgradeStructureRequest;
 import com.ucm.dasi.catan.resource.IResourceStorage;
 import com.ucm.dasi.catan.resource.ResourceManager;
+import com.ucm.dasi.catan.resource.ResourceStorage;
 import com.ucm.dasi.catan.resource.ResourceType;
 import com.ucm.dasi.catan.resource.provider.DefaultTerrainProductionProvider;
 import java.util.ArrayList;
@@ -50,6 +55,7 @@ import java.util.function.Consumer;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 public class CatanGameEngineTest {
 
@@ -107,6 +113,266 @@ public class CatanGameEngineTest {
 
     assertSame(GameState.ENDED, engine.getState());
     assertSame(player1, engine.getActivePlayer());
+  }
+
+  @DisplayName("It must append a request to the log while processing a build connection request")
+  @Tag(value = "CatanBoardEngine")
+  @Test
+  public void itMustLogABuildConnectionRequest()
+      throws NonNullInputException, NonVoidCollectionException, InvalidLogException,
+          InvalidBoardElementException, InvalidBoardDimensionsException {
+
+    Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
+
+    playerResources.put(ResourceType.BRICK, 1);
+    playerResources.put(ResourceType.GRAIN, 1);
+    playerResources.put(ResourceType.LUMBER, 1);
+    playerResources.put(ResourceType.WOOL, 1);
+
+    IPlayer player = new Player(0, new ResourceManager(playerResources));
+    IPlayer[] players = {player};
+    ICatanEditableBoard board = buildStandardBoard(player);
+
+    int requestX = 3;
+    int requestY = 2;
+
+    Consumer<IRequest> errorHandler =
+        (request) -> {
+          fail();
+        };
+
+    Collection<ILogEntry> entries = new ArrayList<ILogEntry>();
+    ArrayList<IRequest> entryRequests = new ArrayList<IRequest>();
+
+    entryRequests.add(new StartTurnRequest(player));
+    entries.add(Mockito.spy(new LogEntry(6, entryRequests)));
+
+    IGameLog originalLog = new LinearGameLog(entries);
+    IGameLog log = Mockito.spy(originalLog);
+
+    int turn = 0;
+
+    CatanGameEngine engine =
+        new CatanGameEngine(
+            board,
+            players,
+            10,
+            GameState.NORMAL,
+            turn,
+            true,
+            errorHandler,
+            log,
+            new ConstantNumberGenerator(6));
+
+    IRequest request = new BuildConnectionRequest(player, ConnectionType.ROAD, requestX, requestY);
+    IRequest[] requests = {request};
+
+    engine.processRequests(requests);
+
+    verify(log.get(turn)).add(request);
+  }
+
+  @DisplayName("It must append a request to the log while processing a build structure request")
+  @Tag(value = "CatanBoardEngine")
+  @Test
+  public void itMustLogABuildStructureRequest()
+      throws NonNullInputException, NonVoidCollectionException, InvalidLogException,
+          InvalidBoardElementException, InvalidBoardDimensionsException {
+
+    Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
+
+    playerResources.put(ResourceType.BRICK, 1);
+    playerResources.put(ResourceType.GRAIN, 1);
+    playerResources.put(ResourceType.LUMBER, 1);
+    playerResources.put(ResourceType.WOOL, 1);
+
+    IPlayer player = new Player(0, new ResourceManager(playerResources));
+    IPlayer[] players = {player};
+    ICatanEditableBoard board = buildStandardBoard(player);
+
+    int requestX = 2;
+    int requestY = 2;
+
+    Consumer<IRequest> errorHandler =
+        (request) -> {
+          fail();
+        };
+
+    Collection<ILogEntry> entries = new ArrayList<ILogEntry>();
+    ArrayList<IRequest> entryRequests = new ArrayList<IRequest>();
+
+    entryRequests.add(new StartTurnRequest(player));
+    entries.add(Mockito.spy(new LogEntry(6, entryRequests)));
+
+    IGameLog originalLog = new LinearGameLog(entries);
+    IGameLog log = Mockito.spy(originalLog);
+
+    int turn = 0;
+
+    CatanGameEngine engine =
+        new CatanGameEngine(
+            board,
+            players,
+            10,
+            GameState.NORMAL,
+            turn,
+            true,
+            errorHandler,
+            log,
+            new ConstantNumberGenerator(6));
+
+    IRequest request =
+        new BuildStructureRequest(player, StructureType.SETTLEMENT, requestX, requestY);
+    IRequest[] requests = {request};
+
+    engine.processRequests(requests);
+
+    verify(log.get(turn)).add(request);
+  }
+
+  @DisplayName("It must log a new entry while processing a start turn request")
+  @Tag(value = "CatanBoardEngine")
+  @Test
+  public void itMustLogAStartTurnRequest()
+      throws NonNullInputException, NonVoidCollectionException, InvalidLogException,
+          InvalidBoardElementException, InvalidBoardDimensionsException {
+    IPlayer player = new Player(0, new ResourceManager());
+    IPlayer[] players = {player};
+    ICatanEditableBoard board = buildStandardBoard(player);
+
+    Consumer<IRequest> errorHandler =
+        (request) -> {
+          fail();
+        };
+
+    IGameLog log = Mockito.spy(new LinearGameLog());
+
+    int turn = 0;
+
+    CatanGameEngine engine =
+        new CatanGameEngine(
+            board,
+            players,
+            10,
+            GameState.NORMAL,
+            turn,
+            false,
+            errorHandler,
+            log,
+            new ConstantNumberGenerator(6));
+
+    IRequest request = new StartTurnRequest(player);
+    IRequest[] requests = {request};
+
+    engine.processRequests(requests);
+
+    verify(log).set(eq(turn), any());
+  }
+
+  @DisplayName("It must append a request to the log while processing an end turn request")
+  @Tag(value = "CatanBoardEngine")
+  @Test
+  public void itMustLogAnEndTurnRequest()
+      throws NonNullInputException, NonVoidCollectionException, InvalidLogException,
+          InvalidBoardElementException, InvalidBoardDimensionsException {
+    IPlayer player = new Player(0, new ResourceManager());
+    IPlayer[] players = {player};
+    ICatanEditableBoard board = buildStandardBoard(player);
+
+    Consumer<IRequest> errorHandler =
+        (request) -> {
+          fail();
+        };
+
+    Collection<ILogEntry> entries = new ArrayList<ILogEntry>();
+    ArrayList<IRequest> entryRequests = new ArrayList<IRequest>();
+
+    entryRequests.add(new StartTurnRequest(player));
+    entries.add(Mockito.spy(new LogEntry(6, entryRequests)));
+
+    IGameLog originalLog = new LinearGameLog(entries);
+    IGameLog log = Mockito.spy(originalLog);
+
+    int turn = 0;
+
+    CatanGameEngine engine =
+        new CatanGameEngine(
+            board,
+            players,
+            10,
+            GameState.NORMAL,
+            turn,
+            true,
+            errorHandler,
+            log,
+            new ConstantNumberGenerator(6));
+
+    IRequest request = new EndTurnRequest(player);
+    IRequest[] requests = {request};
+
+    engine.processRequests(requests);
+
+    verify(log.get(turn)).add(request);
+  }
+
+  @DisplayName("It must append a request to the log while processing an update structure request")
+  @Tag(value = "CatanBoardEngine")
+  @Test
+  public void itMustLogAnUpdateStructureRequest()
+      throws NonNullInputException, NonVoidCollectionException, InvalidLogException,
+          InvalidBoardElementException, InvalidBoardDimensionsException {
+
+    Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
+
+    playerResources.put(ResourceType.GRAIN, 2);
+    playerResources.put(ResourceType.ORE, 3);
+
+    IPlayer player = new Player(0, new ResourceManager(playerResources));
+    IPlayer[] players = {player};
+    ICatanEditableBoard board = buildStandardBoard(player);
+
+    int requestX = 2;
+    int requestY = 2;
+
+    board.build(
+        new BoardStructure(player, new ResourceStorage(), StructureType.SETTLEMENT),
+        requestX,
+        requestY);
+
+    Consumer<IRequest> errorHandler =
+        (request) -> {
+          fail();
+        };
+
+    Collection<ILogEntry> entries = new ArrayList<ILogEntry>();
+    ArrayList<IRequest> entryRequests = new ArrayList<IRequest>();
+
+    entryRequests.add(new StartTurnRequest(player));
+    entries.add(Mockito.spy(new LogEntry(6, entryRequests)));
+
+    IGameLog originalLog = new LinearGameLog(entries);
+    IGameLog log = Mockito.spy(originalLog);
+
+    int turn = 0;
+
+    CatanGameEngine engine =
+        new CatanGameEngine(
+            board,
+            players,
+            10,
+            GameState.NORMAL,
+            turn,
+            true,
+            errorHandler,
+            log,
+            new ConstantNumberGenerator(6));
+
+    IRequest request = new UpgradeStructureRequest(player, StructureType.CITY, requestX, requestY);
+    IRequest[] requests = {request};
+
+    engine.processRequests(requests);
+
+    verify(log.get(turn)).add(request);
   }
 
   @DisplayName(
@@ -726,7 +992,7 @@ public class CatanGameEngineTest {
     assertSame(0, player.getResourceManager().getResource(ResourceType.WOOL));
   }
 
-  @DisplayName("It must process a valid ent turn request")
+  @DisplayName("It must process a valid end turn request")
   @Tag(value = "CatanBoardEngine")
   @Test
   public void itMustProcessAValidEndTurnRequest()
