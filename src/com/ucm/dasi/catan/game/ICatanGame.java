@@ -17,5 +17,7 @@ public interface ICatanGame<TBoard extends ICatanBoard> {
 
   GameState getState();
 
+  int getTurnNumber();
+
   boolean isTurnStarted();
 }
