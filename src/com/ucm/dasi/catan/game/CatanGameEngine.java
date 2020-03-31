@@ -164,6 +164,9 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
         RequestType.BUILD_CONNECTION,
         (IBuildConnectionRequest request) -> handleBuildConnectionRequest(request));
     map.put(
+        RequestType.BUILD_INITIAL_STRUCTURE,
+        (IBuildStructureRequest request) -> handleBuildInitialStructureRequest(request));
+    map.put(
         RequestType.BUILD_STRUCTURE,
         (IBuildStructureRequest request) -> handleBuildStructureRequest(request));
     map.put(RequestType.END_TURN, (IEndTurnRequest request) -> handleEndTurnRequest(request));
@@ -207,6 +210,37 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
       getBoard().build(element, request.getX(), request.getY());
       getActivePlayer().getResourceManager().substract(element.getCost());
     } catch (InvalidBoardElementException | NotEnoughtResourcesException e) {
+      handleRequestError(request);
+    }
+
+    gameLog.get(getTurnNumber()).add(request);
+  }
+
+  private void handleBuildInitialStructureRequest(IBuildStructureRequest request) {
+    if (!isTurnToBuildInitialStructure()) {
+      handleRequestError(request);
+      return;
+    }
+
+    if (!request.getPlayer().equals(getActivePlayer())) {
+      handleRequestError(request);
+      return;
+    }
+
+    if (!isTurnStarted()) {
+      handleRequestError(request);
+      return;
+    }
+
+    BoardStructure element =
+        new BoardStructure(
+            request.getPlayer(),
+            structureCostProvider.getResourceManager(request.getStructureType()),
+            request.getStructureType());
+
+    try {
+      getBoard().build(element, request.getX(), request.getY());
+    } catch (InvalidBoardElementException e) {
       handleRequestError(request);
     }
 
@@ -338,6 +372,11 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
     }
 
     gameLog.get(getTurnNumber()).add(request);
+  }
+
+  private boolean isTurnToBuildInitialStructure() {
+    return getState() == GameState.FOUNDATION
+        && Math.floor(getTurnNumber() / getPlayers().length) % 2 == 0;
   }
 
   private void processTurnRequest(IRequest request) {
