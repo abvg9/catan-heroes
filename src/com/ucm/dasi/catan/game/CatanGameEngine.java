@@ -232,6 +232,11 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
       return;
     }
 
+    if (isRequestPerformedAt(getTurnNumber(), RequestType.BUILD_INITIAL_STRUCTURE)) {
+      handleRequestError(request);
+      return;
+    }
+
     BoardStructure element =
         new BoardStructure(
             request.getPlayer(),
@@ -372,6 +377,24 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
     }
 
     gameLog.get(getTurnNumber()).add(request);
+  }
+
+  private boolean isRequestPerformedAt(int turn, RequestType type) {
+    ILogEntry turnEntry = getLog(turn);
+
+    if (turnEntry == null) {
+      return false;
+    }
+
+    Iterable<IRequest> turnRequests = turnEntry.getRequests();
+
+    for (IRequest turnRequest : turnRequests) {
+      if (turnRequest != null && turnRequest.getType() == type) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   private boolean isTurnToBuildInitialStructure() {
