@@ -3,6 +3,7 @@ package com.ucm.dasi.catan.board.production;
 import com.ucm.dasi.catan.board.BoardElementType;
 import com.ucm.dasi.catan.board.ICatanBoard;
 import com.ucm.dasi.catan.board.element.IBoardElement;
+import com.ucm.dasi.catan.board.exception.InvalidBoardElementException;
 import com.ucm.dasi.catan.board.group.StructureTerrainTypesPair;
 import com.ucm.dasi.catan.board.structure.IBoardStructure;
 import com.ucm.dasi.catan.board.terrain.IBoardTerrain;
@@ -50,7 +51,7 @@ public class BoardProductionManager implements IBoardProductionManager {
     return new ResourceProduction(productionNumber, numberProduction);
   }
 
-  public void syncProductionOnStructureBuilt(int x, int y) {
+  public void syncProductionOnStructureBuilt(int x, int y) throws InvalidBoardElementException {
 
     if (!isInitialized()) {
       return;
@@ -58,7 +59,7 @@ public class BoardProductionManager implements IBoardProductionManager {
 
     IBoardElement element = board.get(x, y);
     if (element.getElementType() != BoardElementType.STRUCTURE) {
-      return;
+      throw new InvalidBoardElementException(element.getElementType());
     }
     IBoardStructure structure = (IBoardStructure) element;
     TreeMap<Integer, IResourceManager> production = getProductionOfStructure(structure, x, y);
@@ -66,7 +67,8 @@ public class BoardProductionManager implements IBoardProductionManager {
     addProductionOfPlayer(structure.getOwner(), production);
   }
 
-  public void syncProductionOnStructureUpgrade(IBoardStructure oldStructure, int x, int y) {
+  public void syncProductionOnStructureUpgrade(IBoardStructure oldStructure, int x, int y)
+      throws InvalidBoardElementException {
 
     if (!isInitialized()) {
       return;
