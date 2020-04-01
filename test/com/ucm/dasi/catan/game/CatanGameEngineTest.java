@@ -926,6 +926,54 @@ public class CatanGameEngineTest {
     assertSame(true, requestFailed.get());
   }
 
+  @DisplayName("It must not process two build initial structure requests at the same turn")
+  @Tag(value = "CatanBoardEngine")
+  @Test
+  public void itMustNotProcessTwoBuildInitialStructureRequestsAtTheSameTurn()
+      throws InvalidBoardDimensionsException, InvalidBoardElementException, NonNullInputException,
+          NonVoidCollectionException, InvalidLogException {
+    IPlayer player = new Player(0, new ResourceManager());
+    IPlayer[] players = {player};
+    ICatanEditableBoard board = buildStandardBoard(player);
+
+    AtomicBoolean requestFailed = new AtomicBoolean(false);
+
+    Consumer<IRequest> errorHandler =
+        (request) -> {
+          requestFailed.set(true);
+        };
+
+    Collection<ILogEntry> entries = new ArrayList<ILogEntry>();
+    ArrayList<IRequest> entryRequests = new ArrayList<IRequest>();
+
+    entryRequests.add(new StartTurnRequest(player));
+    entries.add(new LogEntry(6, entryRequests));
+
+    CatanGameEngine engine =
+        new CatanGameEngine(
+            board,
+            players,
+            10,
+            GameState.FOUNDATION,
+            0,
+            true,
+            errorHandler,
+            new LinearGameLog(entries),
+            new CatanRandomGenerator());
+
+    int requestX = 2;
+    int requestY = 4;
+
+    IRequest[] requests = {
+      new BuildInitialStructureRequest(player, StructureType.SETTLEMENT, requestX, requestY),
+      new BuildInitialStructureRequest(player, StructureType.SETTLEMENT, requestX, requestY),
+    };
+
+    engine.processRequests(requests);
+
+    assertSame(true, requestFailed.get());
+  }
+
   @DisplayName("It must process a valid build connection request")
   @Tag(value = "CatanBoardEngine")
   @Test
