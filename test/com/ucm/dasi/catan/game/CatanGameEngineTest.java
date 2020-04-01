@@ -61,6 +61,54 @@ import org.mockito.Mockito;
 
 public class CatanGameEngineTest {
 
+  public void itMustEndTheFoundationPhase()
+      throws InvalidBoardDimensionsException, InvalidBoardElementException, NonNullInputException,
+          NonVoidCollectionException, InvalidLogException {
+
+    IPlayer player1 = new Player(0, new ResourceManager());
+    IPlayer[] players = {player1};
+
+    ICatanEditableBoard board = buildStandardBoard(player1);
+
+    Consumer<IRequest> errorHandler =
+        (request) -> {
+          fail();
+        };
+
+    Collection<ILogEntry> entries = new ArrayList<ILogEntry>();
+
+    ArrayList<IRequest> entryFirstTurnsRequests = new ArrayList<IRequest>();
+    entryFirstTurnsRequests.add(new StartTurnRequest(player1));
+    entryFirstTurnsRequests.add(new EndTurnRequest(player1));
+
+    entries.add(new LogEntry(6, entryFirstTurnsRequests));
+    entries.add(new LogEntry(6, entryFirstTurnsRequests));
+    entries.add(new LogEntry(6, entryFirstTurnsRequests));
+
+    ArrayList<IRequest> entryLastTurnRequests = new ArrayList<IRequest>();
+    entryLastTurnRequests.add(new StartTurnRequest(player1));
+
+    entries.add(new LogEntry(6, entryLastTurnRequests));
+
+    CatanGameEngine engine =
+        new CatanGameEngine(
+            board,
+            players,
+            10,
+            GameState.NORMAL,
+            3,
+            true,
+            errorHandler,
+            new LinearGameLog(entries),
+            new CatanRandomGenerator());
+
+    IRequest[] requests = {new EndTurnRequest(player1)};
+
+    engine.processRequests(requests);
+
+    assertSame(GameState.NORMAL, engine.getState());
+  }
+
   @DisplayName("it must end the game if the active player won")
   @Tag("CatanBoardEngine")
   @Test

@@ -350,9 +350,9 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
 
     gameLog.get(getTurnNumber()).add(request);
 
-    if (hasActivePlayerWon()) {
-      endGame();
-    } else {
+    switchStateIfNeeded();
+
+    if (getState() != GameState.ENDED) {
       passTurn();
     }
   }
