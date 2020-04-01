@@ -986,7 +986,7 @@ public class CatanGameEngineTest {
     assertSame(true, requestFailed.get());
   }
 
-  @DisplayName("It must process a valid build inital structure request")
+  @DisplayName("It not process two build initial connections at the same turns")
   @Tag(value = "CatanBoardEngine")
   @Test
   public void itMustNotProcessTwoBuildInitialConnectionRequestsAtTheSameTurn()
@@ -1152,7 +1152,7 @@ public class CatanGameEngineTest {
     assertSame(1, player.getResourceManager().getResource(ResourceType.WOOL));
   }
 
-  @DisplayName("It must process a valid build inital structure request")
+  @DisplayName("It must process a valid build inital connection request")
   @Tag(value = "CatanBoardEngine")
   @Test
   public void itMustProcessAValidBuildInitialConnectionRequest()
