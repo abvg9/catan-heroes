@@ -36,6 +36,7 @@ import com.ucm.dasi.catan.game.log.LogEntry;
 import com.ucm.dasi.catan.player.IPlayer;
 import com.ucm.dasi.catan.player.Player;
 import com.ucm.dasi.catan.request.BuildConnectionRequest;
+import com.ucm.dasi.catan.request.BuildInitialStructureRequest;
 import com.ucm.dasi.catan.request.BuildStructureRequest;
 import com.ucm.dasi.catan.request.EndTurnRequest;
 import com.ucm.dasi.catan.request.IRequest;
@@ -165,6 +166,58 @@ public class CatanGameEngineTest {
             new ConstantNumberGenerator(6));
 
     IRequest request = new BuildConnectionRequest(player, ConnectionType.ROAD, requestX, requestY);
+    IRequest[] requests = {request};
+
+    engine.processRequests(requests);
+
+    verify(log.get(turn)).add(request);
+  }
+
+  @DisplayName(
+      "It must append a request to the log while processing a build initial structure request")
+  @Tag(value = "CatanBoardEngine")
+  @Test
+  public void itMustLogABuildInitialStructureRequest()
+      throws NonNullInputException, NonVoidCollectionException, InvalidLogException,
+          InvalidBoardElementException, InvalidBoardDimensionsException {
+
+    IPlayer player = new Player(0, new ResourceManager());
+    IPlayer[] players = {player};
+    ICatanEditableBoard board = buildStandardBoard(player);
+
+    int requestX = 2;
+    int requestY = 4;
+
+    Consumer<IRequest> errorHandler =
+        (request) -> {
+          fail();
+        };
+
+    Collection<ILogEntry> entries = new ArrayList<ILogEntry>();
+    ArrayList<IRequest> entryRequests = new ArrayList<IRequest>();
+
+    entryRequests.add(new StartTurnRequest(player));
+    entries.add(Mockito.spy(new LogEntry(6, entryRequests)));
+
+    IGameLog originalLog = new LinearGameLog(entries);
+    IGameLog log = Mockito.spy(originalLog);
+
+    int turn = 0;
+
+    CatanGameEngine engine =
+        new CatanGameEngine(
+            board,
+            players,
+            10,
+            GameState.FOUNDATION,
+            turn,
+            true,
+            errorHandler,
+            log,
+            new ConstantNumberGenerator(6));
+
+    IRequest request =
+        new BuildInitialStructureRequest(player, StructureType.SETTLEMENT, requestX, requestY);
     IRequest[] requests = {request};
 
     engine.processRequests(requests);
@@ -873,6 +926,54 @@ public class CatanGameEngineTest {
     assertSame(true, requestFailed.get());
   }
 
+  @DisplayName("It must not process two build initial structure requests at the same turn")
+  @Tag(value = "CatanBoardEngine")
+  @Test
+  public void itMustNotProcessTwoBuildInitialStructureRequestsAtTheSameTurn()
+      throws InvalidBoardDimensionsException, InvalidBoardElementException, NonNullInputException,
+          NonVoidCollectionException, InvalidLogException {
+    IPlayer player = new Player(0, new ResourceManager());
+    IPlayer[] players = {player};
+    ICatanEditableBoard board = buildStandardBoard(player);
+
+    AtomicBoolean requestFailed = new AtomicBoolean(false);
+
+    Consumer<IRequest> errorHandler =
+        (request) -> {
+          requestFailed.set(true);
+        };
+
+    Collection<ILogEntry> entries = new ArrayList<ILogEntry>();
+    ArrayList<IRequest> entryRequests = new ArrayList<IRequest>();
+
+    entryRequests.add(new StartTurnRequest(player));
+    entries.add(new LogEntry(6, entryRequests));
+
+    CatanGameEngine engine =
+        new CatanGameEngine(
+            board,
+            players,
+            10,
+            GameState.FOUNDATION,
+            0,
+            true,
+            errorHandler,
+            new LinearGameLog(entries),
+            new CatanRandomGenerator());
+
+    int requestX = 2;
+    int requestY = 4;
+
+    IRequest[] requests = {
+      new BuildInitialStructureRequest(player, StructureType.SETTLEMENT, requestX, requestY),
+      new BuildInitialStructureRequest(player, StructureType.SETTLEMENT, requestX, requestY),
+    };
+
+    engine.processRequests(requests);
+
+    assertSame(true, requestFailed.get());
+  }
+
   @DisplayName("It must process a valid build connection request")
   @Tag(value = "CatanBoardEngine")
   @Test
@@ -930,6 +1031,55 @@ public class CatanGameEngineTest {
     assertSame(1, player.getResourceManager().getResource(ResourceType.GRAIN));
     assertSame(0, player.getResourceManager().getResource(ResourceType.LUMBER));
     assertSame(1, player.getResourceManager().getResource(ResourceType.WOOL));
+  }
+
+  @DisplayName("It must process a valid build inital structure request")
+  @Tag(value = "CatanBoardEngine")
+  @Test
+  public void itMustProcessAValidBuildInitialStructureRequest()
+      throws InvalidBoardDimensionsException, InvalidBoardElementException, NonNullInputException,
+          NonVoidCollectionException, InvalidLogException {
+
+    IPlayer player = new Player(0, new ResourceManager());
+    IPlayer[] players = {player};
+    ICatanEditableBoard board = buildStandardBoard(player);
+    Consumer<IRequest> errorHandler =
+        (request) -> {
+          fail();
+        };
+
+    Collection<ILogEntry> entries = new ArrayList<ILogEntry>();
+    ArrayList<IRequest> entryRequests = new ArrayList<IRequest>();
+
+    entryRequests.add(new StartTurnRequest(player));
+    entries.add(new LogEntry(6, entryRequests));
+
+    CatanGameEngine engine =
+        new CatanGameEngine(
+            board,
+            players,
+            10,
+            GameState.FOUNDATION,
+            0,
+            true,
+            errorHandler,
+            new LinearGameLog(entries),
+            new CatanRandomGenerator());
+
+    int requestX = 2;
+    int requestY = 4;
+
+    IRequest[] requests = {
+      new BuildInitialStructureRequest(player, StructureType.SETTLEMENT, requestX, requestY)
+    };
+
+    engine.processRequests(requests);
+
+    IBoardElement elementBuilt = board.get(requestX, requestY);
+
+    assertSame(BoardElementType.STRUCTURE, elementBuilt.getElementType());
+    assertSame(StructureType.SETTLEMENT, ((IBoardStructure) elementBuilt).getType());
+    assertSame(player.getId(), ((IOwnedElement) elementBuilt).getOwner().getId());
   }
 
   @DisplayName("It must process a valid build structure request")
