@@ -164,6 +164,9 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
         RequestType.BUILD_CONNECTION,
         (IBuildConnectionRequest request) -> handleBuildConnectionRequest(request));
     map.put(
+        RequestType.BUILD_INITIAL_CONNECTION,
+        (IBuildConnectionRequest request) -> handleBuildInitialConnectionRequest(request));
+    map.put(
         RequestType.BUILD_INITIAL_STRUCTURE,
         (IBuildStructureRequest request) -> handleBuildInitialStructureRequest(request));
     map.put(
@@ -210,6 +213,42 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
       getBoard().build(element, request.getX(), request.getY());
       getActivePlayer().getResourceManager().substract(element.getCost());
     } catch (InvalidBoardElementException | NotEnoughtResourcesException e) {
+      handleRequestError(request);
+    }
+
+    gameLog.get(getTurnNumber()).add(request);
+  }
+
+  private void handleBuildInitialConnectionRequest(IBuildConnectionRequest request) {
+    if (!isTurnToBuildInitialConnection()) {
+      handleRequestError(request);
+      return;
+    }
+
+    if (!request.getPlayer().equals(getActivePlayer())) {
+      handleRequestError(request);
+      return;
+    }
+
+    if (!isTurnStarted()) {
+      handleRequestError(request);
+      return;
+    }
+
+    if (isRequestPerformedAt(getTurnNumber(), RequestType.BUILD_INITIAL_CONNECTION)) {
+      handleRequestError(request);
+      return;
+    }
+
+    BoardConnection element =
+        new BoardConnection(
+            request.getPlayer(),
+            connectionCostProvider.getResourceManager(request.getConnectionType()),
+            request.getConnectionType());
+
+    try {
+      getBoard().build(element, request.getX(), request.getY());
+    } catch (InvalidBoardElementException e) {
       handleRequestError(request);
     }
 
@@ -395,6 +434,11 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
     }
 
     return false;
+  }
+
+  private boolean isTurnToBuildInitialConnection() {
+    return getState() == GameState.FOUNDATION
+        && Math.floor(getTurnNumber() / getPlayers().length) % 2 == 1;
   }
 
   private boolean isTurnToBuildInitialStructure() {

@@ -36,6 +36,7 @@ import com.ucm.dasi.catan.game.log.LogEntry;
 import com.ucm.dasi.catan.player.IPlayer;
 import com.ucm.dasi.catan.player.Player;
 import com.ucm.dasi.catan.request.BuildConnectionRequest;
+import com.ucm.dasi.catan.request.BuildInitialConnectionRequest;
 import com.ucm.dasi.catan.request.BuildInitialStructureRequest;
 import com.ucm.dasi.catan.request.BuildStructureRequest;
 import com.ucm.dasi.catan.request.EndTurnRequest;
@@ -166,6 +167,65 @@ public class CatanGameEngineTest {
             new ConstantNumberGenerator(6));
 
     IRequest request = new BuildConnectionRequest(player, ConnectionType.ROAD, requestX, requestY);
+    IRequest[] requests = {request};
+
+    engine.processRequests(requests);
+
+    verify(log.get(turn)).add(request);
+  }
+
+  @DisplayName(
+      "It must append a request to the log while processing a build initial connection request")
+  @Tag(value = "CatanBoardEngine")
+  @Test
+  public void itMustLogABuildInitialConnectionRequest()
+      throws NonNullInputException, NonVoidCollectionException, InvalidLogException,
+          InvalidBoardElementException, InvalidBoardDimensionsException {
+
+    IPlayer player = new Player(0, new ResourceManager());
+    IPlayer[] players = {player};
+    ICatanEditableBoard board = buildStandardBoard(player);
+
+    int requestX = 3;
+    int requestY = 4;
+
+    Consumer<IRequest> errorHandler =
+        (request) -> {
+          fail();
+        };
+
+    Collection<ILogEntry> entries = new ArrayList<ILogEntry>();
+
+    ArrayList<IRequest> turn1Requests = new ArrayList<IRequest>();
+    turn1Requests.add(new StartTurnRequest(player));
+    turn1Requests.add(new EndTurnRequest(player));
+
+    ArrayList<IRequest> turn2Requests = new ArrayList<IRequest>();
+    turn1Requests.add(new StartTurnRequest(player));
+
+    entries.add(new LogEntry(6, turn1Requests));
+
+    entries.add(Mockito.spy(new LogEntry(6, turn2Requests)));
+
+    IGameLog originalLog = new LinearGameLog(entries);
+    IGameLog log = Mockito.spy(originalLog);
+
+    int turn = 1;
+
+    CatanGameEngine engine =
+        new CatanGameEngine(
+            board,
+            players,
+            10,
+            GameState.FOUNDATION,
+            turn,
+            true,
+            errorHandler,
+            log,
+            new ConstantNumberGenerator(6));
+
+    IRequest request =
+        new BuildInitialConnectionRequest(player, ConnectionType.ROAD, requestX, requestY);
     IRequest[] requests = {request};
 
     engine.processRequests(requests);
@@ -926,6 +986,65 @@ public class CatanGameEngineTest {
     assertSame(true, requestFailed.get());
   }
 
+  @DisplayName("It not process two build initial connections at the same turns")
+  @Tag(value = "CatanBoardEngine")
+  @Test
+  public void itMustNotProcessTwoBuildInitialConnectionRequestsAtTheSameTurn()
+      throws InvalidBoardDimensionsException, InvalidBoardElementException, NonNullInputException,
+          NonVoidCollectionException, InvalidLogException {
+
+    IPlayer player = new Player(0, new ResourceManager());
+    IPlayer[] players = {player};
+    ICatanEditableBoard board = buildStandardBoard(player);
+
+    AtomicBoolean requestFailed = new AtomicBoolean(false);
+
+    Consumer<IRequest> errorHandler =
+        (request) -> {
+          requestFailed.set(true);
+        };
+
+    Collection<ILogEntry> entries = new ArrayList<ILogEntry>();
+
+    ArrayList<IRequest> turn1Requests = new ArrayList<IRequest>();
+    turn1Requests.add(new StartTurnRequest(player));
+    turn1Requests.add(new EndTurnRequest(player));
+
+    ArrayList<IRequest> turn2Requests = new ArrayList<IRequest>();
+    turn1Requests.add(new StartTurnRequest(player));
+
+    entries.add(new LogEntry(6, turn1Requests));
+
+    entries.add(new LogEntry(6, turn2Requests));
+
+    CatanGameEngine engine =
+        new CatanGameEngine(
+            board,
+            players,
+            10,
+            GameState.FOUNDATION,
+            1,
+            true,
+            errorHandler,
+            new LinearGameLog(entries),
+            new CatanRandomGenerator());
+
+    int requestX1 = 3;
+    int requestY1 = 4;
+
+    int requestX2 = 2;
+    int requestY2 = 3;
+
+    IRequest[] requests = {
+      new BuildInitialConnectionRequest(player, ConnectionType.ROAD, requestX1, requestY1),
+      new BuildInitialConnectionRequest(player, ConnectionType.ROAD, requestX2, requestY2),
+    };
+
+    engine.processRequests(requests);
+
+    assertSame(true, requestFailed.get());
+  }
+
   @DisplayName("It must not process two build initial structure requests at the same turn")
   @Tag(value = "CatanBoardEngine")
   @Test
@@ -1031,6 +1150,62 @@ public class CatanGameEngineTest {
     assertSame(1, player.getResourceManager().getResource(ResourceType.GRAIN));
     assertSame(0, player.getResourceManager().getResource(ResourceType.LUMBER));
     assertSame(1, player.getResourceManager().getResource(ResourceType.WOOL));
+  }
+
+  @DisplayName("It must process a valid build inital connection request")
+  @Tag(value = "CatanBoardEngine")
+  @Test
+  public void itMustProcessAValidBuildInitialConnectionRequest()
+      throws InvalidBoardDimensionsException, InvalidBoardElementException, NonNullInputException,
+          NonVoidCollectionException, InvalidLogException {
+
+    IPlayer player = new Player(0, new ResourceManager());
+    IPlayer[] players = {player};
+    ICatanEditableBoard board = buildStandardBoard(player);
+    Consumer<IRequest> errorHandler =
+        (request) -> {
+          fail();
+        };
+
+    Collection<ILogEntry> entries = new ArrayList<ILogEntry>();
+
+    ArrayList<IRequest> turn1Requests = new ArrayList<IRequest>();
+    turn1Requests.add(new StartTurnRequest(player));
+    turn1Requests.add(new EndTurnRequest(player));
+
+    ArrayList<IRequest> turn2Requests = new ArrayList<IRequest>();
+    turn1Requests.add(new StartTurnRequest(player));
+
+    entries.add(new LogEntry(6, turn1Requests));
+
+    entries.add(new LogEntry(6, turn2Requests));
+
+    CatanGameEngine engine =
+        new CatanGameEngine(
+            board,
+            players,
+            10,
+            GameState.FOUNDATION,
+            1,
+            true,
+            errorHandler,
+            new LinearGameLog(entries),
+            new CatanRandomGenerator());
+
+    int requestX = 3;
+    int requestY = 4;
+
+    IRequest[] requests = {
+      new BuildInitialConnectionRequest(player, ConnectionType.ROAD, requestX, requestY)
+    };
+
+    engine.processRequests(requests);
+
+    IBoardElement elementBuilt = board.get(requestX, requestY);
+
+    assertSame(BoardElementType.CONNECTION, elementBuilt.getElementType());
+    assertSame(ConnectionType.ROAD, ((IBoardConnection) elementBuilt).getType());
+    assertSame(player, ((IOwnedElement) elementBuilt).getOwner());
   }
 
   @DisplayName("It must process a valid build inital structure request")
