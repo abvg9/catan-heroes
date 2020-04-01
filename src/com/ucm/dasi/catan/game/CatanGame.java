@@ -88,24 +88,29 @@ public class CatanGame<TBoard extends ICatanBoard> implements ICatanGame<TBoard>
     return turnStarted;
   }
 
-  protected void endGame() {
-    state = GameState.ENDED;
-  }
-
-  protected boolean hasActivePlayerWon() {
-
-    if (state == GameState.ENDED) {
-      return true;
-    }
-    return pointsCalculator.getPoints(this).get(getActivePlayer()) >= getPointsToWin();
-  }
-
   protected void passTurn() {
     ++turnNumber;
   }
 
   protected void switchTurnStarted() {
     turnStarted = !turnStarted;
+  }
+
+  protected void switchStateIfNeeded() {
+    switch (getState()) {
+      case ENDED:
+        return;
+      case FOUNDATION:
+        if (isLastFoundationPhaseTurn()) {
+          state = GameState.NORMAL;
+        }
+        return;
+      case NORMAL:
+        if (hasActivePlayerWon()) {
+          state = GameState.ENDED;
+        }
+        return;
+    }
   }
 
   private void checkBoard(ICatanBoard board) throws NonNullInputException {
@@ -144,5 +149,13 @@ public class CatanGame<TBoard extends ICatanBoard> implements ICatanGame<TBoard>
 
   private int getTurnIndex() {
     return turnNumber % players.length;
+  }
+
+  private boolean hasActivePlayerWon() {
+    return pointsCalculator.getPoints(this).get(getActivePlayer()) >= getPointsToWin();
+  }
+
+  private boolean isLastFoundationPhaseTurn() {
+    return getTurnNumber() == 4 * getPlayers().length - 1;
   }
 }
