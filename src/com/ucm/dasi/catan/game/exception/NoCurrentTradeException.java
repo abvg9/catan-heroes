@@ -7,7 +7,7 @@ public class NoCurrentTradeException extends RuntimeException {
   public NoCurrentTradeException() {
     super(composeMessage());
   }
-  
+
   private static String composeMessage() {
     return "Expected a trade, but none was found";
   }
