@@ -1,22 +1,22 @@
 package com.ucm.dasi.catan.request.trade;
 
+import com.ucm.dasi.catan.game.trade.ITradeConfirmation;
 import com.ucm.dasi.catan.player.IPlayer;
 import com.ucm.dasi.catan.request.Request;
 import com.ucm.dasi.catan.request.RequestType;
-import java.util.UUID;
 
 public class TradeConfirmationRequest extends Request implements ITradeConfirmationRequest {
 
-  private UUID agreementId;
+  private ITradeConfirmation tradeConfirmation;
 
-  public TradeConfirmationRequest(IPlayer player, RequestType type, UUID agreementId) {
-    super(player, type);
+  public TradeConfirmationRequest(IPlayer player, ITradeConfirmation tradeConfirmation) {
+    super(player, RequestType.TRADE_CONFIRMATION);
 
-    this.agreementId = agreementId;
+    this.tradeConfirmation = tradeConfirmation;
   }
 
   @Override
-  public UUID getAgreementId() {
-    return agreementId;
+  public ITradeConfirmation getConfirmation() {
+    return tradeConfirmation;
   }
 }
