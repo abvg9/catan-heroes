@@ -2,7 +2,7 @@ package com.ucm.dasi.catan.game.exception;
 
 import com.ucm.dasi.catan.game.trade.IReference;
 
-public class InvalidReferenceException extends RuntimeException {
+public class InvalidReferenceException extends Exception {
 
   private static final long serialVersionUID = 7640762256694875499L;
 
