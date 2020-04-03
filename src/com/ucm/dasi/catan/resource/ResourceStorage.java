@@ -41,6 +41,19 @@ public class ResourceStorage implements IResourceStorage {
   }
 
   @Override
+  public int compareTo(IResourceStorage other) {
+    for (ResourceType resourceType : ResourceType.values()) {
+      int comparison = Integer.compare(getResource(resourceType), other.getResource(resourceType));
+
+      if (comparison != 0) {
+        return comparison;
+      }
+    }
+
+    return 0;
+  }
+
+  @Override
   public boolean equals(Object object) {
     if (!(object instanceof IResourceStorage)) {
       return false;
