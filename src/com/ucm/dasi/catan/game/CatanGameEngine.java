@@ -34,6 +34,7 @@ import com.ucm.dasi.catan.request.IUpgradeStructureRequest;
 import com.ucm.dasi.catan.request.RequestType;
 import com.ucm.dasi.catan.request.trade.ITradeAgreementRequest;
 import com.ucm.dasi.catan.request.trade.ITradeConfirmationRequest;
+import com.ucm.dasi.catan.request.trade.ITradeDiscardRequest;
 import com.ucm.dasi.catan.request.trade.ITradeRequest;
 import com.ucm.dasi.catan.resource.exception.NotEnoughtResourcesException;
 import com.ucm.dasi.catan.resource.production.IResourceProduction;
@@ -484,6 +485,32 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
     try {
       tradeManager.confirm(request.getConfirmation());
     } catch (InvalidReferenceException | NoCurrentTradeException e) {
+      handleRequestError(request);
+      return;
+    }
+
+    gameLog.get(getTurnNumber()).add(request);
+  }
+
+  private void handleTradeDiscardRequest(ITradeDiscardRequest request) {
+    if (getState() != GameState.NORMAL) {
+      handleRequestError(request);
+      return;
+    }
+
+    if (request.getPlayer().equals(getActivePlayer())) {
+      handleRequestError(request);
+      return;
+    }
+
+    if (!isTurnStarted()) {
+      handleRequestError(request);
+      return;
+    }
+
+    try {
+      tradeManager.discard(request.getDiscard());
+    } catch (InvalidReferenceException | NoCurrentTradeException | NonNullInputException e) {
       handleRequestError(request);
       return;
     }
