@@ -8,10 +8,10 @@ import com.ucm.dasi.catan.request.RequestType;
 public class TradeDiscardRequest extends Request implements ITradeDiscardRequest {
 
   private ITradeDiscard discard;
-  
+
   public TradeDiscardRequest(IPlayer player, RequestType type, ITradeDiscard discard) {
     super(player, type);
-    
+
     this.discard = discard;
   }
 
@@ -19,5 +19,4 @@ public class TradeDiscardRequest extends Request implements ITradeDiscardRequest
   public ITradeDiscard getDiscard() {
     return discard;
   }
-
 }
