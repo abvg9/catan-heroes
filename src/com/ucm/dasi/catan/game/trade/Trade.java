@@ -18,7 +18,13 @@ public class Trade extends Reference implements ITrade {
       IResourceStorage requestedResources) {
 
     super(id);
-    this.acceptableExchanges = new ArrayList<IResourceStorage>(acceptableExchanges);
+
+    if (acceptableExchanges == null) {
+      this.acceptableExchanges = null;
+    } else {
+      this.acceptableExchanges = new ArrayList<IResourceStorage>(acceptableExchanges);
+    }
+
     this.requestedResources = new ResourceStorage(requestedResources);
   }
 
