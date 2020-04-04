@@ -38,6 +38,8 @@ import com.ucm.dasi.catan.game.trade.ITrade;
 import com.ucm.dasi.catan.game.trade.ITradeAgreement;
 import com.ucm.dasi.catan.game.trade.Trade;
 import com.ucm.dasi.catan.game.trade.TradeAgreement;
+import com.ucm.dasi.catan.game.trade.TradeConfirmation;
+import com.ucm.dasi.catan.game.trade.TradeDiscard;
 import com.ucm.dasi.catan.player.IPlayer;
 import com.ucm.dasi.catan.player.Player;
 import com.ucm.dasi.catan.request.BuildConnectionRequest;
@@ -49,6 +51,8 @@ import com.ucm.dasi.catan.request.IRequest;
 import com.ucm.dasi.catan.request.StartTurnRequest;
 import com.ucm.dasi.catan.request.UpgradeStructureRequest;
 import com.ucm.dasi.catan.request.trade.TradeAgreementRequest;
+import com.ucm.dasi.catan.request.trade.TradeConfirmationRequest;
+import com.ucm.dasi.catan.request.trade.TradeDiscardRequest;
 import com.ucm.dasi.catan.request.trade.TradeRequest;
 import com.ucm.dasi.catan.resource.IResourceStorage;
 import com.ucm.dasi.catan.resource.ResourceManager;
@@ -1649,6 +1653,83 @@ public class CatanGameEngineTest {
 
     IRequest[] requests2 = {new TradeAgreementRequest(player2, tradeAgreement)};
     engine.processRequests(requests2);
+
+    IRequest[] requests3 = {
+      new TradeConfirmationRequest(
+          player1, new TradeConfirmation(UUID.randomUUID(), tradeAgreement))
+    };
+    engine.processRequests(requests3);
+
+    assertFalse(requestFailed.get());
+  }
+
+  public void itMustProcessAValidTradeDiscardRequest()
+      throws InvalidBoardDimensionsException, InvalidBoardElementException, NonNullInputException,
+          NonVoidCollectionException, InvalidLogException {
+    Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
+
+    playerResources.put(ResourceType.BRICK, 1);
+    playerResources.put(ResourceType.GRAIN, 1);
+    playerResources.put(ResourceType.LUMBER, 1);
+    playerResources.put(ResourceType.ORE, 1);
+    playerResources.put(ResourceType.WOOL, 1);
+
+    IPlayer player1 = new Player(0, new ResourceManager(playerResources));
+    IPlayer player2 = new Player(1, new ResourceManager(playerResources));
+    IPlayer[] players = {player1, player2};
+    ICatanEditableBoard board = buildStandardBoard(player1);
+
+    AtomicBoolean requestFailed = new AtomicBoolean(false);
+
+    Consumer<IRequest> errorHandler =
+        (request) -> {
+          requestFailed.set(true);
+        };
+
+    Collection<ILogEntry> entries = new ArrayList<ILogEntry>();
+    ArrayList<IRequest> entryRequests = new ArrayList<IRequest>();
+
+    entryRequests.add(new StartTurnRequest(player1));
+    entries.add(new LogEntry(6, entryRequests));
+
+    CatanGameEngine engine =
+        new CatanGameEngine(
+            board,
+            players,
+            10,
+            GameState.NORMAL,
+            0,
+            true,
+            errorHandler,
+            new LinearGameLog(entries),
+            new CatanRandomGenerator());
+
+    Map<ResourceType, Integer> requestedResourcesMap = new TreeMap<ResourceType, Integer>();
+    requestedResourcesMap.put(ResourceType.ORE, 1);
+
+    IResourceStorage requestedResources = new ResourceStorage(requestedResourcesMap);
+
+    Map<ResourceType, Integer> resourcesMap = new TreeMap<ResourceType, Integer>();
+    resourcesMap.put(ResourceType.GRAIN, 1);
+
+    Collection<IResourceStorage> acceptableExchanges = new ArrayList<IResourceStorage>();
+    acceptableExchanges.add(new ResourceStorage(resourcesMap));
+
+    ITrade trade = new Trade(UUID.randomUUID(), acceptableExchanges, requestedResources);
+
+    IRequest[] requests = {new TradeRequest(player1, trade)};
+    engine.processRequests(requests);
+
+    ITradeAgreement tradeAgreement =
+        new TradeAgreement(UUID.randomUUID(), acceptableExchanges.iterator().next(), trade);
+
+    IRequest[] requests2 = {new TradeAgreementRequest(player2, tradeAgreement)};
+    engine.processRequests(requests2);
+
+    IRequest[] requests3 = {
+      new TradeDiscardRequest(player1, new TradeDiscard(UUID.randomUUID(), trade))
+    };
+    engine.processRequests(requests3);
 
     assertFalse(requestFailed.get());
   }
