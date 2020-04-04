@@ -41,6 +41,17 @@ public class ResourceStorage implements IResourceStorage {
   }
 
   @Override
+  public boolean canSubstract(IResourceStorage resources) {
+
+    for (ResourceType resourceType : ResourceType.values()) {
+      if (getResource(resourceType) < resources.getResource(resourceType)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  @Override
   public int compareTo(IResourceStorage other) {
     for (ResourceType resourceType : ResourceType.values()) {
       int comparison = Integer.compare(getResource(resourceType), other.getResource(resourceType));
