@@ -195,6 +195,9 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
         RequestType.TRADE_CONFIRMATION,
         (ITradeConfirmationRequest request) -> handleTradeConfirmationRequest(request));
     map.put(
+        RequestType.TRADE_DISCARD,
+        (ITradeDiscardRequest request) -> handleTradeDiscardRequest(request));
+    map.put(
         RequestType.UPGRADE_STRUCTURE,
         (IUpgradeStructureRequest request) -> handleUpgradeStructureRequest(request));
 
