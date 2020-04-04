@@ -12,12 +12,17 @@ import com.ucm.dasi.catan.board.structure.StructureType;
 import com.ucm.dasi.catan.exception.NonNullInputException;
 import com.ucm.dasi.catan.exception.NonVoidCollectionException;
 import com.ucm.dasi.catan.game.exception.InvalidLogException;
+import com.ucm.dasi.catan.game.exception.InvalidReferenceException;
+import com.ucm.dasi.catan.game.exception.NoCurrentTradeException;
+import com.ucm.dasi.catan.game.exception.NotAnAcceptableExchangeException;
 import com.ucm.dasi.catan.game.generator.INumberGenerator;
 import com.ucm.dasi.catan.game.handler.GameEngineHandlersMap;
 import com.ucm.dasi.catan.game.handler.IGameEngineHandlersMap;
 import com.ucm.dasi.catan.game.log.IGameLog;
 import com.ucm.dasi.catan.game.log.ILogEntry;
 import com.ucm.dasi.catan.game.log.LogEntry;
+import com.ucm.dasi.catan.game.trade.ITradeManager;
+import com.ucm.dasi.catan.game.trade.TradeManager;
 import com.ucm.dasi.catan.player.IPlayer;
 import com.ucm.dasi.catan.request.IBuildConnectionRequest;
 import com.ucm.dasi.catan.request.IBuildStructureRequest;
@@ -26,6 +31,9 @@ import com.ucm.dasi.catan.request.IRequest;
 import com.ucm.dasi.catan.request.IStartTurnRequest;
 import com.ucm.dasi.catan.request.IUpgradeStructureRequest;
 import com.ucm.dasi.catan.request.RequestType;
+import com.ucm.dasi.catan.request.trade.ITradeAgreementRequest;
+import com.ucm.dasi.catan.request.trade.ITradeConfirmationRequest;
+import com.ucm.dasi.catan.request.trade.ITradeRequest;
 import com.ucm.dasi.catan.resource.exception.NotEnoughtResourcesException;
 import com.ucm.dasi.catan.resource.production.IResourceProduction;
 import com.ucm.dasi.catan.resource.provider.DefaultConnectionCostProvider;
@@ -47,6 +55,8 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
   private INumberGenerator numberGenerator;
 
   private IResourceManagerProvider<StructureType> structureCostProvider;
+
+  private ITradeManager tradeManager;
 
   public CatanGameEngine(
       ICatanEditableBoard board,
@@ -70,6 +80,7 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
     handlersMap = new GameEngineHandlersMap(generateMap());
     this.numberGenerator = numberGenerator;
     structureCostProvider = new DefaultStructureCostProvider();
+    this.tradeManager = new TradeManager();
   }
 
   @Override
@@ -174,6 +185,13 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
         (IBuildStructureRequest request) -> handleBuildStructureRequest(request));
     map.put(RequestType.END_TURN, (IEndTurnRequest request) -> handleEndTurnRequest(request));
     map.put(RequestType.START_TURN, (IStartTurnRequest request) -> handleStartTurnRequest(request));
+    map.put(RequestType.TRADE, (ITradeRequest request) -> handleTradeRequest(request));
+    map.put(
+        RequestType.TRADE_AGREEMENT,
+        (ITradeAgreementRequest request) -> handleTradeAgreementRequest(request));
+    map.put(
+        RequestType.TRADE_CONFIRMATION,
+        (ITradeConfirmationRequest request) -> handleTradeConfirmationRequest(request));
     map.put(
         RequestType.UPGRADE_STRUCTURE,
         (IUpgradeStructureRequest request) -> handleUpgradeStructureRequest(request));
@@ -214,6 +232,7 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
       getActivePlayer().getResourceManager().substract(element.getCost());
     } catch (InvalidBoardElementException | NotEnoughtResourcesException e) {
       handleRequestError(request);
+      return;
     }
 
     gameLog.get(getTurnNumber()).add(request);
@@ -250,6 +269,7 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
       getBoard().build(element, request.getX(), request.getY());
     } catch (InvalidBoardElementException e) {
       handleRequestError(request);
+      return;
     }
 
     gameLog.get(getTurnNumber()).add(request);
@@ -286,6 +306,7 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
       getBoard().build(element, request.getX(), request.getY());
     } catch (InvalidBoardElementException e) {
       handleRequestError(request);
+      return;
     }
 
     gameLog.get(getTurnNumber()).add(request);
@@ -324,6 +345,7 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
       getActivePlayer().getResourceManager().substract(element.getCost());
     } catch (InvalidBoardElementException | NotEnoughtResourcesException e) {
       handleRequestError(request);
+      return;
     }
 
     gameLog.get(getTurnNumber()).add(request);
@@ -385,6 +407,88 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
     gameLog.set(getTurnNumber(), new LogEntry(productionNumber, requestList));
   }
 
+  private void handleTradeRequest(ITradeRequest request) {
+    if (getState() != GameState.NORMAL) {
+      handleRequestError(request);
+      return;
+    }
+
+    if (!request.getPlayer().equals(getActivePlayer())) {
+      handleRequestError(request);
+      return;
+    }
+
+    if (!isTurnStarted()) {
+      handleRequestError(request);
+      return;
+    }
+
+    try {
+      tradeManager.start(request.getPlayer(), request.getTrade());
+    } catch (NonNullInputException | NonVoidCollectionException | NotEnoughtResourcesException e) {
+      handleRequestError(request);
+      return;
+    }
+
+    gameLog.get(getTurnNumber()).add(request);
+  }
+
+  private void handleTradeAgreementRequest(ITradeAgreementRequest request) {
+    if (getState() != GameState.NORMAL) {
+      handleRequestError(request);
+      return;
+    }
+
+    if (request.getPlayer().equals(getActivePlayer())) {
+      handleRequestError(request);
+      return;
+    }
+
+    if (!isTurnStarted()) {
+      handleRequestError(request);
+      return;
+    }
+
+    try {
+      tradeManager.addAgreement(request.getPlayer(), request.getTradeAgreement());
+    } catch (NotAnAcceptableExchangeException
+        | InvalidReferenceException
+        | NoCurrentTradeException
+        | NonNullInputException
+        | NotEnoughtResourcesException e) {
+      handleRequestError(request);
+      return;
+    }
+
+    gameLog.get(getTurnNumber()).add(request);
+  }
+
+  private void handleTradeConfirmationRequest(ITradeConfirmationRequest request) {
+    if (getState() != GameState.NORMAL) {
+      handleRequestError(request);
+      return;
+    }
+
+    if (request.getPlayer().equals(getActivePlayer())) {
+      handleRequestError(request);
+      return;
+    }
+
+    if (!isTurnStarted()) {
+      handleRequestError(request);
+      return;
+    }
+
+    try {
+      tradeManager.confirm(request.getConfirmation());
+    } catch (InvalidReferenceException | NoCurrentTradeException e) {
+      handleRequestError(request);
+      return;
+    }
+
+    gameLog.get(getTurnNumber()).add(request);
+  }
+
   private void handleUpgradeStructureRequest(IUpgradeStructureRequest request) {
 
     if (getState() != GameState.NORMAL) {
@@ -413,6 +517,7 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
       getActivePlayer().getResourceManager().substract(element.getCost());
     } catch (InvalidBoardElementException | NotEnoughtResourcesException e) {
       handleRequestError(request);
+      return;
     }
 
     gameLog.get(getTurnNumber()).add(request);
