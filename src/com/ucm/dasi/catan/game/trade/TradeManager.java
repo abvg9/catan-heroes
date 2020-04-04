@@ -106,10 +106,19 @@ public class TradeManager implements ITradeManager {
   }
 
   @Override
-  public void discard() throws NoCurrentTradeException {
+  public void discard(ITradeDiscard discard)
+      throws NoCurrentTradeException, NonNullInputException, InvalidReferenceException {
+
+    if (discard == null) {
+      throw new NonNullInputException();
+    }
 
     if (trade == null) {
       throw new NoCurrentTradeException();
+    }
+
+    if (!trade.getId().equals(discard.getTrade().getId())) {
+      throw new InvalidReferenceException(discard.getTrade());
     }
 
     clear();
