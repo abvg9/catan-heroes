@@ -115,6 +115,11 @@ public class TradeManager implements ITradeManager {
   }
 
   @Override
+  public IPlayer getBuyer() {
+    return buyer;
+  }
+
+  @Override
   public ITrade getTrade() {
     return trade;
   }

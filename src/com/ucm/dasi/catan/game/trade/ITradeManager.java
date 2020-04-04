@@ -22,6 +22,8 @@ public interface ITradeManager {
 
   Collection<ITradeAgreement> getAgreements() throws NoCurrentTradeException;
 
+  IPlayer getBuyer();
+
   ITrade getTrade();
 
   void start(IPlayer player, ITrade trade)
