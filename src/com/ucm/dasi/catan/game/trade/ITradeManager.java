@@ -2,6 +2,7 @@ package com.ucm.dasi.catan.game.trade;
 
 import com.ucm.dasi.catan.exception.NonNullInputException;
 import com.ucm.dasi.catan.exception.NonVoidCollectionException;
+import com.ucm.dasi.catan.game.exception.AgreementAlreadyProposedException;
 import com.ucm.dasi.catan.game.exception.InvalidReferenceException;
 import com.ucm.dasi.catan.game.exception.NoCurrentTradeException;
 import com.ucm.dasi.catan.game.exception.NotAnAcceptableExchangeException;
@@ -13,7 +14,7 @@ public interface ITradeManager {
 
   void addAgreement(IPlayer player, ITradeAgreement agreement)
       throws NonNullInputException, NotAnAcceptableExchangeException, InvalidReferenceException,
-          NoCurrentTradeException, NotEnoughtResourcesException;
+          NoCurrentTradeException, NotEnoughtResourcesException, AgreementAlreadyProposedException;
 
   ITradeAgreement confirm(ITradeConfirmation confirmation)
       throws InvalidReferenceException, NoCurrentTradeException;

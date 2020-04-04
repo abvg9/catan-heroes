@@ -3,6 +3,7 @@ package com.ucm.dasi.catan.game.trade;
 import com.ucm.dasi.catan.exception.NonNullInputException;
 import com.ucm.dasi.catan.exception.NonVoidCollectionException;
 import com.ucm.dasi.catan.exception.UnexpectedException;
+import com.ucm.dasi.catan.game.exception.AgreementAlreadyProposedException;
 import com.ucm.dasi.catan.game.exception.InvalidReferenceException;
 import com.ucm.dasi.catan.game.exception.NoCurrentTradeException;
 import com.ucm.dasi.catan.game.exception.NotAnAcceptableExchangeException;
@@ -10,6 +11,7 @@ import com.ucm.dasi.catan.game.exception.PendingTradeException;
 import com.ucm.dasi.catan.player.IPlayer;
 import com.ucm.dasi.catan.resource.IResourceStorage;
 import com.ucm.dasi.catan.resource.exception.NotEnoughtResourcesException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -18,6 +20,8 @@ import java.util.UUID;
 public class TradeManager implements ITradeManager {
 
   private TreeMap<UUID, IPlayer> agreementToPlayerMap;
+
+  private TreeMap<IResourceStorage, Collection<IPlayer>> exchangeToPlayersMap;
 
   private IPlayer buyer;
 
@@ -30,6 +34,7 @@ public class TradeManager implements ITradeManager {
   public TradeManager() {
 
     agreementToPlayerMap = new TreeMap<UUID, IPlayer>();
+    exchangeToPlayersMap = new TreeMap<IResourceStorage, Collection<IPlayer>>();
     tradeAgreements = new TreeMap<UUID, ITradeAgreement>();
     tradeExchangesSet = new TreeSet<IResourceStorage>();
   }
@@ -37,7 +42,7 @@ public class TradeManager implements ITradeManager {
   @Override
   public void addAgreement(IPlayer player, ITradeAgreement agreement)
       throws NonNullInputException, NotAnAcceptableExchangeException, InvalidReferenceException,
-          NoCurrentTradeException, NotEnoughtResourcesException {
+          NoCurrentTradeException, NotEnoughtResourcesException, AgreementAlreadyProposedException {
 
     if (player == null || agreement == null) {
       throw new NonNullInputException();
@@ -55,11 +60,17 @@ public class TradeManager implements ITradeManager {
       throw new NotAnAcceptableExchangeException(trade);
     }
 
+    Collection<IPlayer> exchangePlayers = exchangeToPlayersMap.get(agreement.getExchange());
+    if (exchangePlayers.contains(player)) {
+      throw new AgreementAlreadyProposedException(agreement, player);
+    }
+
     if (!player.getResourceManager().canSubstract(agreement.getExchange())) {
       throw new NotEnoughtResourcesException();
     }
 
     agreementToPlayerMap.put(agreement.getId(), player);
+    exchangePlayers.add(player);
     tradeAgreements.put(agreement.getId(), agreement);
   }
 
@@ -153,6 +164,7 @@ public class TradeManager implements ITradeManager {
   private void clearMaps() {
 
     agreementToPlayerMap.clear();
+    exchangeToPlayersMap.clear();
     tradeAgreements.clear();
     tradeExchangesSet.clear();
   }
@@ -177,6 +189,7 @@ public class TradeManager implements ITradeManager {
         throw new NotEnoughtResourcesException();
       }
 
+      exchangeToPlayersMap.put(exchange, new ArrayList<IPlayer>());
       tradeExchangesSet.add(exchange);
     }
   }

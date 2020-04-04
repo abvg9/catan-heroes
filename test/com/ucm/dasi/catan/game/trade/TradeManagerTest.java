@@ -2,9 +2,14 @@ package com.ucm.dasi.catan.game.trade;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.ucm.dasi.catan.exception.NonNullInputException;
 import com.ucm.dasi.catan.exception.NonVoidCollectionException;
+import com.ucm.dasi.catan.game.exception.AgreementAlreadyProposedException;
+import com.ucm.dasi.catan.game.exception.InvalidReferenceException;
+import com.ucm.dasi.catan.game.exception.NoCurrentTradeException;
+import com.ucm.dasi.catan.game.exception.NotAnAcceptableExchangeException;
 import com.ucm.dasi.catan.game.exception.PendingTradeException;
 import com.ucm.dasi.catan.player.IPlayer;
 import com.ucm.dasi.catan.player.Player;
@@ -23,6 +28,64 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 public class TradeManagerTest {
+
+  @DisplayName("It adds an agreement")
+  @Tag("TradeManager")
+  @Test
+  public void itAddsAnAgreement()
+      throws NonNullInputException, NonVoidCollectionException, NotEnoughtResourcesException,
+          NotAnAcceptableExchangeException, InvalidReferenceException, NoCurrentTradeException,
+          AgreementAlreadyProposedException {
+
+    TradeManager manager = createStandardTradeManager();
+
+    ITrade trade = manager.getTrade();
+    IResourceStorage exchange = trade.getAcceptableExchanges().iterator().next();
+
+    IPlayer player = new Player(1, new ResourceManager(exchange));
+
+    ITradeAgreement agreement = new TradeAgreement(UUID.randomUUID(), exchange, trade);
+
+    manager.addAgreement(player, agreement);
+
+    assertTrue(manager.getAgreements().contains(agreement));
+  }
+
+  @DisplayName("It does not add an agreement if the player is null")
+  @Tag("TradeManager")
+  @Test
+  public void itDoesNotAddAnAgreementI()
+      throws NonNullInputException, NonVoidCollectionException, NotEnoughtResourcesException,
+          NotAnAcceptableExchangeException, InvalidReferenceException, NoCurrentTradeException,
+          AgreementAlreadyProposedException {
+
+    TradeManager manager = createStandardTradeManager();
+
+    ITrade trade = manager.getTrade();
+    IResourceStorage exchange = trade.getAcceptableExchanges().iterator().next();
+
+    ITradeAgreement agreement = new TradeAgreement(UUID.randomUUID(), exchange, trade);
+
+    assertThrows(NonNullInputException.class, () -> manager.addAgreement(null, agreement));
+  }
+
+  @DisplayName("It does not add an agreement if the agreement is null")
+  @Tag("TradeManager")
+  @Test
+  public void itDoesNotAddAnAgreementII()
+      throws NonNullInputException, NonVoidCollectionException, NotEnoughtResourcesException,
+          NotAnAcceptableExchangeException, InvalidReferenceException, NoCurrentTradeException,
+          AgreementAlreadyProposedException {
+
+    TradeManager manager = createStandardTradeManager();
+
+    ITrade trade = manager.getTrade();
+    IResourceStorage exchange = trade.getAcceptableExchanges().iterator().next();
+
+    IPlayer player = new Player(1, new ResourceManager(exchange));
+
+    assertThrows(NonNullInputException.class, () -> manager.addAgreement(player, null));
+  }
 
   @DisplayName("It does not start a trade if a pending trade is found")
   @Tag("TradeManager")
@@ -176,5 +239,28 @@ public class TradeManagerTest {
 
     assertSame(player, manager.getBuyer());
     assertSame(trade, manager.getTrade());
+  }
+
+  private TradeManager createStandardTradeManager()
+      throws NonNullInputException, NonVoidCollectionException, NotEnoughtResourcesException {
+
+    Map<ResourceType, Integer> resourcesMap = new TreeMap<ResourceType, Integer>();
+    resourcesMap.put(ResourceType.GRAIN, 2);
+
+    Map<ResourceType, Integer> requestedResourcesMap = new TreeMap<ResourceType, Integer>();
+    requestedResourcesMap.put(ResourceType.ORE, 2);
+
+    IResourceStorage requestedResources = new ResourceStorage(requestedResourcesMap);
+
+    Collection<IResourceStorage> acceptableExchanges = new ArrayList<IResourceStorage>();
+    acceptableExchanges.add(new ResourceStorage(resourcesMap));
+
+    Trade trade = new Trade(UUID.randomUUID(), acceptableExchanges, requestedResources);
+    IPlayer player = new Player(0, new ResourceManager(resourcesMap));
+    TradeManager manager = new TradeManager();
+
+    manager.start(player, trade);
+
+    return manager;
   }
 }
