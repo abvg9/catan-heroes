@@ -5,15 +5,17 @@ import com.ucm.dasi.catan.exception.NonVoidCollectionException;
 import com.ucm.dasi.catan.game.exception.InvalidReferenceException;
 import com.ucm.dasi.catan.game.exception.NoCurrentTradeException;
 import com.ucm.dasi.catan.game.exception.NotAnAcceptableExchangeException;
+import com.ucm.dasi.catan.player.IPlayer;
+import com.ucm.dasi.catan.resource.exception.NotEnoughtResourcesException;
 import java.util.Collection;
 
 public interface ITradeManager {
 
-  void addAgreement(ITradeAgreement agreement)
+  void addAgreement(IPlayer player, ITradeAgreement agreement)
       throws NonNullInputException, NotAnAcceptableExchangeException, InvalidReferenceException,
-          NoCurrentTradeException;
+          NoCurrentTradeException, NotEnoughtResourcesException;
 
-  void confirm(ITradeConfirmation confirmation)
+  ITradeAgreement confirm(ITradeConfirmation confirmation)
       throws InvalidReferenceException, NoCurrentTradeException;
 
   void discard() throws NoCurrentTradeException;
@@ -22,5 +24,6 @@ public interface ITradeManager {
 
   ITrade getTrade();
 
-  void start(ITrade trade) throws NonNullInputException, NonVoidCollectionException;
+  void start(IPlayer player, ITrade trade)
+      throws NonNullInputException, NonVoidCollectionException, NotEnoughtResourcesException;
 }
