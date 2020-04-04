@@ -19,7 +19,8 @@ public interface ITradeManager {
   ITradeAgreement confirm(ITradeConfirmation confirmation)
       throws InvalidReferenceException, NoCurrentTradeException;
 
-  void discard() throws NoCurrentTradeException;
+  void discard(ITradeDiscard discard)
+      throws NoCurrentTradeException, NonNullInputException, InvalidReferenceException;
 
   Collection<ITradeAgreement> getAgreements() throws NoCurrentTradeException;
 

@@ -84,11 +84,11 @@ public class TradeManagerTest {
   @Test
   public void itDiscardsATrade()
       throws NonNullInputException, NonVoidCollectionException, NotEnoughtResourcesException,
-          NoCurrentTradeException {
+          NoCurrentTradeException, InvalidReferenceException {
 
     TradeManager manager = createStandardTradeManager();
 
-    manager.discard();
+    manager.discard(new TradeDiscard(UUID.randomUUID(), manager.getTrade()));
 
     assertNull(manager.getBuyer());
     assertNull(manager.getTrade());
@@ -143,7 +143,7 @@ public class TradeManagerTest {
 
     ITradeAgreement agreement = new TradeAgreement(UUID.randomUUID(), exchange, trade);
 
-    manager.discard();
+    manager.discard(new TradeDiscard(UUID.randomUUID(), manager.getTrade()));
     assertThrows(NoCurrentTradeException.class, () -> manager.addAgreement(player, agreement));
   }
 
@@ -245,7 +245,7 @@ public class TradeManagerTest {
 
     manager.addAgreement(player, agreement);
 
-    manager.discard();
+    manager.discard(new TradeDiscard(UUID.randomUUID(), manager.getTrade()));
 
     assertThrows(
         NoCurrentTradeException.class,
@@ -282,7 +282,9 @@ public class TradeManagerTest {
 
     TradeManager manager = new TradeManager();
 
-    assertThrows(NoCurrentTradeException.class, () -> manager.discard());
+    assertThrows(
+        NoCurrentTradeException.class,
+        () -> manager.discard(new TradeDiscard(UUID.randomUUID(), manager.getTrade())));
   }
 
   @DisplayName("It does not start a trade if a pending trade is found")
