@@ -65,7 +65,7 @@ public class TradeManager implements ITradeManager {
       throw new AgreementAlreadyProposedException(agreement, player);
     }
 
-    if (!player.getResourceManager().canSubstract(agreement.getExchange())) {
+    if (!player.getResourceManager().canSubstract(trade.getRequestedResources())) {
       throw new NotEnoughtResourcesException();
     }
 

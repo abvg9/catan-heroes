@@ -1,5 +1,7 @@
 package com.ucm.dasi.catan.game.trade;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -41,14 +43,40 @@ public class TradeManagerTest {
 
     ITrade trade = manager.getTrade();
     IResourceStorage exchange = trade.getAcceptableExchanges().iterator().next();
-
-    IPlayer player = new Player(1, new ResourceManager(exchange));
+    IPlayer player = new Player(1, new ResourceManager(trade.getRequestedResources()));
 
     ITradeAgreement agreement = new TradeAgreement(UUID.randomUUID(), exchange, trade);
 
     manager.addAgreement(player, agreement);
 
     assertTrue(manager.getAgreements().contains(agreement));
+  }
+
+  @DisplayName("It confirms an agreement")
+  @Tag("TradeManager")
+  @Test
+  public void itConfirmsAnAgreement()
+      throws NonNullInputException, NonVoidCollectionException, NotEnoughtResourcesException,
+          NotAnAcceptableExchangeException, InvalidReferenceException, NoCurrentTradeException,
+          AgreementAlreadyProposedException {
+
+    TradeManager manager = createStandardTradeManager();
+
+    ITrade trade = manager.getTrade();
+    IResourceStorage exchange = trade.getAcceptableExchanges().iterator().next();
+
+    IPlayer buyer = manager.getBuyer();
+    IPlayer player = new Player(1, new ResourceManager(trade.getRequestedResources()));
+
+    ITradeAgreement agreement = new TradeAgreement(UUID.randomUUID(), exchange, trade);
+
+    manager.addAgreement(player, agreement);
+    manager.confirm(new TradeConfirmation(UUID.randomUUID(), agreement));
+
+    assertNull(manager.getBuyer());
+    assertNull(manager.getTrade());
+    assertEquals(trade.getRequestedResources(), buyer.getResourceManager());
+    assertEquals(exchange, player.getResourceManager());
   }
 
   @DisplayName("It does not add an agreement if the player is null")
@@ -78,11 +106,8 @@ public class TradeManagerTest {
           AgreementAlreadyProposedException {
 
     TradeManager manager = createStandardTradeManager();
-
     ITrade trade = manager.getTrade();
-    IResourceStorage exchange = trade.getAcceptableExchanges().iterator().next();
-
-    IPlayer player = new Player(1, new ResourceManager(exchange));
+    IPlayer player = new Player(1, new ResourceManager(trade.getRequestedResources()));
 
     assertThrows(NonNullInputException.class, () -> manager.addAgreement(player, null));
   }
@@ -99,8 +124,7 @@ public class TradeManagerTest {
 
     ITrade trade = manager.getTrade();
     IResourceStorage exchange = trade.getAcceptableExchanges().iterator().next();
-
-    IPlayer player = new Player(1, new ResourceManager(exchange));
+    IPlayer player = new Player(1, new ResourceManager(trade.getRequestedResources()));
 
     ITradeAgreement agreement = new TradeAgreement(UUID.randomUUID(), exchange, trade);
 
@@ -120,8 +144,7 @@ public class TradeManagerTest {
 
     ITrade trade = manager.getTrade();
     IResourceStorage exchange = trade.getAcceptableExchanges().iterator().next();
-
-    IPlayer player = new Player(1, new ResourceManager(exchange));
+    IPlayer player = new Player(1, new ResourceManager(trade.getRequestedResources()));
 
     ITradeAgreement agreement =
         new TradeAgreement(UUID.randomUUID(), exchange, new Reference(UUID.randomUUID()));
@@ -141,8 +164,7 @@ public class TradeManagerTest {
 
     ITrade trade = manager.getTrade();
     IResourceStorage exchange = trade.getRequestedResources();
-
-    IPlayer player = new Player(1, new ResourceManager(exchange));
+    IPlayer player = new Player(1, new ResourceManager(trade.getRequestedResources()));
 
     ITradeAgreement agreement = new TradeAgreement(UUID.randomUUID(), exchange, trade);
 
@@ -162,8 +184,7 @@ public class TradeManagerTest {
 
     ITrade trade = manager.getTrade();
     IResourceStorage exchange = trade.getAcceptableExchanges().iterator().next();
-
-    IPlayer player = new Player(1, new ResourceManager(exchange));
+    IPlayer player = new Player(1, new ResourceManager(trade.getRequestedResources()));
 
     ITradeAgreement agreement = new TradeAgreement(UUID.randomUUID(), exchange, trade);
 
@@ -184,12 +205,57 @@ public class TradeManagerTest {
 
     ITrade trade = manager.getTrade();
     IResourceStorage exchange = trade.getAcceptableExchanges().iterator().next();
-
     IPlayer player = new Player(1, new ResourceManager());
-
     ITradeAgreement agreement = new TradeAgreement(UUID.randomUUID(), exchange, trade);
 
     assertThrows(NotEnoughtResourcesException.class, () -> manager.addAgreement(player, agreement));
+  }
+
+  @DisplayName("It does not confirm an agreement if no pending trade is found")
+  @Tag("TradeManager")
+  @Test
+  public void itDoesNotConfirmAnAgreementI()
+      throws NonNullInputException, NonVoidCollectionException, NotEnoughtResourcesException,
+          NotAnAcceptableExchangeException, InvalidReferenceException, NoCurrentTradeException,
+          AgreementAlreadyProposedException {
+
+    TradeManager manager = createStandardTradeManager();
+
+    ITrade trade = manager.getTrade();
+    IResourceStorage exchange = trade.getAcceptableExchanges().iterator().next();
+
+    IPlayer player = new Player(1, new ResourceManager(trade.getRequestedResources()));
+
+    ITradeAgreement agreement = new TradeAgreement(UUID.randomUUID(), exchange, trade);
+
+    manager.addAgreement(player, agreement);
+
+    manager.discard();
+
+    assertThrows(
+        NoCurrentTradeException.class,
+        () -> manager.confirm(new TradeConfirmation(UUID.randomUUID(), agreement)));
+  }
+
+  @DisplayName(
+      "It does not confirm an agreement if the agreement does not match with any registered agreement")
+  @Tag("TradeManager")
+  @Test
+  public void itDoesNotConfirmAnAgreementII()
+      throws NonNullInputException, NonVoidCollectionException, NotEnoughtResourcesException,
+          NotAnAcceptableExchangeException, InvalidReferenceException, NoCurrentTradeException,
+          AgreementAlreadyProposedException {
+
+    TradeManager manager = createStandardTradeManager();
+
+    ITrade trade = manager.getTrade();
+    IResourceStorage exchange = trade.getAcceptableExchanges().iterator().next();
+
+    ITradeAgreement agreement = new TradeAgreement(UUID.randomUUID(), exchange, trade);
+
+    assertThrows(
+        InvalidReferenceException.class,
+        () -> manager.confirm(new TradeConfirmation(UUID.randomUUID(), agreement)));
   }
 
   @DisplayName("It does not start a trade if a pending trade is found")
