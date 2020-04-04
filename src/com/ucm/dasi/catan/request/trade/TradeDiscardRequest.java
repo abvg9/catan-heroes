@@ -9,8 +9,8 @@ public class TradeDiscardRequest extends Request implements ITradeDiscardRequest
 
   private ITradeDiscard discard;
 
-  public TradeDiscardRequest(IPlayer player, RequestType type, ITradeDiscard discard) {
-    super(player, type);
+  public TradeDiscardRequest(IPlayer player, ITradeDiscard discard) {
+    super(player, RequestType.TRADE_DISCARD);
 
     this.discard = discard;
   }
