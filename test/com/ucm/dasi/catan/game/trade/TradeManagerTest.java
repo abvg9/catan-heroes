@@ -79,6 +79,21 @@ public class TradeManagerTest {
     assertEquals(exchange, player.getResourceManager());
   }
 
+  @DisplayName("It discards a trade")
+  @Tag("TradeManager")
+  @Test
+  public void itDiscardsATrade()
+      throws NonNullInputException, NonVoidCollectionException, NotEnoughtResourcesException,
+          NoCurrentTradeException {
+
+    TradeManager manager = createStandardTradeManager();
+
+    manager.discard();
+
+    assertNull(manager.getBuyer());
+    assertNull(manager.getTrade());
+  }
+
   @DisplayName("It does not add an agreement if the player is null")
   @Tag("TradeManager")
   @Test
@@ -256,6 +271,18 @@ public class TradeManagerTest {
     assertThrows(
         InvalidReferenceException.class,
         () -> manager.confirm(new TradeConfirmation(UUID.randomUUID(), agreement)));
+  }
+
+  @DisplayName("It does not discard a trade if no pending trade is found")
+  @Tag("TradeManager")
+  @Test
+  public void itDoesNotDiscardATradeI()
+      throws NonNullInputException, NonVoidCollectionException, NotEnoughtResourcesException,
+          NoCurrentTradeException {
+
+    TradeManager manager = new TradeManager();
+
+    assertThrows(NoCurrentTradeException.class, () -> manager.discard());
   }
 
   @DisplayName("It does not start a trade if a pending trade is found")
