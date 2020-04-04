@@ -11,6 +11,7 @@ import com.ucm.dasi.catan.board.structure.BoardStructure;
 import com.ucm.dasi.catan.board.structure.StructureType;
 import com.ucm.dasi.catan.exception.NonNullInputException;
 import com.ucm.dasi.catan.exception.NonVoidCollectionException;
+import com.ucm.dasi.catan.game.exception.AgreementAlreadyProposedException;
 import com.ucm.dasi.catan.game.exception.InvalidLogException;
 import com.ucm.dasi.catan.game.exception.InvalidReferenceException;
 import com.ucm.dasi.catan.game.exception.NoCurrentTradeException;
@@ -455,7 +456,8 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
         | InvalidReferenceException
         | NoCurrentTradeException
         | NonNullInputException
-        | NotEnoughtResourcesException e) {
+        | NotEnoughtResourcesException
+        | AgreementAlreadyProposedException e) {
       handleRequestError(request);
       return;
     }
