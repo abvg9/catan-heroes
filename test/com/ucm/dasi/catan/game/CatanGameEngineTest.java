@@ -1,7 +1,9 @@
 package com.ucm.dasi.catan.game;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -33,6 +35,12 @@ import com.ucm.dasi.catan.game.log.IGameLog;
 import com.ucm.dasi.catan.game.log.ILogEntry;
 import com.ucm.dasi.catan.game.log.LinearGameLog;
 import com.ucm.dasi.catan.game.log.LogEntry;
+import com.ucm.dasi.catan.game.trade.ITrade;
+import com.ucm.dasi.catan.game.trade.ITradeAgreement;
+import com.ucm.dasi.catan.game.trade.Trade;
+import com.ucm.dasi.catan.game.trade.TradeAgreement;
+import com.ucm.dasi.catan.game.trade.TradeConfirmation;
+import com.ucm.dasi.catan.game.trade.TradeDiscard;
 import com.ucm.dasi.catan.player.IPlayer;
 import com.ucm.dasi.catan.player.Player;
 import com.ucm.dasi.catan.request.BuildConnectionRequest;
@@ -43,6 +51,10 @@ import com.ucm.dasi.catan.request.EndTurnRequest;
 import com.ucm.dasi.catan.request.IRequest;
 import com.ucm.dasi.catan.request.StartTurnRequest;
 import com.ucm.dasi.catan.request.UpgradeStructureRequest;
+import com.ucm.dasi.catan.request.trade.TradeAgreementRequest;
+import com.ucm.dasi.catan.request.trade.TradeConfirmationRequest;
+import com.ucm.dasi.catan.request.trade.TradeDiscardRequest;
+import com.ucm.dasi.catan.request.trade.TradeRequest;
 import com.ucm.dasi.catan.resource.IResourceStorage;
 import com.ucm.dasi.catan.resource.ResourceManager;
 import com.ucm.dasi.catan.resource.ResourceStorage;
@@ -52,6 +64,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 import org.junit.jupiter.api.DisplayName;
@@ -61,6 +74,9 @@ import org.mockito.Mockito;
 
 public class CatanGameEngineTest {
 
+  @DisplayName("it must end the foundation phase")
+  @Tag("CatanBoardEngine")
+  @Test
   public void itMustEndTheFoundationPhase()
       throws InvalidBoardDimensionsException, InvalidBoardElementException, NonNullInputException,
           NonVoidCollectionException, InvalidLogException {
@@ -428,6 +444,297 @@ public class CatanGameEngineTest {
     engine.processRequests(requests);
 
     verify(log).set(eq(turn), any());
+  }
+
+  @DisplayName("it must log a valid trade agreement request")
+  @Tag("CatanBoardEngine")
+  @Test
+  public void itMustLogATradeAgreementRequest()
+      throws InvalidBoardDimensionsException, InvalidBoardElementException, NonNullInputException,
+          NonVoidCollectionException, InvalidLogException {
+
+    Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
+
+    playerResources.put(ResourceType.BRICK, 1);
+    playerResources.put(ResourceType.GRAIN, 1);
+    playerResources.put(ResourceType.LUMBER, 1);
+    playerResources.put(ResourceType.ORE, 1);
+    playerResources.put(ResourceType.WOOL, 1);
+
+    IPlayer player1 = new Player(0, new ResourceManager(playerResources));
+    IPlayer player2 = new Player(1, new ResourceManager(playerResources));
+    IPlayer[] players = {player1, player2};
+    ICatanEditableBoard board = buildStandardBoard(player1);
+
+    Consumer<IRequest> errorHandler =
+        (request) -> {
+          fail();
+        };
+
+    Collection<ILogEntry> entries = new ArrayList<ILogEntry>();
+    ArrayList<IRequest> entryRequests = new ArrayList<IRequest>();
+
+    entryRequests.add(new StartTurnRequest(player1));
+    entries.add(Mockito.spy(new LogEntry(6, entryRequests)));
+
+    IGameLog log = new LinearGameLog(entries);
+    int turn = 0;
+
+    CatanGameEngine engine =
+        new CatanGameEngine(
+            board,
+            players,
+            10,
+            GameState.NORMAL,
+            turn,
+            true,
+            errorHandler,
+            new LinearGameLog(entries),
+            new CatanRandomGenerator());
+
+    Map<ResourceType, Integer> requestedResourcesMap = new TreeMap<ResourceType, Integer>();
+    requestedResourcesMap.put(ResourceType.ORE, 1);
+
+    IResourceStorage requestedResources = new ResourceStorage(requestedResourcesMap);
+
+    Map<ResourceType, Integer> resourcesMap = new TreeMap<ResourceType, Integer>();
+    resourcesMap.put(ResourceType.GRAIN, 1);
+
+    Collection<IResourceStorage> acceptableExchanges = new ArrayList<IResourceStorage>();
+    acceptableExchanges.add(new ResourceStorage(resourcesMap));
+
+    ITrade trade = new Trade(UUID.randomUUID(), acceptableExchanges, requestedResources);
+
+    IRequest[] requests = {new TradeRequest(player1, trade)};
+    engine.processRequests(requests);
+
+    ITradeAgreement tradeAgreement =
+        new TradeAgreement(UUID.randomUUID(), acceptableExchanges.iterator().next(), trade);
+
+    IRequest request = new TradeAgreementRequest(player2, tradeAgreement);
+
+    IRequest[] requests2 = {request};
+    engine.processRequests(requests2);
+
+    verify(log.get(turn)).add(request);
+  }
+
+  @DisplayName("it must log a valid trade confirmation request")
+  @Tag("CatanBoardEngine")
+  @Test
+  public void itMustLogATradeConfirmationRequest()
+      throws InvalidBoardDimensionsException, InvalidBoardElementException, NonNullInputException,
+          NonVoidCollectionException, InvalidLogException {
+
+    Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
+
+    playerResources.put(ResourceType.BRICK, 1);
+    playerResources.put(ResourceType.GRAIN, 1);
+    playerResources.put(ResourceType.LUMBER, 1);
+    playerResources.put(ResourceType.ORE, 1);
+    playerResources.put(ResourceType.WOOL, 1);
+
+    IPlayer player1 = new Player(0, new ResourceManager(playerResources));
+    IPlayer player2 = new Player(1, new ResourceManager(playerResources));
+    IPlayer[] players = {player1, player2};
+    ICatanEditableBoard board = buildStandardBoard(player1);
+
+    Consumer<IRequest> errorHandler =
+        (request) -> {
+          fail();
+        };
+
+    Collection<ILogEntry> entries = new ArrayList<ILogEntry>();
+    ArrayList<IRequest> entryRequests = new ArrayList<IRequest>();
+
+    entryRequests.add(new StartTurnRequest(player1));
+    entries.add(Mockito.spy(new LogEntry(6, entryRequests)));
+
+    IGameLog log = new LinearGameLog(entries);
+    int turn = 0;
+
+    CatanGameEngine engine =
+        new CatanGameEngine(
+            board,
+            players,
+            10,
+            GameState.NORMAL,
+            turn,
+            true,
+            errorHandler,
+            new LinearGameLog(entries),
+            new CatanRandomGenerator());
+
+    Map<ResourceType, Integer> requestedResourcesMap = new TreeMap<ResourceType, Integer>();
+    requestedResourcesMap.put(ResourceType.ORE, 1);
+
+    IResourceStorage requestedResources = new ResourceStorage(requestedResourcesMap);
+
+    Map<ResourceType, Integer> resourcesMap = new TreeMap<ResourceType, Integer>();
+    resourcesMap.put(ResourceType.GRAIN, 1);
+
+    Collection<IResourceStorage> acceptableExchanges = new ArrayList<IResourceStorage>();
+    acceptableExchanges.add(new ResourceStorage(resourcesMap));
+
+    ITrade trade = new Trade(UUID.randomUUID(), acceptableExchanges, requestedResources);
+
+    IRequest[] requests = {new TradeRequest(player1, trade)};
+    engine.processRequests(requests);
+
+    ITradeAgreement tradeAgreement =
+        new TradeAgreement(UUID.randomUUID(), acceptableExchanges.iterator().next(), trade);
+
+    IRequest[] requests2 = {new TradeAgreementRequest(player2, tradeAgreement)};
+    engine.processRequests(requests2);
+
+    IRequest request =
+        new TradeConfirmationRequest(
+            player1, new TradeConfirmation(UUID.randomUUID(), tradeAgreement));
+
+    IRequest[] requests3 = {request};
+    engine.processRequests(requests3);
+
+    verify(log.get(turn)).add(request);
+  }
+
+  @DisplayName("it must log a valid trade discard request")
+  @Tag("CatanBoardEngine")
+  @Test
+  public void itMustLogATradeDiscardRequest()
+      throws InvalidBoardDimensionsException, InvalidBoardElementException, NonNullInputException,
+          NonVoidCollectionException, InvalidLogException {
+
+    Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
+
+    playerResources.put(ResourceType.BRICK, 1);
+    playerResources.put(ResourceType.GRAIN, 1);
+    playerResources.put(ResourceType.LUMBER, 1);
+    playerResources.put(ResourceType.ORE, 1);
+    playerResources.put(ResourceType.WOOL, 1);
+
+    IPlayer player1 = new Player(0, new ResourceManager(playerResources));
+    IPlayer player2 = new Player(1, new ResourceManager(playerResources));
+    IPlayer[] players = {player1, player2};
+    ICatanEditableBoard board = buildStandardBoard(player1);
+
+    Consumer<IRequest> errorHandler =
+        (request) -> {
+          fail();
+        };
+
+    Collection<ILogEntry> entries = new ArrayList<ILogEntry>();
+    ArrayList<IRequest> entryRequests = new ArrayList<IRequest>();
+
+    entryRequests.add(new StartTurnRequest(player1));
+    entries.add(Mockito.spy(new LogEntry(6, entryRequests)));
+
+    IGameLog log = new LinearGameLog(entries);
+    int turn = 0;
+
+    CatanGameEngine engine =
+        new CatanGameEngine(
+            board,
+            players,
+            10,
+            GameState.NORMAL,
+            turn,
+            true,
+            errorHandler,
+            new LinearGameLog(entries),
+            new CatanRandomGenerator());
+
+    Map<ResourceType, Integer> requestedResourcesMap = new TreeMap<ResourceType, Integer>();
+    requestedResourcesMap.put(ResourceType.ORE, 1);
+
+    IResourceStorage requestedResources = new ResourceStorage(requestedResourcesMap);
+
+    Map<ResourceType, Integer> resourcesMap = new TreeMap<ResourceType, Integer>();
+    resourcesMap.put(ResourceType.GRAIN, 1);
+
+    Collection<IResourceStorage> acceptableExchanges = new ArrayList<IResourceStorage>();
+    acceptableExchanges.add(new ResourceStorage(resourcesMap));
+
+    ITrade trade = new Trade(UUID.randomUUID(), acceptableExchanges, requestedResources);
+
+    IRequest[] requests = {new TradeRequest(player1, trade)};
+    engine.processRequests(requests);
+
+    ITradeAgreement tradeAgreement =
+        new TradeAgreement(UUID.randomUUID(), acceptableExchanges.iterator().next(), trade);
+
+    IRequest[] requests2 = {new TradeAgreementRequest(player2, tradeAgreement)};
+    engine.processRequests(requests2);
+
+    IRequest request = new TradeDiscardRequest(player1, new TradeDiscard(UUID.randomUUID(), trade));
+
+    IRequest[] requests3 = {request};
+    engine.processRequests(requests3);
+
+    verify(log.get(turn)).add(request);
+  }
+
+  @DisplayName("it must log a valid trade request")
+  @Tag("CatanBoardEngine")
+  @Test
+  public void itMustLogATradeRequest()
+      throws InvalidBoardDimensionsException, InvalidBoardElementException, NonNullInputException,
+          NonVoidCollectionException, InvalidLogException {
+
+    Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
+
+    playerResources.put(ResourceType.BRICK, 1);
+    playerResources.put(ResourceType.GRAIN, 1);
+    playerResources.put(ResourceType.LUMBER, 1);
+    playerResources.put(ResourceType.WOOL, 1);
+
+    IPlayer player = new Player(0, new ResourceManager(playerResources));
+    IPlayer[] players = {player};
+    ICatanEditableBoard board = buildStandardBoard(player);
+
+    Consumer<IRequest> errorHandler =
+        (request) -> {
+          fail();
+        };
+
+    Collection<ILogEntry> entries = new ArrayList<ILogEntry>();
+    ArrayList<IRequest> entryRequests = new ArrayList<IRequest>();
+
+    entryRequests.add(new StartTurnRequest(player));
+    entries.add(Mockito.spy(new LogEntry(6, entryRequests)));
+
+    IGameLog log = new LinearGameLog(entries);
+    int turn = 0;
+
+    CatanGameEngine engine =
+        new CatanGameEngine(
+            board,
+            players,
+            10,
+            GameState.NORMAL,
+            turn,
+            true,
+            errorHandler,
+            log,
+            new CatanRandomGenerator());
+
+    Map<ResourceType, Integer> requestedResourcesMap = new TreeMap<ResourceType, Integer>();
+    requestedResourcesMap.put(ResourceType.ORE, 1);
+
+    IResourceStorage requestedResources = new ResourceStorage(requestedResourcesMap);
+
+    Map<ResourceType, Integer> resourcesMap = new TreeMap<ResourceType, Integer>();
+    resourcesMap.put(ResourceType.GRAIN, 1);
+
+    Collection<IResourceStorage> acceptableExchanges = new ArrayList<IResourceStorage>();
+    acceptableExchanges.add(new ResourceStorage(resourcesMap));
+
+    Trade trade = new Trade(UUID.randomUUID(), acceptableExchanges, requestedResources);
+
+    IRequest request = new TradeRequest(player, trade);
+    IRequest[] requests = {request};
+    engine.processRequests(requests);
+
+    verify(log.get(turn)).add(request);
   }
 
   @DisplayName("It must append a request to the log while processing an end turn request")
@@ -959,7 +1266,7 @@ public class CatanGameEngineTest {
   @DisplayName("It must not process a valid end turn request if the game is ended")
   @Tag(value = "CatanBoardEngine")
   @Test
-  public void itMustNotProcessAValidEndTurnRequestIfTheGameIsEnded()
+  public void itMustNotProcessAValidEndTurnRequestI()
       throws NonNullInputException, NonVoidCollectionException, InvalidBoardDimensionsException,
           InvalidBoardElementException, InvalidLogException {
 
@@ -998,6 +1305,74 @@ public class CatanGameEngineTest {
     assertSame(true, requestFailed.get());
   }
 
+  @DisplayName("it must log a valid trade request")
+  @Tag("CatanBoardEngine")
+  @Test
+  public void itMustNotProcessAValidEndTurnRequestII()
+      throws InvalidBoardDimensionsException, InvalidBoardElementException, NonNullInputException,
+          NonVoidCollectionException, InvalidLogException {
+
+    Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
+
+    playerResources.put(ResourceType.BRICK, 1);
+    playerResources.put(ResourceType.GRAIN, 1);
+    playerResources.put(ResourceType.LUMBER, 1);
+    playerResources.put(ResourceType.WOOL, 1);
+
+    IPlayer player = new Player(0, new ResourceManager(playerResources));
+    IPlayer[] players = {player};
+    ICatanEditableBoard board = buildStandardBoard(player);
+
+    AtomicBoolean requestFailed = new AtomicBoolean(false);
+
+    Consumer<IRequest> errorHandler =
+        (request) -> {
+          requestFailed.set(true);
+        };
+
+    Collection<ILogEntry> entries = new ArrayList<ILogEntry>();
+    ArrayList<IRequest> entryRequests = new ArrayList<IRequest>();
+
+    entryRequests.add(new StartTurnRequest(player));
+    entries.add(new LogEntry(6, entryRequests));
+
+    IGameLog log = new LinearGameLog(entries);
+    int turn = 0;
+
+    CatanGameEngine engine =
+        new CatanGameEngine(
+            board,
+            players,
+            10,
+            GameState.NORMAL,
+            turn,
+            true,
+            errorHandler,
+            log,
+            new CatanRandomGenerator());
+
+    Map<ResourceType, Integer> requestedResourcesMap = new TreeMap<ResourceType, Integer>();
+    requestedResourcesMap.put(ResourceType.ORE, 1);
+
+    IResourceStorage requestedResources = new ResourceStorage(requestedResourcesMap);
+
+    Map<ResourceType, Integer> resourcesMap = new TreeMap<ResourceType, Integer>();
+    resourcesMap.put(ResourceType.GRAIN, 1);
+
+    Collection<IResourceStorage> acceptableExchanges = new ArrayList<IResourceStorage>();
+    acceptableExchanges.add(new ResourceStorage(resourcesMap));
+
+    Trade trade = new Trade(UUID.randomUUID(), acceptableExchanges, requestedResources);
+
+    IRequest[] requests = {new TradeRequest(player, trade)};
+    engine.processRequests(requests);
+
+    IRequest[] requests2 = {new EndTurnRequest(player)};
+    engine.processRequests(requests2);
+
+    assertSame(true, requestFailed.get());
+  }
+
   @DisplayName("It must not process a valid start turn request if the game is ended")
   @Tag(value = "CatanBoardEngine")
   @Test
@@ -1032,6 +1407,189 @@ public class CatanGameEngineTest {
     engine.processRequests(requests);
 
     assertSame(true, requestFailed.get());
+  }
+
+  @DisplayName("it must process a valid trade request if the turn is not started")
+  @Tag("CatanBoardEngine")
+  @Test
+  public void itMustNotProcessAValidTradeRequestI()
+      throws InvalidBoardDimensionsException, InvalidBoardElementException, NonNullInputException,
+          NonVoidCollectionException, InvalidLogException {
+
+    Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
+
+    playerResources.put(ResourceType.BRICK, 1);
+    playerResources.put(ResourceType.GRAIN, 1);
+    playerResources.put(ResourceType.LUMBER, 1);
+    playerResources.put(ResourceType.WOOL, 1);
+
+    IPlayer player = new Player(0, new ResourceManager(playerResources));
+    IPlayer[] players = {player};
+    ICatanEditableBoard board = buildStandardBoard(player);
+
+    AtomicBoolean requestFailed = new AtomicBoolean(false);
+
+    Consumer<IRequest> errorHandler =
+        (request) -> {
+          requestFailed.set(true);
+        };
+
+    Collection<ILogEntry> entries = new ArrayList<ILogEntry>();
+
+    CatanGameEngine engine =
+        new CatanGameEngine(
+            board,
+            players,
+            10,
+            GameState.NORMAL,
+            0,
+            false,
+            errorHandler,
+            new LinearGameLog(entries),
+            new CatanRandomGenerator());
+
+    Map<ResourceType, Integer> requestedResourcesMap = new TreeMap<ResourceType, Integer>();
+    requestedResourcesMap.put(ResourceType.ORE, 1);
+
+    IResourceStorage requestedResources = new ResourceStorage(requestedResourcesMap);
+
+    Map<ResourceType, Integer> resourcesMap = new TreeMap<ResourceType, Integer>();
+    resourcesMap.put(ResourceType.GRAIN, 1);
+
+    Collection<IResourceStorage> acceptableExchanges = new ArrayList<IResourceStorage>();
+    acceptableExchanges.add(new ResourceStorage(resourcesMap));
+
+    Trade trade = new Trade(UUID.randomUUID(), acceptableExchanges, requestedResources);
+
+    IRequest[] requests = {new TradeRequest(player, trade)};
+    engine.processRequests(requests);
+
+    assertTrue(requestFailed.get());
+  }
+
+  @DisplayName("it must process a valid trade request if the phase is not the normal one")
+  @Tag("CatanBoardEngine")
+  @Test
+  public void itMustNotProcessAValidTradeRequestII()
+      throws InvalidBoardDimensionsException, InvalidBoardElementException, NonNullInputException,
+          NonVoidCollectionException, InvalidLogException {
+
+    Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
+
+    playerResources.put(ResourceType.BRICK, 1);
+    playerResources.put(ResourceType.GRAIN, 1);
+    playerResources.put(ResourceType.LUMBER, 1);
+    playerResources.put(ResourceType.WOOL, 1);
+
+    IPlayer player = new Player(0, new ResourceManager(playerResources));
+    IPlayer[] players = {player};
+    ICatanEditableBoard board = buildStandardBoard(player);
+
+    AtomicBoolean requestFailed = new AtomicBoolean(false);
+
+    Consumer<IRequest> errorHandler =
+        (request) -> {
+          requestFailed.set(true);
+        };
+
+    Collection<ILogEntry> entries = new ArrayList<ILogEntry>();
+    ArrayList<IRequest> entryRequests = new ArrayList<IRequest>();
+
+    entryRequests.add(new StartTurnRequest(player));
+    entries.add(new LogEntry(6, entryRequests));
+
+    CatanGameEngine engine =
+        new CatanGameEngine(
+            board,
+            players,
+            10,
+            GameState.FOUNDATION,
+            0,
+            true,
+            errorHandler,
+            new LinearGameLog(entries),
+            new CatanRandomGenerator());
+
+    Map<ResourceType, Integer> requestedResourcesMap = new TreeMap<ResourceType, Integer>();
+    requestedResourcesMap.put(ResourceType.ORE, 1);
+
+    IResourceStorage requestedResources = new ResourceStorage(requestedResourcesMap);
+
+    Map<ResourceType, Integer> resourcesMap = new TreeMap<ResourceType, Integer>();
+    resourcesMap.put(ResourceType.GRAIN, 1);
+
+    Collection<IResourceStorage> acceptableExchanges = new ArrayList<IResourceStorage>();
+    acceptableExchanges.add(new ResourceStorage(resourcesMap));
+
+    Trade trade = new Trade(UUID.randomUUID(), acceptableExchanges, requestedResources);
+
+    IRequest[] requests = {new TradeRequest(player, trade)};
+    engine.processRequests(requests);
+
+    assertTrue(requestFailed.get());
+  }
+
+  @DisplayName("it must not process a valid trade request if the player is not the active one")
+  @Tag("CatanBoardEngine")
+  @Test
+  public void itMustNotProcessAValidTradeRequestIII()
+      throws InvalidBoardDimensionsException, InvalidBoardElementException, NonNullInputException,
+          NonVoidCollectionException, InvalidLogException {
+
+    Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
+
+    playerResources.put(ResourceType.BRICK, 1);
+    playerResources.put(ResourceType.GRAIN, 1);
+    playerResources.put(ResourceType.LUMBER, 1);
+    playerResources.put(ResourceType.WOOL, 1);
+
+    IPlayer player = new Player(0, new ResourceManager(playerResources));
+    IPlayer player2 = new Player(1, new ResourceManager(playerResources));
+    IPlayer[] players = {player, player2};
+    ICatanEditableBoard board = buildStandardBoard(player);
+
+    AtomicBoolean requestFailed = new AtomicBoolean(false);
+
+    Consumer<IRequest> errorHandler =
+        (request) -> {
+          requestFailed.set(true);
+        };
+
+    Collection<ILogEntry> entries = new ArrayList<ILogEntry>();
+    ArrayList<IRequest> entryRequests = new ArrayList<IRequest>();
+
+    entryRequests.add(new StartTurnRequest(player));
+    entries.add(new LogEntry(6, entryRequests));
+
+    CatanGameEngine engine =
+        new CatanGameEngine(
+            board,
+            players,
+            10,
+            GameState.NORMAL,
+            0,
+            true,
+            errorHandler,
+            new LinearGameLog(entries),
+            new CatanRandomGenerator());
+
+    Map<ResourceType, Integer> requestedResourcesMap = new TreeMap<ResourceType, Integer>();
+    requestedResourcesMap.put(ResourceType.ORE, 1);
+
+    IResourceStorage requestedResources = new ResourceStorage(requestedResourcesMap);
+
+    Map<ResourceType, Integer> resourcesMap = new TreeMap<ResourceType, Integer>();
+    resourcesMap.put(ResourceType.GRAIN, 1);
+
+    Collection<IResourceStorage> acceptableExchanges = new ArrayList<IResourceStorage>();
+    acceptableExchanges.add(new ResourceStorage(resourcesMap));
+
+    Trade trade = new Trade(UUID.randomUUID(), acceptableExchanges, requestedResources);
+
+    IRequest[] requests = {new TradeRequest(player2, trade)};
+    engine.processRequests(requests);
+
+    assertTrue(requestFailed.get());
   }
 
   @DisplayName("It not process two build initial connections at the same turns")
@@ -1500,6 +2058,285 @@ public class CatanGameEngineTest {
     engine.processRequests(requests);
 
     assertSame(true, engine.isTurnStarted());
+  }
+
+  @DisplayName("it must process a valid trade agreement request")
+  @Tag("CatanBoardEngine")
+  @Test
+  public void itMustProcessAValidTradeAgreementRequest()
+      throws InvalidBoardDimensionsException, InvalidBoardElementException, NonNullInputException,
+          NonVoidCollectionException, InvalidLogException {
+
+    Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
+
+    playerResources.put(ResourceType.BRICK, 1);
+    playerResources.put(ResourceType.GRAIN, 1);
+    playerResources.put(ResourceType.LUMBER, 1);
+    playerResources.put(ResourceType.ORE, 1);
+    playerResources.put(ResourceType.WOOL, 1);
+
+    IPlayer player1 = new Player(0, new ResourceManager(playerResources));
+    IPlayer player2 = new Player(1, new ResourceManager(playerResources));
+    IPlayer[] players = {player1, player2};
+    ICatanEditableBoard board = buildStandardBoard(player1);
+
+    AtomicBoolean requestFailed = new AtomicBoolean(false);
+
+    Consumer<IRequest> errorHandler =
+        (request) -> {
+          requestFailed.set(true);
+        };
+
+    Collection<ILogEntry> entries = new ArrayList<ILogEntry>();
+    ArrayList<IRequest> entryRequests = new ArrayList<IRequest>();
+
+    entryRequests.add(new StartTurnRequest(player1));
+    entries.add(new LogEntry(6, entryRequests));
+
+    CatanGameEngine engine =
+        new CatanGameEngine(
+            board,
+            players,
+            10,
+            GameState.NORMAL,
+            0,
+            true,
+            errorHandler,
+            new LinearGameLog(entries),
+            new CatanRandomGenerator());
+
+    Map<ResourceType, Integer> requestedResourcesMap = new TreeMap<ResourceType, Integer>();
+    requestedResourcesMap.put(ResourceType.ORE, 1);
+
+    IResourceStorage requestedResources = new ResourceStorage(requestedResourcesMap);
+
+    Map<ResourceType, Integer> resourcesMap = new TreeMap<ResourceType, Integer>();
+    resourcesMap.put(ResourceType.GRAIN, 1);
+
+    Collection<IResourceStorage> acceptableExchanges = new ArrayList<IResourceStorage>();
+    acceptableExchanges.add(new ResourceStorage(resourcesMap));
+
+    ITrade trade = new Trade(UUID.randomUUID(), acceptableExchanges, requestedResources);
+
+    IRequest[] requests = {new TradeRequest(player1, trade)};
+    engine.processRequests(requests);
+
+    ITradeAgreement tradeAgreement =
+        new TradeAgreement(UUID.randomUUID(), acceptableExchanges.iterator().next(), trade);
+
+    IRequest[] requests2 = {new TradeAgreementRequest(player2, tradeAgreement)};
+    engine.processRequests(requests2);
+
+    assertFalse(requestFailed.get());
+  }
+
+  @DisplayName("it must process a valid trade confirmation request")
+  @Tag("CatanBoardEngine")
+  @Test
+  public void itMustProcessAValidTradeConfirmationRequest()
+      throws InvalidBoardDimensionsException, InvalidBoardElementException, NonNullInputException,
+          NonVoidCollectionException, InvalidLogException {
+
+    Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
+
+    playerResources.put(ResourceType.BRICK, 1);
+    playerResources.put(ResourceType.GRAIN, 1);
+    playerResources.put(ResourceType.LUMBER, 1);
+    playerResources.put(ResourceType.ORE, 1);
+    playerResources.put(ResourceType.WOOL, 1);
+
+    IPlayer player1 = new Player(0, new ResourceManager(playerResources));
+    IPlayer player2 = new Player(1, new ResourceManager(playerResources));
+    IPlayer[] players = {player1, player2};
+    ICatanEditableBoard board = buildStandardBoard(player1);
+
+    AtomicBoolean requestFailed = new AtomicBoolean(false);
+
+    Consumer<IRequest> errorHandler =
+        (request) -> {
+          requestFailed.set(true);
+        };
+
+    Collection<ILogEntry> entries = new ArrayList<ILogEntry>();
+    ArrayList<IRequest> entryRequests = new ArrayList<IRequest>();
+
+    entryRequests.add(new StartTurnRequest(player1));
+    entries.add(new LogEntry(6, entryRequests));
+
+    CatanGameEngine engine =
+        new CatanGameEngine(
+            board,
+            players,
+            10,
+            GameState.NORMAL,
+            0,
+            true,
+            errorHandler,
+            new LinearGameLog(entries),
+            new CatanRandomGenerator());
+
+    Map<ResourceType, Integer> requestedResourcesMap = new TreeMap<ResourceType, Integer>();
+    requestedResourcesMap.put(ResourceType.ORE, 1);
+
+    IResourceStorage requestedResources = new ResourceStorage(requestedResourcesMap);
+
+    Map<ResourceType, Integer> resourcesMap = new TreeMap<ResourceType, Integer>();
+    resourcesMap.put(ResourceType.GRAIN, 1);
+
+    Collection<IResourceStorage> acceptableExchanges = new ArrayList<IResourceStorage>();
+    acceptableExchanges.add(new ResourceStorage(resourcesMap));
+
+    ITrade trade = new Trade(UUID.randomUUID(), acceptableExchanges, requestedResources);
+
+    IRequest[] requests = {new TradeRequest(player1, trade)};
+    engine.processRequests(requests);
+
+    ITradeAgreement tradeAgreement =
+        new TradeAgreement(UUID.randomUUID(), acceptableExchanges.iterator().next(), trade);
+
+    IRequest[] requests2 = {new TradeAgreementRequest(player2, tradeAgreement)};
+    engine.processRequests(requests2);
+
+    IRequest[] requests3 = {
+      new TradeConfirmationRequest(
+          player1, new TradeConfirmation(UUID.randomUUID(), tradeAgreement))
+    };
+    engine.processRequests(requests3);
+
+    assertFalse(requestFailed.get());
+  }
+
+  public void itMustProcessAValidTradeDiscardRequest()
+      throws InvalidBoardDimensionsException, InvalidBoardElementException, NonNullInputException,
+          NonVoidCollectionException, InvalidLogException {
+    Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
+
+    playerResources.put(ResourceType.BRICK, 1);
+    playerResources.put(ResourceType.GRAIN, 1);
+    playerResources.put(ResourceType.LUMBER, 1);
+    playerResources.put(ResourceType.ORE, 1);
+    playerResources.put(ResourceType.WOOL, 1);
+
+    IPlayer player1 = new Player(0, new ResourceManager(playerResources));
+    IPlayer player2 = new Player(1, new ResourceManager(playerResources));
+    IPlayer[] players = {player1, player2};
+    ICatanEditableBoard board = buildStandardBoard(player1);
+
+    AtomicBoolean requestFailed = new AtomicBoolean(false);
+
+    Consumer<IRequest> errorHandler =
+        (request) -> {
+          requestFailed.set(true);
+        };
+
+    Collection<ILogEntry> entries = new ArrayList<ILogEntry>();
+    ArrayList<IRequest> entryRequests = new ArrayList<IRequest>();
+
+    entryRequests.add(new StartTurnRequest(player1));
+    entries.add(new LogEntry(6, entryRequests));
+
+    CatanGameEngine engine =
+        new CatanGameEngine(
+            board,
+            players,
+            10,
+            GameState.NORMAL,
+            0,
+            true,
+            errorHandler,
+            new LinearGameLog(entries),
+            new CatanRandomGenerator());
+
+    Map<ResourceType, Integer> requestedResourcesMap = new TreeMap<ResourceType, Integer>();
+    requestedResourcesMap.put(ResourceType.ORE, 1);
+
+    IResourceStorage requestedResources = new ResourceStorage(requestedResourcesMap);
+
+    Map<ResourceType, Integer> resourcesMap = new TreeMap<ResourceType, Integer>();
+    resourcesMap.put(ResourceType.GRAIN, 1);
+
+    Collection<IResourceStorage> acceptableExchanges = new ArrayList<IResourceStorage>();
+    acceptableExchanges.add(new ResourceStorage(resourcesMap));
+
+    ITrade trade = new Trade(UUID.randomUUID(), acceptableExchanges, requestedResources);
+
+    IRequest[] requests = {new TradeRequest(player1, trade)};
+    engine.processRequests(requests);
+
+    ITradeAgreement tradeAgreement =
+        new TradeAgreement(UUID.randomUUID(), acceptableExchanges.iterator().next(), trade);
+
+    IRequest[] requests2 = {new TradeAgreementRequest(player2, tradeAgreement)};
+    engine.processRequests(requests2);
+
+    IRequest[] requests3 = {
+      new TradeDiscardRequest(player1, new TradeDiscard(UUID.randomUUID(), trade))
+    };
+    engine.processRequests(requests3);
+
+    assertFalse(requestFailed.get());
+  }
+
+  @DisplayName("it must process a valid trade request")
+  @Tag("CatanBoardEngine")
+  @Test
+  public void itMustProcessAValidTradeRequest()
+      throws InvalidBoardDimensionsException, InvalidBoardElementException, NonNullInputException,
+          NonVoidCollectionException, InvalidLogException {
+
+    Map<ResourceType, Integer> playerResources = new TreeMap<ResourceType, Integer>();
+
+    playerResources.put(ResourceType.BRICK, 1);
+    playerResources.put(ResourceType.GRAIN, 1);
+    playerResources.put(ResourceType.LUMBER, 1);
+    playerResources.put(ResourceType.WOOL, 1);
+
+    IPlayer player = new Player(0, new ResourceManager(playerResources));
+    IPlayer[] players = {player};
+    ICatanEditableBoard board = buildStandardBoard(player);
+
+    AtomicBoolean requestFailed = new AtomicBoolean(false);
+
+    Consumer<IRequest> errorHandler =
+        (request) -> {
+          requestFailed.set(true);
+        };
+
+    Collection<ILogEntry> entries = new ArrayList<ILogEntry>();
+    ArrayList<IRequest> entryRequests = new ArrayList<IRequest>();
+
+    entryRequests.add(new StartTurnRequest(player));
+    entries.add(new LogEntry(6, entryRequests));
+
+    CatanGameEngine engine =
+        new CatanGameEngine(
+            board,
+            players,
+            10,
+            GameState.NORMAL,
+            0,
+            true,
+            errorHandler,
+            new LinearGameLog(entries),
+            new CatanRandomGenerator());
+
+    Map<ResourceType, Integer> requestedResourcesMap = new TreeMap<ResourceType, Integer>();
+    requestedResourcesMap.put(ResourceType.ORE, 1);
+
+    IResourceStorage requestedResources = new ResourceStorage(requestedResourcesMap);
+
+    Map<ResourceType, Integer> resourcesMap = new TreeMap<ResourceType, Integer>();
+    resourcesMap.put(ResourceType.GRAIN, 1);
+
+    Collection<IResourceStorage> acceptableExchanges = new ArrayList<IResourceStorage>();
+    acceptableExchanges.add(new ResourceStorage(resourcesMap));
+
+    Trade trade = new Trade(UUID.randomUUID(), acceptableExchanges, requestedResources);
+
+    IRequest[] requests = {new TradeRequest(player, trade)};
+    engine.processRequests(requests);
+
+    assertFalse(requestFailed.get());
   }
 
   @DisplayName("It must produce resources at the start of a turn")
