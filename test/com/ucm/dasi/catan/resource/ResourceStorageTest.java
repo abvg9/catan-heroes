@@ -1,6 +1,8 @@
 package com.ucm.dasi.catan.resource;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
@@ -8,6 +10,76 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 public class ResourceStorageTest {
+
+  @DisplayName(
+      "It must determine that resources can be substracted if every resources is greater or equal")
+  @Tag("ResourceStorage")
+  @Test
+  public void itMustDetermineIfResourcesCanBeSubbstractedI() {
+
+    Map<ResourceType, Integer> resources1 =
+        Map.of(
+            ResourceType.ORE,
+            1,
+            ResourceType.BRICK,
+            2,
+            ResourceType.WOOL,
+            3,
+            ResourceType.LUMBER,
+            4);
+
+    ResourceStorage storage1 = new ResourceStorage(resources1);
+
+    Map<ResourceType, Integer> resources2 =
+        Map.of(
+            ResourceType.ORE,
+            1,
+            ResourceType.BRICK,
+            1,
+            ResourceType.WOOL,
+            2,
+            ResourceType.LUMBER,
+            3);
+
+    ResourceStorage storage2 = new ResourceStorage(resources2);
+
+    assertTrue(storage1.canSubstract(storage2));
+  }
+
+  @DisplayName(
+      "It must determine that resources can not be substracted if at least one resource fewer")
+  @Tag("ResourceStorage")
+  @Test
+  public void itMustDetermineIfResourcesCanBeSubbstractedII() {
+
+    Map<ResourceType, Integer> resources1 =
+        Map.of(
+            ResourceType.ORE,
+            0,
+            ResourceType.BRICK,
+            2,
+            ResourceType.WOOL,
+            3,
+            ResourceType.LUMBER,
+            4);
+
+    ResourceStorage storage1 = new ResourceStorage(resources1);
+
+    Map<ResourceType, Integer> resources2 =
+        Map.of(
+            ResourceType.ORE,
+            1,
+            ResourceType.BRICK,
+            1,
+            ResourceType.WOOL,
+            2,
+            ResourceType.LUMBER,
+            3);
+
+    ResourceStorage storage2 = new ResourceStorage(resources2);
+
+    assertFalse(storage1.canSubstract(storage2));
+  }
 
   @DisplayName("It must get a resource amount")
   @Tag("ResourceStorage")
