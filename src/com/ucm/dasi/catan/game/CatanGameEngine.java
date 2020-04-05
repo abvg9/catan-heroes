@@ -373,6 +373,11 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
       return;
     }
 
+    if (tradeManager.getTrade() != null) {
+      handleRequestError(request);
+      return;
+    }
+
     switchTurnStarted();
 
     gameLog.get(getTurnNumber()).add(request);
