@@ -3,7 +3,6 @@ package com.ucm.dasi.catan.board.production;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.ucm.dasi.catan.board.CatanBoard;
-import com.ucm.dasi.catan.board.CatanEditableBoard;
 import com.ucm.dasi.catan.board.connection.BoardConnection;
 import com.ucm.dasi.catan.board.connection.ConnectionType;
 import com.ucm.dasi.catan.board.connection.IBoardConnection;
@@ -78,7 +77,7 @@ public class BoardProductionManagerTest {
     IPlayer player = new Player(0, new ResourceManager());
 
     ITerrainProductionProvider productionProvider = new DefaultTerrainProductionProvider();
-    CatanEditableBoard board = buildStandardBoard(player, productionProvider);
+    CatanBoard board = buildStandardBoard(player, productionProvider);
 
     BoardProductionManager boardProductionManager =
         new BoardProductionManager(board, productionProvider);
@@ -117,7 +116,7 @@ public class BoardProductionManagerTest {
     IPlayer player = new Player(0, new ResourceManager());
 
     ITerrainProductionProvider productionProvider = new DefaultTerrainProductionProvider();
-    CatanEditableBoard board = buildStandardBoard(player, productionProvider);
+    CatanBoard board = buildStandardBoard(player, productionProvider);
 
     BoardProductionManager boardProductionManager =
         new BoardProductionManager(board, productionProvider);
@@ -155,7 +154,7 @@ public class BoardProductionManagerTest {
     assertEquals(standardCityAtMountainProduction, productionAfter);
   }
 
-  private CatanEditableBoard buildStandardBoard(
+  private CatanBoard buildStandardBoard(
       IPlayer player1, ITerrainProductionProvider productionProvider)
       throws InvalidBoardDimensionsException, InvalidBoardElementException {
     IBoardElement[][] elements = {
@@ -196,7 +195,7 @@ public class BoardProductionManagerTest {
       },
     };
 
-    return new CatanEditableBoard(5, 5, elements, productionProvider);
+    return new CatanBoard(5, 5, elements, productionProvider);
   }
 
   private IBoardTerrain createMountainsTerrain(int productionNumber) {

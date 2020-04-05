@@ -39,7 +39,7 @@ public class CatanEditableBoardTest {
 
     IPlayer player = new Player(0, new ResourceManager());
 
-    CatanEditableBoard board = buildStandardBoard(player, new DefaultTerrainProductionProvider());
+    CatanBoard board = buildStandardBoard(player, new DefaultTerrainProductionProvider());
 
     int requestX = 3;
     int requestY = 2;
@@ -63,7 +63,7 @@ public class CatanEditableBoardTest {
 
     IPlayer player = new Player(0, new ResourceManager());
 
-    CatanEditableBoard board = buildStandardBoard(player, new DefaultTerrainProductionProvider());
+    CatanBoard board = buildStandardBoard(player, new DefaultTerrainProductionProvider());
 
     int requestX = 2;
     int requestY = 2;
@@ -87,7 +87,7 @@ public class CatanEditableBoardTest {
     IPlayer player = new Player(0, new ResourceManager());
 
     ITerrainProductionProvider productionProvider = new DefaultTerrainProductionProvider();
-    CatanEditableBoardForTest board = buildStandardBoard(player, productionProvider);
+    CatanBoardForTest board = buildStandardBoard(player, productionProvider);
 
     IBoardProductionManager productionManager =
         Mockito.spy(new BoardProductionManager(board, productionProvider));
@@ -119,7 +119,7 @@ public class CatanEditableBoardTest {
     IPlayer player = new Player(0, new ResourceManager());
 
     ITerrainProductionProvider productionProvider = new DefaultTerrainProductionProvider();
-    CatanEditableBoardForTest board = buildStandardBoard(player, productionProvider);
+    CatanBoardForTest board = buildStandardBoard(player, productionProvider);
 
     IBoardProductionManager productionManager =
         Mockito.spy(new BoardProductionManager(board, productionProvider));
@@ -155,7 +155,7 @@ public class CatanEditableBoardTest {
 
     IPlayer player = new Player(0, new ResourceManager());
 
-    CatanEditableBoard board = buildStandardBoard(player, new DefaultTerrainProductionProvider());
+    CatanBoard board = buildStandardBoard(player, new DefaultTerrainProductionProvider());
 
     int requestX = 2;
     int requestY = 2;
@@ -189,7 +189,7 @@ public class CatanEditableBoardTest {
     return new BoardConnection(player, new ResourceManager(), ConnectionType.ROAD);
   }
 
-  private CatanEditableBoardForTest buildStandardBoard(
+  private CatanBoardForTest buildStandardBoard(
       IPlayer player1, ITerrainProductionProvider productionProvider)
       throws InvalidBoardDimensionsException, InvalidBoardElementException {
     IBoardElement[][] elements = {
@@ -230,7 +230,7 @@ public class CatanEditableBoardTest {
       },
     };
 
-    return new CatanEditableBoardForTest(5, 5, elements, productionProvider);
+    return new CatanBoardForTest(5, 5, elements, productionProvider);
   }
 
   private IBoardConnection buildVoidConnection() {

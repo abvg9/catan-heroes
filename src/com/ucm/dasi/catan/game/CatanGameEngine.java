@@ -1,7 +1,7 @@
 package com.ucm.dasi.catan.game;
 
 import com.ucm.dasi.catan.board.BoardElementType;
-import com.ucm.dasi.catan.board.ICatanEditableBoard;
+import com.ucm.dasi.catan.board.ICatanBoard;
 import com.ucm.dasi.catan.board.connection.BoardConnection;
 import com.ucm.dasi.catan.board.connection.ConnectionDirection;
 import com.ucm.dasi.catan.board.connection.ConnectionType;
@@ -61,7 +61,7 @@ public class CatanGameEngine extends CatanGame implements ICatanGameEngine {
   private ITradeManager tradeManager;
 
   public CatanGameEngine(
-      ICatanEditableBoard board,
+      ICatanBoard board,
       IPlayer[] players,
       int pointsToWin,
       GameState state,
