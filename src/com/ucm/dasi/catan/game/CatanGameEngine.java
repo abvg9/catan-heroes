@@ -44,7 +44,7 @@ import com.ucm.dasi.catan.resource.provider.IResourceManagerProvider;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
-public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements ICatanGameEngine {
+public class CatanGameEngine extends CatanGame implements ICatanGameEngine {
 
   private IResourceManagerProvider<ConnectionType> connectionCostProvider;
 
