@@ -10,8 +10,8 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 
 import com.ucm.dasi.catan.board.BoardElementType;
-import com.ucm.dasi.catan.board.CatanEditableBoard;
-import com.ucm.dasi.catan.board.ICatanEditableBoard;
+import com.ucm.dasi.catan.board.CatanBoard;
+import com.ucm.dasi.catan.board.ICatanBoard;
 import com.ucm.dasi.catan.board.connection.BoardConnection;
 import com.ucm.dasi.catan.board.connection.ConnectionType;
 import com.ucm.dasi.catan.board.connection.IBoardConnection;
@@ -84,7 +84,7 @@ public class CatanGameEngineTest {
     IPlayer player1 = new Player(0, new ResourceManager());
     IPlayer[] players = {player1};
 
-    ICatanEditableBoard board = buildStandardBoard(player1);
+    ICatanBoard board = buildStandardBoard(player1);
 
     Consumer<IRequest> errorHandler =
         (request) -> {
@@ -142,7 +142,7 @@ public class CatanGameEngineTest {
     IPlayer player1 = new Player(0, new ResourceManager(playerResources));
     IPlayer[] players = {player1};
 
-    ICatanEditableBoard board = buildStandardBoard(player1);
+    ICatanBoard board = buildStandardBoard(player1);
 
     Consumer<IRequest> errorHandler =
         (request) -> {
@@ -197,7 +197,7 @@ public class CatanGameEngineTest {
 
     IPlayer player = new Player(0, new ResourceManager(playerResources));
     IPlayer[] players = {player};
-    ICatanEditableBoard board = buildStandardBoard(player);
+    ICatanBoard board = buildStandardBoard(player);
 
     int requestX = 3;
     int requestY = 2;
@@ -248,7 +248,7 @@ public class CatanGameEngineTest {
 
     IPlayer player = new Player(0, new ResourceManager());
     IPlayer[] players = {player};
-    ICatanEditableBoard board = buildStandardBoard(player);
+    ICatanBoard board = buildStandardBoard(player);
 
     int requestX = 3;
     int requestY = 4;
@@ -307,7 +307,7 @@ public class CatanGameEngineTest {
 
     IPlayer player = new Player(0, new ResourceManager());
     IPlayer[] players = {player};
-    ICatanEditableBoard board = buildStandardBoard(player);
+    ICatanBoard board = buildStandardBoard(player);
 
     int requestX = 2;
     int requestY = 4;
@@ -365,7 +365,7 @@ public class CatanGameEngineTest {
 
     IPlayer player = new Player(0, new ResourceManager(playerResources));
     IPlayer[] players = {player};
-    ICatanEditableBoard board = buildStandardBoard(player);
+    ICatanBoard board = buildStandardBoard(player);
 
     int requestX = 2;
     int requestY = 2;
@@ -415,7 +415,7 @@ public class CatanGameEngineTest {
           InvalidBoardElementException, InvalidBoardDimensionsException {
     IPlayer player = new Player(0, new ResourceManager());
     IPlayer[] players = {player};
-    ICatanEditableBoard board = buildStandardBoard(player);
+    ICatanBoard board = buildStandardBoard(player);
 
     Consumer<IRequest> errorHandler =
         (request) -> {
@@ -464,7 +464,7 @@ public class CatanGameEngineTest {
     IPlayer player1 = new Player(0, new ResourceManager(playerResources));
     IPlayer player2 = new Player(1, new ResourceManager(playerResources));
     IPlayer[] players = {player1, player2};
-    ICatanEditableBoard board = buildStandardBoard(player1);
+    ICatanBoard board = buildStandardBoard(player1);
 
     Consumer<IRequest> errorHandler =
         (request) -> {
@@ -537,7 +537,7 @@ public class CatanGameEngineTest {
     IPlayer player1 = new Player(0, new ResourceManager(playerResources));
     IPlayer player2 = new Player(1, new ResourceManager(playerResources));
     IPlayer[] players = {player1, player2};
-    ICatanEditableBoard board = buildStandardBoard(player1);
+    ICatanBoard board = buildStandardBoard(player1);
 
     Consumer<IRequest> errorHandler =
         (request) -> {
@@ -615,7 +615,7 @@ public class CatanGameEngineTest {
     IPlayer player1 = new Player(0, new ResourceManager(playerResources));
     IPlayer player2 = new Player(1, new ResourceManager(playerResources));
     IPlayer[] players = {player1, player2};
-    ICatanEditableBoard board = buildStandardBoard(player1);
+    ICatanBoard board = buildStandardBoard(player1);
 
     Consumer<IRequest> errorHandler =
         (request) -> {
@@ -689,7 +689,7 @@ public class CatanGameEngineTest {
 
     IPlayer player = new Player(0, new ResourceManager(playerResources));
     IPlayer[] players = {player};
-    ICatanEditableBoard board = buildStandardBoard(player);
+    ICatanBoard board = buildStandardBoard(player);
 
     Consumer<IRequest> errorHandler =
         (request) -> {
@@ -745,7 +745,7 @@ public class CatanGameEngineTest {
           InvalidBoardElementException, InvalidBoardDimensionsException {
     IPlayer player = new Player(0, new ResourceManager());
     IPlayer[] players = {player};
-    ICatanEditableBoard board = buildStandardBoard(player);
+    ICatanBoard board = buildStandardBoard(player);
 
     Consumer<IRequest> errorHandler =
         (request) -> {
@@ -797,7 +797,7 @@ public class CatanGameEngineTest {
 
     IPlayer player = new Player(0, new ResourceManager(playerResources));
     IPlayer[] players = {player};
-    ICatanEditableBoard board = buildStandardBoard(player);
+    ICatanBoard board = buildStandardBoard(player);
 
     int requestX = 2;
     int requestY = 2;
@@ -853,7 +853,7 @@ public class CatanGameEngineTest {
 
     IPlayer player1 = new Player(0, new ResourceManager());
     IPlayer[] players = {player1};
-    ICatanEditableBoard board = buildStandardBoard(player1);
+    ICatanBoard board = buildStandardBoard(player1);
 
     AtomicBoolean requestFailed = new AtomicBoolean(false);
 
@@ -909,7 +909,7 @@ public class CatanGameEngineTest {
     IPlayer player1 = new Player(0, new ResourceManager(playerResources));
     IPlayer player2 = new Player(1, new ResourceManager(playerResources));
     IPlayer[] players = {player1, player2};
-    ICatanEditableBoard board = buildStandardBoard(player2);
+    ICatanBoard board = buildStandardBoard(player2);
 
     AtomicBoolean requestFailed = new AtomicBoolean(false);
 
@@ -963,7 +963,7 @@ public class CatanGameEngineTest {
 
     IPlayer player = new Player(0, new ResourceManager(playerResources));
     IPlayer[] players = {player};
-    ICatanEditableBoard board = buildStandardBoard(player);
+    ICatanBoard board = buildStandardBoard(player);
 
     AtomicBoolean requestFailed = new AtomicBoolean(false);
 
@@ -1012,7 +1012,7 @@ public class CatanGameEngineTest {
 
     IPlayer player = new Player(0, new ResourceManager(playerResources));
     IPlayer[] players = {player};
-    ICatanEditableBoard board = buildStandardBoard(player);
+    ICatanBoard board = buildStandardBoard(player);
 
     AtomicBoolean requestFailed = new AtomicBoolean(false);
 
@@ -1062,7 +1062,7 @@ public class CatanGameEngineTest {
 
     IPlayer player1 = new Player(0, new ResourceManager(playerResources));
     IPlayer[] players = {player1};
-    ICatanEditableBoard board = buildStandardBoard(player1);
+    ICatanBoard board = buildStandardBoard(player1);
 
     AtomicBoolean requestFailed = new AtomicBoolean(false);
 
@@ -1119,7 +1119,7 @@ public class CatanGameEngineTest {
     IPlayer player1 = new Player(0, new ResourceManager(playerResources));
     IPlayer player2 = new Player(1, new ResourceManager(playerResources));
     IPlayer[] players = {player1, player2};
-    ICatanEditableBoard board = buildStandardBoard(player2);
+    ICatanBoard board = buildStandardBoard(player2);
 
     AtomicBoolean requestFailed = new AtomicBoolean(false);
 
@@ -1174,7 +1174,7 @@ public class CatanGameEngineTest {
 
     IPlayer player = new Player(0, new ResourceManager(playerResources));
     IPlayer[] players = {player};
-    ICatanEditableBoard board = buildStandardBoard(player);
+    ICatanBoard board = buildStandardBoard(player);
 
     AtomicBoolean requestFailed = new AtomicBoolean(false);
 
@@ -1224,7 +1224,7 @@ public class CatanGameEngineTest {
 
     IPlayer player1 = new Player(0, new ResourceManager(playerResources));
     IPlayer[] players = {player1};
-    ICatanEditableBoard board = buildStandardBoard(player1);
+    ICatanBoard board = buildStandardBoard(player1);
 
     AtomicBoolean requestFailed = new AtomicBoolean(false);
 
@@ -1272,7 +1272,7 @@ public class CatanGameEngineTest {
 
     IPlayer player = new Player(0, new ResourceManager());
     IPlayer[] players = {player};
-    ICatanEditableBoard board = buildStandardBoard(player);
+    ICatanBoard board = buildStandardBoard(player);
     AtomicBoolean requestFailed = new AtomicBoolean(false);
 
     Consumer<IRequest> errorHandler =
@@ -1321,7 +1321,7 @@ public class CatanGameEngineTest {
 
     IPlayer player = new Player(0, new ResourceManager(playerResources));
     IPlayer[] players = {player};
-    ICatanEditableBoard board = buildStandardBoard(player);
+    ICatanBoard board = buildStandardBoard(player);
 
     AtomicBoolean requestFailed = new AtomicBoolean(false);
 
@@ -1382,7 +1382,7 @@ public class CatanGameEngineTest {
 
     IPlayer player = new Player(0, new ResourceManager());
     IPlayer[] players = {player};
-    ICatanEditableBoard board = buildStandardBoard(player);
+    ICatanBoard board = buildStandardBoard(player);
     AtomicBoolean requestFailed = new AtomicBoolean(false);
 
     Consumer<IRequest> errorHandler =
@@ -1425,7 +1425,7 @@ public class CatanGameEngineTest {
 
     IPlayer player = new Player(0, new ResourceManager(playerResources));
     IPlayer[] players = {player};
-    ICatanEditableBoard board = buildStandardBoard(player);
+    ICatanBoard board = buildStandardBoard(player);
 
     AtomicBoolean requestFailed = new AtomicBoolean(false);
 
@@ -1483,7 +1483,7 @@ public class CatanGameEngineTest {
 
     IPlayer player = new Player(0, new ResourceManager(playerResources));
     IPlayer[] players = {player};
-    ICatanEditableBoard board = buildStandardBoard(player);
+    ICatanBoard board = buildStandardBoard(player);
 
     AtomicBoolean requestFailed = new AtomicBoolean(false);
 
@@ -1546,7 +1546,7 @@ public class CatanGameEngineTest {
     IPlayer player = new Player(0, new ResourceManager(playerResources));
     IPlayer player2 = new Player(1, new ResourceManager(playerResources));
     IPlayer[] players = {player, player2};
-    ICatanEditableBoard board = buildStandardBoard(player);
+    ICatanBoard board = buildStandardBoard(player);
 
     AtomicBoolean requestFailed = new AtomicBoolean(false);
 
@@ -1601,7 +1601,7 @@ public class CatanGameEngineTest {
 
     IPlayer player = new Player(0, new ResourceManager());
     IPlayer[] players = {player};
-    ICatanEditableBoard board = buildStandardBoard(player);
+    ICatanBoard board = buildStandardBoard(player);
 
     AtomicBoolean requestFailed = new AtomicBoolean(false);
 
@@ -1659,7 +1659,7 @@ public class CatanGameEngineTest {
           NonVoidCollectionException, InvalidLogException {
     IPlayer player = new Player(0, new ResourceManager());
     IPlayer[] players = {player};
-    ICatanEditableBoard board = buildStandardBoard(player);
+    ICatanBoard board = buildStandardBoard(player);
 
     AtomicBoolean requestFailed = new AtomicBoolean(false);
 
@@ -1715,7 +1715,7 @@ public class CatanGameEngineTest {
 
     IPlayer player = new Player(0, new ResourceManager(playerResources));
     IPlayer[] players = {player};
-    ICatanEditableBoard board = buildStandardBoard(player);
+    ICatanBoard board = buildStandardBoard(player);
     Consumer<IRequest> errorHandler =
         (request) -> {
           fail();
@@ -1767,7 +1767,7 @@ public class CatanGameEngineTest {
 
     IPlayer player = new Player(0, new ResourceManager());
     IPlayer[] players = {player};
-    ICatanEditableBoard board = buildStandardBoard(player);
+    ICatanBoard board = buildStandardBoard(player);
     Consumer<IRequest> errorHandler =
         (request) -> {
           fail();
@@ -1823,7 +1823,7 @@ public class CatanGameEngineTest {
 
     IPlayer player = new Player(0, new ResourceManager());
     IPlayer[] players = {player};
-    ICatanEditableBoard board = buildStandardBoard(player);
+    ICatanBoard board = buildStandardBoard(player);
     Consumer<IRequest> errorHandler =
         (request) -> {
           fail();
@@ -1879,7 +1879,7 @@ public class CatanGameEngineTest {
 
     IPlayer player = new Player(0, new ResourceManager(playerResources));
     IPlayer[] players = {player};
-    ICatanEditableBoard board = buildStandardBoard(player);
+    ICatanBoard board = buildStandardBoard(player);
     Consumer<IRequest> errorHandler =
         (request) -> {
           fail();
@@ -1932,7 +1932,7 @@ public class CatanGameEngineTest {
 
     IPlayer player = new Player(0, new ResourceManager());
     IPlayer[] players = {player};
-    ICatanEditableBoard board = buildStandardBoard(player);
+    ICatanBoard board = buildStandardBoard(player);
     Consumer<IRequest> errorHandler =
         (request) -> {
           fail();
@@ -1980,7 +1980,7 @@ public class CatanGameEngineTest {
 
     IPlayer player = new Player(0, new ResourceManager(playerResources));
     IPlayer[] players = {player};
-    ICatanEditableBoard board = buildStandardBoard(player);
+    ICatanBoard board = buildStandardBoard(player);
     Consumer<IRequest> errorHandler =
         (request) -> {
           fail();
@@ -2034,7 +2034,7 @@ public class CatanGameEngineTest {
 
     IPlayer player = new Player(0, new ResourceManager());
     IPlayer[] players = {player};
-    ICatanEditableBoard board = buildStandardBoard(player);
+    ICatanBoard board = buildStandardBoard(player);
 
     Consumer<IRequest> errorHandler =
         (request) -> {
@@ -2078,7 +2078,7 @@ public class CatanGameEngineTest {
     IPlayer player1 = new Player(0, new ResourceManager(playerResources));
     IPlayer player2 = new Player(1, new ResourceManager(playerResources));
     IPlayer[] players = {player1, player2};
-    ICatanEditableBoard board = buildStandardBoard(player1);
+    ICatanBoard board = buildStandardBoard(player1);
 
     AtomicBoolean requestFailed = new AtomicBoolean(false);
 
@@ -2148,7 +2148,7 @@ public class CatanGameEngineTest {
     IPlayer player1 = new Player(0, new ResourceManager(playerResources));
     IPlayer player2 = new Player(1, new ResourceManager(playerResources));
     IPlayer[] players = {player1, player2};
-    ICatanEditableBoard board = buildStandardBoard(player1);
+    ICatanBoard board = buildStandardBoard(player1);
 
     AtomicBoolean requestFailed = new AtomicBoolean(false);
 
@@ -2220,7 +2220,7 @@ public class CatanGameEngineTest {
     IPlayer player1 = new Player(0, new ResourceManager(playerResources));
     IPlayer player2 = new Player(1, new ResourceManager(playerResources));
     IPlayer[] players = {player1, player2};
-    ICatanEditableBoard board = buildStandardBoard(player1);
+    ICatanBoard board = buildStandardBoard(player1);
 
     AtomicBoolean requestFailed = new AtomicBoolean(false);
 
@@ -2293,7 +2293,7 @@ public class CatanGameEngineTest {
 
     IPlayer player = new Player(0, new ResourceManager(playerResources));
     IPlayer[] players = {player};
-    ICatanEditableBoard board = buildStandardBoard(player);
+    ICatanBoard board = buildStandardBoard(player);
 
     AtomicBoolean requestFailed = new AtomicBoolean(false);
 
@@ -2350,7 +2350,7 @@ public class CatanGameEngineTest {
 
     IPlayer player = new Player(0, new ResourceManager(playerResources));
     IPlayer[] players = {player};
-    ICatanEditableBoard board = buildStandardBoard(player);
+    ICatanBoard board = buildStandardBoard(player);
 
     int requestX = 2;
     int requestY = 2;
@@ -2405,7 +2405,7 @@ public class CatanGameEngineTest {
     return new BoardConnection(player, new ResourceManager(), ConnectionType.ROAD);
   }
 
-  private ICatanEditableBoard buildStandardBoard(IPlayer player1)
+  private ICatanBoard buildStandardBoard(IPlayer player1)
       throws InvalidBoardDimensionsException, InvalidBoardElementException {
     IBoardElement[][] elements = {
       {
@@ -2445,7 +2445,7 @@ public class CatanGameEngineTest {
       },
     };
 
-    return new CatanEditableBoard(5, 5, elements, new DefaultTerrainProductionProvider());
+    return new CatanBoard(5, 5, elements, new DefaultTerrainProductionProvider());
   }
 
   private IBoardConnection buildVoidConnection() {

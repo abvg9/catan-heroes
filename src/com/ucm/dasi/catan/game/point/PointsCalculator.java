@@ -16,7 +16,7 @@ public class PointsCalculator implements IPointsCalculator {
   private static final int POINTS_PER_SETTLEMENT = 1;
 
   @Override
-  public Map<IPlayer, Integer> getPoints(ICatanGame<? extends ICatanBoard> game) {
+  public Map<IPlayer, Integer> getPoints(ICatanGame game) {
     Map<IPlayer, Integer> pointsMap = new TreeMap<IPlayer, Integer>();
 
     for (IPlayer player : game.getPlayers()) {

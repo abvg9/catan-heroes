@@ -28,10 +28,10 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-public class CatanEditableBoardTest {
+public class CatanBoardTestII {
 
   @DisplayName("it must build a road")
-  @Tag("CatanEditableBoard")
+  @Tag("CatanBoard")
   @Test
   public void itMustBuildARoad()
       throws NegativeNumberException, InvalidBoardDimensionsException,
@@ -39,7 +39,7 @@ public class CatanEditableBoardTest {
 
     IPlayer player = new Player(0, new ResourceManager());
 
-    CatanEditableBoard board = buildStandardBoard(player, new DefaultTerrainProductionProvider());
+    CatanBoard board = buildStandardBoard(player, new DefaultTerrainProductionProvider());
 
     int requestX = 3;
     int requestY = 2;
@@ -55,7 +55,7 @@ public class CatanEditableBoardTest {
   }
 
   @DisplayName("it must build a settlement")
-  @Tag("CatanEditableBoard")
+  @Tag("CatanBoard")
   @Test
   public void itMustBuildASettlement()
       throws NegativeNumberException, InvalidBoardDimensionsException,
@@ -63,7 +63,7 @@ public class CatanEditableBoardTest {
 
     IPlayer player = new Player(0, new ResourceManager());
 
-    CatanEditableBoard board = buildStandardBoard(player, new DefaultTerrainProductionProvider());
+    CatanBoard board = buildStandardBoard(player, new DefaultTerrainProductionProvider());
 
     int requestX = 2;
     int requestY = 2;
@@ -79,7 +79,7 @@ public class CatanEditableBoardTest {
   }
 
   @DisplayName("it must call the production manager to sync the production after a structure build")
-  @Tag("CatanEditableBoard")
+  @Tag("CatanBoard")
   @Test
   public void itMustCallProductionManagerI()
       throws InvalidBoardDimensionsException, InvalidBoardElementException {
@@ -87,7 +87,7 @@ public class CatanEditableBoardTest {
     IPlayer player = new Player(0, new ResourceManager());
 
     ITerrainProductionProvider productionProvider = new DefaultTerrainProductionProvider();
-    CatanEditableBoardForTest board = buildStandardBoard(player, productionProvider);
+    CatanBoardForTest board = buildStandardBoard(player, productionProvider);
 
     IBoardProductionManager productionManager =
         Mockito.spy(new BoardProductionManager(board, productionProvider));
@@ -111,7 +111,7 @@ public class CatanEditableBoardTest {
 
   @DisplayName(
       "it must call the production manager to sync the production after a structure upgrade")
-  @Tag("CatanEditableBoard")
+  @Tag("CatanBoard")
   @Test
   public void itMustCallProductionManagerII()
       throws InvalidBoardDimensionsException, InvalidBoardElementException {
@@ -119,7 +119,7 @@ public class CatanEditableBoardTest {
     IPlayer player = new Player(0, new ResourceManager());
 
     ITerrainProductionProvider productionProvider = new DefaultTerrainProductionProvider();
-    CatanEditableBoardForTest board = buildStandardBoard(player, productionProvider);
+    CatanBoardForTest board = buildStandardBoard(player, productionProvider);
 
     IBoardProductionManager productionManager =
         Mockito.spy(new BoardProductionManager(board, productionProvider));
@@ -147,7 +147,7 @@ public class CatanEditableBoardTest {
   }
 
   @DisplayName("it must upgrade a settlement into a city")
-  @Tag("CatanEditableBoard")
+  @Tag("CatanBoard")
   @Test
   public void itMustUpgradeASettlementIntoACity()
       throws NegativeNumberException, InvalidBoardDimensionsException,
@@ -155,7 +155,7 @@ public class CatanEditableBoardTest {
 
     IPlayer player = new Player(0, new ResourceManager());
 
-    CatanEditableBoard board = buildStandardBoard(player, new DefaultTerrainProductionProvider());
+    CatanBoard board = buildStandardBoard(player, new DefaultTerrainProductionProvider());
 
     int requestX = 2;
     int requestY = 2;
@@ -189,7 +189,7 @@ public class CatanEditableBoardTest {
     return new BoardConnection(player, new ResourceManager(), ConnectionType.ROAD);
   }
 
-  private CatanEditableBoardForTest buildStandardBoard(
+  private CatanBoardForTest buildStandardBoard(
       IPlayer player1, ITerrainProductionProvider productionProvider)
       throws InvalidBoardDimensionsException, InvalidBoardElementException {
     IBoardElement[][] elements = {
@@ -230,7 +230,7 @@ public class CatanEditableBoardTest {
       },
     };
 
-    return new CatanEditableBoardForTest(5, 5, elements, productionProvider);
+    return new CatanBoardForTest(5, 5, elements, productionProvider);
   }
 
   private IBoardConnection buildVoidConnection() {

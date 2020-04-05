@@ -9,9 +9,9 @@ import com.ucm.dasi.catan.game.point.PointsCalculator;
 import com.ucm.dasi.catan.player.IPlayer;
 import java.util.Map;
 
-public class CatanGame<TBoard extends ICatanBoard> implements ICatanGame<TBoard> {
+public class CatanGame implements ICatanGame {
 
-  private TBoard board;
+  private ICatanBoard board;
 
   private IPlayer[] players;
 
@@ -26,7 +26,7 @@ public class CatanGame<TBoard extends ICatanBoard> implements ICatanGame<TBoard>
   private boolean turnStarted;
 
   public CatanGame(
-      TBoard board,
+      ICatanBoard board,
       IPlayer[] players,
       int pointsToWin,
       GameState state,
@@ -54,7 +54,7 @@ public class CatanGame<TBoard extends ICatanBoard> implements ICatanGame<TBoard>
   }
 
   @Override
-  public TBoard getBoard() {
+  public ICatanBoard getBoard() {
     return board;
   }
 
