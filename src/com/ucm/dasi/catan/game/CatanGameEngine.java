@@ -501,7 +501,7 @@ public class CatanGameEngine extends CatanGame<ICatanEditableBoard> implements I
       return;
     }
 
-    if (request.getPlayer().equals(getActivePlayer())) {
+    if (!request.getPlayer().equals(getActivePlayer())) {
       handleRequestError(request);
       return;
     }
