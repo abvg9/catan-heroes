@@ -10,17 +10,17 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-public class BuildConnectionRequestTest {
+public class BuildInitialConnectionRequestTest {
 
   @DisplayName("It must store its request type")
-  @Tag(value = "BuildConnectionRequest")
+  @Tag(value = "BuildInitialConnectionRequest")
   @Test
   public void mustStoreItsRequestType() {
     IPlayer player = new Player(0, new ResourceManager());
     ConnectionType type = ConnectionType.ROAD;
 
-    BuildConnectionRequest request = new BuildConnectionRequest(player, type, 0, 1);
+    BuildInitialConnectionRequest request = new BuildInitialConnectionRequest(player, type, 0, 1);
 
-    assertSame(RequestType.BUILD_CONNECTION, request.getType());
+    assertSame(RequestType.BUILD_INITIAL_CONNECTION, request.getType());
   }
 }

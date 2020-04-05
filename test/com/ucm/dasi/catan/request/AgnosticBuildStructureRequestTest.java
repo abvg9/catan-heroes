@@ -10,17 +10,18 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-public class BuildStructureRequestTest {
+public class AgnosticBuildStructureRequestTest {
 
-  @DisplayName("It must store its request type")
-  @Tag(value = "BuildStructureRequest")
+  @DisplayName("It must store its structure type")
+  @Tag(value = "AgnosticBuildStructureRequest")
   @Test
-  public void mustStoreItsRequestType() {
+  public void mustStoreStructureType() {
     IPlayer player = new Player(0, new ResourceManager());
     StructureType type = StructureType.SETTLEMENT;
 
-    BuildStructureRequest request = new BuildStructureRequest(player, type, 0, 1);
+    AgnosticBuildStructureRequest request =
+        new AgnosticBuildStructureRequest(player, RequestType.BUILD_STRUCTURE, type, 0, 1);
 
-    assertSame(RequestType.BUILD_STRUCTURE, request.getType());
+    assertSame(type, request.getStructureType());
   }
 }
