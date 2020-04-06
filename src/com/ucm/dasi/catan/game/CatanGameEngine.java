@@ -91,10 +91,8 @@ public class CatanGameEngine extends CatanGame implements ICatanGameEngine {
   }
 
   @Override
-  public void processRequests(IRequest[] requests) {
-    for (IRequest request : requests) {
-      processTurnRequest(request);
-    }
+  public void processRequest(IRequest request) {
+    processTurnRequest(request);
   }
 
   protected void handleRequestError(IRequest request) {
