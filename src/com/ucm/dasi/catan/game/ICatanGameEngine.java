@@ -7,5 +7,5 @@ public interface ICatanGameEngine extends ICatanGame {
 
   ILogEntry getLog(int turn);
 
-  void processRequest(IRequest[] requests);
+  void processRequest(IRequest requests);
 }
