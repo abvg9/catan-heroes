@@ -120,7 +120,7 @@ public class CatanGameEngineTest {
 
     IRequest[] requests = {new EndTurnRequest(player1)};
 
-    engine.processRequests(requests);
+    engine.processRequest(requests);
 
     assertSame(GameState.NORMAL, engine.getState());
   }
@@ -175,7 +175,7 @@ public class CatanGameEngineTest {
       new EndTurnRequest(player1)
     };
 
-    engine.processRequests(requests);
+    engine.processRequest(requests);
 
     assertSame(GameState.ENDED, engine.getState());
     assertSame(player1, engine.getActivePlayer());
@@ -233,7 +233,7 @@ public class CatanGameEngineTest {
     IRequest request = new BuildConnectionRequest(player, ConnectionType.ROAD, requestX, requestY);
     IRequest[] requests = {request};
 
-    engine.processRequests(requests);
+    engine.processRequest(requests);
 
     verify(log.get(turn)).add(request);
   }
@@ -292,7 +292,7 @@ public class CatanGameEngineTest {
         new BuildInitialConnectionRequest(player, ConnectionType.ROAD, requestX, requestY);
     IRequest[] requests = {request};
 
-    engine.processRequests(requests);
+    engine.processRequest(requests);
 
     verify(log.get(turn)).add(request);
   }
@@ -344,7 +344,7 @@ public class CatanGameEngineTest {
         new BuildInitialStructureRequest(player, StructureType.SETTLEMENT, requestX, requestY);
     IRequest[] requests = {request};
 
-    engine.processRequests(requests);
+    engine.processRequest(requests);
 
     verify(log.get(turn)).add(request);
   }
@@ -402,7 +402,7 @@ public class CatanGameEngineTest {
         new BuildStructureRequest(player, StructureType.SETTLEMENT, requestX, requestY);
     IRequest[] requests = {request};
 
-    engine.processRequests(requests);
+    engine.processRequest(requests);
 
     verify(log.get(turn)).add(request);
   }
@@ -441,7 +441,7 @@ public class CatanGameEngineTest {
     IRequest request = new StartTurnRequest(player);
     IRequest[] requests = {request};
 
-    engine.processRequests(requests);
+    engine.processRequest(requests);
 
     verify(log).set(eq(turn), any());
   }
@@ -506,7 +506,7 @@ public class CatanGameEngineTest {
     ITrade trade = new Trade(UUID.randomUUID(), acceptableExchanges, requestedResources);
 
     IRequest[] requests = {new TradeRequest(player1, trade)};
-    engine.processRequests(requests);
+    engine.processRequest(requests);
 
     ITradeAgreement tradeAgreement =
         new TradeAgreement(UUID.randomUUID(), acceptableExchanges.iterator().next(), trade);
@@ -514,7 +514,7 @@ public class CatanGameEngineTest {
     IRequest request = new TradeAgreementRequest(player2, tradeAgreement);
 
     IRequest[] requests2 = {request};
-    engine.processRequests(requests2);
+    engine.processRequest(requests2);
 
     verify(log.get(turn)).add(request);
   }
@@ -579,20 +579,20 @@ public class CatanGameEngineTest {
     ITrade trade = new Trade(UUID.randomUUID(), acceptableExchanges, requestedResources);
 
     IRequest[] requests = {new TradeRequest(player1, trade)};
-    engine.processRequests(requests);
+    engine.processRequest(requests);
 
     ITradeAgreement tradeAgreement =
         new TradeAgreement(UUID.randomUUID(), acceptableExchanges.iterator().next(), trade);
 
     IRequest[] requests2 = {new TradeAgreementRequest(player2, tradeAgreement)};
-    engine.processRequests(requests2);
+    engine.processRequest(requests2);
 
     IRequest request =
         new TradeConfirmationRequest(
             player1, new TradeConfirmation(UUID.randomUUID(), tradeAgreement));
 
     IRequest[] requests3 = {request};
-    engine.processRequests(requests3);
+    engine.processRequest(requests3);
 
     verify(log.get(turn)).add(request);
   }
@@ -657,18 +657,18 @@ public class CatanGameEngineTest {
     ITrade trade = new Trade(UUID.randomUUID(), acceptableExchanges, requestedResources);
 
     IRequest[] requests = {new TradeRequest(player1, trade)};
-    engine.processRequests(requests);
+    engine.processRequest(requests);
 
     ITradeAgreement tradeAgreement =
         new TradeAgreement(UUID.randomUUID(), acceptableExchanges.iterator().next(), trade);
 
     IRequest[] requests2 = {new TradeAgreementRequest(player2, tradeAgreement)};
-    engine.processRequests(requests2);
+    engine.processRequest(requests2);
 
     IRequest request = new TradeDiscardRequest(player1, new TradeDiscard(UUID.randomUUID(), trade));
 
     IRequest[] requests3 = {request};
-    engine.processRequests(requests3);
+    engine.processRequest(requests3);
 
     verify(log.get(turn)).add(request);
   }
@@ -732,7 +732,7 @@ public class CatanGameEngineTest {
 
     IRequest request = new TradeRequest(player, trade);
     IRequest[] requests = {request};
-    engine.processRequests(requests);
+    engine.processRequest(requests);
 
     verify(log.get(turn)).add(request);
   }
@@ -778,7 +778,7 @@ public class CatanGameEngineTest {
     IRequest request = new EndTurnRequest(player);
     IRequest[] requests = {request};
 
-    engine.processRequests(requests);
+    engine.processRequest(requests);
 
     verify(log.get(turn)).add(request);
   }
@@ -838,7 +838,7 @@ public class CatanGameEngineTest {
     IRequest request = new UpgradeStructureRequest(player, StructureType.CITY, requestX, requestY);
     IRequest[] requests = {request};
 
-    engine.processRequests(requests);
+    engine.processRequest(requests);
 
     verify(log.get(turn)).add(request);
   }
@@ -886,7 +886,7 @@ public class CatanGameEngineTest {
       new BuildConnectionRequest(player1, ConnectionType.ROAD, requestX, requestY)
     };
 
-    engine.processRequests(requests);
+    engine.processRequest(requests);
 
     assertSame(true, requestFailed.get());
   }
@@ -942,7 +942,7 @@ public class CatanGameEngineTest {
       new BuildConnectionRequest(player2, ConnectionType.ROAD, requestX, requestY)
     };
 
-    engine.processRequests(requests);
+    engine.processRequest(requests);
 
     assertSame(true, requestFailed.get());
   }
@@ -990,7 +990,7 @@ public class CatanGameEngineTest {
       new BuildConnectionRequest(player, ConnectionType.ROAD, requestX, requestY)
     };
 
-    engine.processRequests(requests);
+    engine.processRequest(requests);
 
     assertSame(true, requestFailed.get());
   }
@@ -1045,7 +1045,7 @@ public class CatanGameEngineTest {
       new BuildConnectionRequest(player, ConnectionType.ROAD, requestX, requestY)
     };
 
-    engine.processRequests(requests);
+    engine.processRequest(requests);
 
     assertSame(true, requestFailed.get());
   }
@@ -1096,7 +1096,7 @@ public class CatanGameEngineTest {
       new BuildStructureRequest(player1, StructureType.SETTLEMENT, requestX, requestY)
     };
 
-    engine.processRequests(requests);
+    engine.processRequest(requests);
 
     assertSame(true, requestFailed.get());
   }
@@ -1153,7 +1153,7 @@ public class CatanGameEngineTest {
       new BuildStructureRequest(player2, StructureType.SETTLEMENT, requestX, requestY)
     };
 
-    engine.processRequests(requests);
+    engine.processRequest(requests);
 
     assertSame(true, requestFailed.get());
   }
@@ -1202,7 +1202,7 @@ public class CatanGameEngineTest {
       new BuildStructureRequest(player, StructureType.SETTLEMENT, requestX, requestY)
     };
 
-    engine.processRequests(requests);
+    engine.processRequest(requests);
 
     assertSame(true, requestFailed.get());
   }
@@ -1258,7 +1258,7 @@ public class CatanGameEngineTest {
       new BuildStructureRequest(player1, StructureType.SETTLEMENT, requestX, requestY)
     };
 
-    engine.processRequests(requests);
+    engine.processRequest(requests);
 
     assertSame(true, requestFailed.get());
   }
@@ -1300,7 +1300,7 @@ public class CatanGameEngineTest {
 
     IRequest[] requests = {new EndTurnRequest(player)};
 
-    engine.processRequests(requests);
+    engine.processRequest(requests);
 
     assertSame(true, requestFailed.get());
   }
@@ -1365,10 +1365,10 @@ public class CatanGameEngineTest {
     Trade trade = new Trade(UUID.randomUUID(), acceptableExchanges, requestedResources);
 
     IRequest[] requests = {new TradeRequest(player, trade)};
-    engine.processRequests(requests);
+    engine.processRequest(requests);
 
     IRequest[] requests2 = {new EndTurnRequest(player)};
-    engine.processRequests(requests2);
+    engine.processRequest(requests2);
 
     assertSame(true, requestFailed.get());
   }
@@ -1404,7 +1404,7 @@ public class CatanGameEngineTest {
 
     IRequest[] requests = {new StartTurnRequest(player)};
 
-    engine.processRequests(requests);
+    engine.processRequest(requests);
 
     assertSame(true, requestFailed.get());
   }
@@ -1462,7 +1462,7 @@ public class CatanGameEngineTest {
     Trade trade = new Trade(UUID.randomUUID(), acceptableExchanges, requestedResources);
 
     IRequest[] requests = {new TradeRequest(player, trade)};
-    engine.processRequests(requests);
+    engine.processRequest(requests);
 
     assertTrue(requestFailed.get());
   }
@@ -1524,7 +1524,7 @@ public class CatanGameEngineTest {
     Trade trade = new Trade(UUID.randomUUID(), acceptableExchanges, requestedResources);
 
     IRequest[] requests = {new TradeRequest(player, trade)};
-    engine.processRequests(requests);
+    engine.processRequest(requests);
 
     assertTrue(requestFailed.get());
   }
@@ -1587,7 +1587,7 @@ public class CatanGameEngineTest {
     Trade trade = new Trade(UUID.randomUUID(), acceptableExchanges, requestedResources);
 
     IRequest[] requests = {new TradeRequest(player2, trade)};
-    engine.processRequests(requests);
+    engine.processRequest(requests);
 
     assertTrue(requestFailed.get());
   }
@@ -1646,7 +1646,7 @@ public class CatanGameEngineTest {
       new BuildInitialConnectionRequest(player, ConnectionType.ROAD, requestX2, requestY2),
     };
 
-    engine.processRequests(requests);
+    engine.processRequest(requests);
 
     assertSame(true, requestFailed.get());
   }
@@ -1694,7 +1694,7 @@ public class CatanGameEngineTest {
       new BuildInitialStructureRequest(player, StructureType.SETTLEMENT, requestX, requestY),
     };
 
-    engine.processRequests(requests);
+    engine.processRequest(requests);
 
     assertSame(true, requestFailed.get());
   }
@@ -1745,7 +1745,7 @@ public class CatanGameEngineTest {
       new BuildConnectionRequest(player, ConnectionType.ROAD, requestX, requestY)
     };
 
-    engine.processRequests(requests);
+    engine.processRequest(requests);
 
     IBoardElement elementBuilt = board.get(requestX, requestY);
 
@@ -1805,7 +1805,7 @@ public class CatanGameEngineTest {
       new BuildInitialConnectionRequest(player, ConnectionType.ROAD, requestX, requestY)
     };
 
-    engine.processRequests(requests);
+    engine.processRequest(requests);
 
     IBoardElement elementBuilt = board.get(requestX, requestY);
 
@@ -1854,7 +1854,7 @@ public class CatanGameEngineTest {
       new BuildInitialStructureRequest(player, StructureType.SETTLEMENT, requestX, requestY)
     };
 
-    engine.processRequests(requests);
+    engine.processRequest(requests);
 
     IBoardElement elementBuilt = board.get(requestX, requestY);
 
@@ -1910,7 +1910,7 @@ public class CatanGameEngineTest {
       new BuildStructureRequest(player, StructureType.SETTLEMENT, requestX, requestY)
     };
 
-    engine.processRequests(requests);
+    engine.processRequest(requests);
 
     IBoardElement elementBuilt = board.get(requestX, requestY);
 
@@ -1958,7 +1958,7 @@ public class CatanGameEngineTest {
 
     IRequest[] requests = {new EndTurnRequest(player)};
 
-    engine.processRequests(requests);
+    engine.processRequest(requests);
 
     assertSame(false, engine.isTurnStarted());
   }
@@ -2012,7 +2012,7 @@ public class CatanGameEngineTest {
       new UpgradeStructureRequest(player, StructureType.CITY, requestX, requestY)
     };
 
-    engine.processRequests(requests);
+    engine.processRequest(requests);
 
     IBoardElement elementBuilt = board.get(requestX, requestY);
 
@@ -2055,7 +2055,7 @@ public class CatanGameEngineTest {
 
     IRequest[] requests = {new StartTurnRequest(player)};
 
-    engine.processRequests(requests);
+    engine.processRequest(requests);
 
     assertSame(true, engine.isTurnStarted());
   }
@@ -2119,13 +2119,13 @@ public class CatanGameEngineTest {
     ITrade trade = new Trade(UUID.randomUUID(), acceptableExchanges, requestedResources);
 
     IRequest[] requests = {new TradeRequest(player1, trade)};
-    engine.processRequests(requests);
+    engine.processRequest(requests);
 
     ITradeAgreement tradeAgreement =
         new TradeAgreement(UUID.randomUUID(), acceptableExchanges.iterator().next(), trade);
 
     IRequest[] requests2 = {new TradeAgreementRequest(player2, tradeAgreement)};
-    engine.processRequests(requests2);
+    engine.processRequest(requests2);
 
     assertFalse(requestFailed.get());
   }
@@ -2189,19 +2189,19 @@ public class CatanGameEngineTest {
     ITrade trade = new Trade(UUID.randomUUID(), acceptableExchanges, requestedResources);
 
     IRequest[] requests = {new TradeRequest(player1, trade)};
-    engine.processRequests(requests);
+    engine.processRequest(requests);
 
     ITradeAgreement tradeAgreement =
         new TradeAgreement(UUID.randomUUID(), acceptableExchanges.iterator().next(), trade);
 
     IRequest[] requests2 = {new TradeAgreementRequest(player2, tradeAgreement)};
-    engine.processRequests(requests2);
+    engine.processRequest(requests2);
 
     IRequest[] requests3 = {
       new TradeConfirmationRequest(
           player1, new TradeConfirmation(UUID.randomUUID(), tradeAgreement))
     };
-    engine.processRequests(requests3);
+    engine.processRequest(requests3);
 
     assertFalse(requestFailed.get());
   }
@@ -2261,18 +2261,18 @@ public class CatanGameEngineTest {
     ITrade trade = new Trade(UUID.randomUUID(), acceptableExchanges, requestedResources);
 
     IRequest[] requests = {new TradeRequest(player1, trade)};
-    engine.processRequests(requests);
+    engine.processRequest(requests);
 
     ITradeAgreement tradeAgreement =
         new TradeAgreement(UUID.randomUUID(), acceptableExchanges.iterator().next(), trade);
 
     IRequest[] requests2 = {new TradeAgreementRequest(player2, tradeAgreement)};
-    engine.processRequests(requests2);
+    engine.processRequest(requests2);
 
     IRequest[] requests3 = {
       new TradeDiscardRequest(player1, new TradeDiscard(UUID.randomUUID(), trade))
     };
-    engine.processRequests(requests3);
+    engine.processRequest(requests3);
 
     assertFalse(requestFailed.get());
   }
@@ -2334,7 +2334,7 @@ public class CatanGameEngineTest {
     Trade trade = new Trade(UUID.randomUUID(), acceptableExchanges, requestedResources);
 
     IRequest[] requests = {new TradeRequest(player, trade)};
-    engine.processRequests(requests);
+    engine.processRequest(requests);
 
     assertFalse(requestFailed.get());
   }
@@ -2379,7 +2379,7 @@ public class CatanGameEngineTest {
 
     IRequest[] requests = {new StartTurnRequest(player)};
 
-    engine.processRequests(requests);
+    engine.processRequest(requests);
 
     IResourceStorage expectedResources =
         new DefaultTerrainProductionProvider()
