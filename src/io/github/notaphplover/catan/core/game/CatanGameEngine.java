@@ -407,7 +407,10 @@ public class CatanGameEngine extends CatanGame implements ICatanGameEngine {
     switchTurnStarted();
 
     int productionNumber = numberGenerator.getNextProductionNumber();
-    produceResources(productionNumber);
+
+    if (getState() == GameState.NORMAL) {
+      produceResources(productionNumber);
+    }
 
     ArrayList<IRequest> requestList = new ArrayList<IRequest>();
     requestList.add(request);
