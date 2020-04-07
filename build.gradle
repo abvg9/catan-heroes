@@ -3,11 +3,13 @@ plugins {
     id 'com.diffplug.gradle.spotless' version '3.28.0'
     id 'eclipse'
     id 'jacoco'
-    id 'java'
+    id 'java-library'
+    id 'maven-publish'
+    id 'signing'
 }
 
-group 'com.ucm.catan.dasi'
-version '0.2.0'
+group 'io.github.notaphplover.catan-core'
+version '0.2.0-SNAPSHOT'
 
 sourceCompatibility = 1.11
 
@@ -32,6 +34,40 @@ jacocoTestReport {
         csv.enabled false
         html.destination file("${buildDir}/reports/jacoco/jacocoHtml")
     }
+}
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = 'io.github.notaphplover'
+            artifactId = 'catan-core'
+            version = '0.2.0-SNAPSHOT'
+
+            from components.java
+        }
+    }
+
+    repositories {
+        maven {
+            def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+            def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots"
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+            credentials {
+                username sonatypeUsername
+                password sonatypePassword
+            }
+        }
+    }
+}
+
+signing {
+    useGpgCmd()
+    sign publishing.publications.mavenJava
 }
 
 sourceSets {
