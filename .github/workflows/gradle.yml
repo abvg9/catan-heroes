@@ -14,9 +14,9 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.11
-    - name: Add wrapper
-      run: gradle wrapper
     - name: Copy gradle.properties.sample
       run: cp gradle.properties.sample gradle.properties
+    - name: Add wrapper
+      run: gradle wrapper
     - name: Build with Gradle
       run: ./gradlew build
