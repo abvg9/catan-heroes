@@ -18,6 +18,7 @@ public interface IGameLog {
   /**
    * Pushes an entry
    *
+   * @param turn entry's turn
    * @param entry entry to push
    */
   void set(int turn, ILogEntry entry);
