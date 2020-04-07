@@ -823,8 +823,44 @@ public class CatanGameEngineTest {
   }
 
   @DisplayName(
+      "It must not generate resources processing a start turn request at the foundation phase")
+  @Tag(value = "CatanGameEngine")
+  @Test
+  public void itMustNotGenerateResourcesProcessingAStartTurnRequestI()
+      throws NonNullInputException, NonVoidCollectionException, InvalidLogException,
+          InvalidBoardDimensionsException, InvalidBoardElementException {
+
+    IPlayer player = new Player(0, new ResourceManager());
+    IPlayer[] players = {player};
+    ICatanBoard board = buildStandardBoard(player);
+
+    board.build(new BoardStructure(player, new ResourceManager(), StructureType.SETTLEMENT), 2, 2);
+
+    Consumer<IRequest> errorHandler =
+        (request) -> {
+          fail();
+        };
+
+    CatanGameEngine engine =
+        new CatanGameEngine(
+            board,
+            players,
+            10,
+            GameState.FOUNDATION,
+            0,
+            false,
+            errorHandler,
+            new LinearGameLog(),
+            new ConstantNumberGenerator(6));
+
+    engine.processRequest(new StartTurnRequest(player));
+
+    assertEquals(new ResourceStorage(), player.getResourceManager());
+  }
+
+  @DisplayName(
       "It must not process a valid build connection request if the player has not enought resources")
-  @Tag(value = "CatanBoardEngine")
+  @Tag(value = "CatanGameEngine")
   @Test
   public void itMustNotProcessAValidBuildConnectionRequestI()
       throws InvalidBoardDimensionsException, InvalidBoardElementException, NonNullInputException,
