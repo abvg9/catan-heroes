@@ -26,6 +26,8 @@ import io.github.notaphplover.catan.core.board.structure.StructureType;
 import io.github.notaphplover.catan.core.board.terrain.BoardTerrain;
 import io.github.notaphplover.catan.core.board.terrain.IBoardTerrain;
 import io.github.notaphplover.catan.core.board.terrain.TerrainType;
+import io.github.notaphplover.catan.core.command.ICommand;
+import io.github.notaphplover.catan.core.command.ICommandSender;
 import io.github.notaphplover.catan.core.exception.NonNullInputException;
 import io.github.notaphplover.catan.core.exception.NonVoidCollectionException;
 import io.github.notaphplover.catan.core.game.exception.InvalidLogException;
@@ -35,6 +37,7 @@ import io.github.notaphplover.catan.core.game.log.IGameLog;
 import io.github.notaphplover.catan.core.game.log.ILogEntry;
 import io.github.notaphplover.catan.core.game.log.LinearGameLog;
 import io.github.notaphplover.catan.core.game.log.LogEntry;
+import io.github.notaphplover.catan.core.game.player.PlayerManager;
 import io.github.notaphplover.catan.core.game.trade.ITrade;
 import io.github.notaphplover.catan.core.game.trade.ITradeAgreement;
 import io.github.notaphplover.catan.core.game.trade.Trade;
@@ -106,17 +109,25 @@ public class CatanGameEngineTest {
 
     entries.add(new LogEntry(6, entryLastTurnRequests));
 
-    CatanGameEngine engine =
-        new CatanGameEngine(
-            board,
-            players,
-            10,
-            GameState.NORMAL,
-            3,
-            true,
-            errorHandler,
-            new LinearGameLog(entries),
-            new CatanRandomGenerator());
+    ICommandSender commandSender =
+        new ICommandSender() {
+
+          @Override
+          public void send(ICommand command) {}
+        };
+
+    ICatanGameBuilder builder =
+        new CatanGameBuilder()
+            .setBoard(board)
+            .setCommandSender(commandSender)
+            .setErrorHandler(errorHandler)
+            .setGameLog(new LinearGameLog(entries))
+            .setNumberGenerator(new CatanRandomGenerator())
+            .setPlayerManager(new PlayerManager(players, 3, true))
+            .setPointsToWin(10)
+            .setState(GameState.NORMAL);
+
+    CatanGameEngine engine = new CatanGameEngine(builder);
 
     engine.processRequest(new EndTurnRequest(player1));
 
@@ -153,17 +164,25 @@ public class CatanGameEngineTest {
     entryRequests.add(new StartTurnRequest(player1));
     entries.add(new LogEntry(6, entryRequests));
 
-    CatanGameEngine engine =
-        new CatanGameEngine(
-            board,
-            players,
-            1,
-            GameState.NORMAL,
-            0,
-            true,
-            errorHandler,
-            new LinearGameLog(entries),
-            new CatanRandomGenerator());
+    ICommandSender commandSender =
+        new ICommandSender() {
+
+          @Override
+          public void send(ICommand command) {}
+        };
+
+    ICatanGameBuilder builder =
+        new CatanGameBuilder()
+            .setBoard(board)
+            .setCommandSender(commandSender)
+            .setErrorHandler(errorHandler)
+            .setGameLog(new LinearGameLog(entries))
+            .setNumberGenerator(new CatanRandomGenerator())
+            .setPlayerManager(new PlayerManager(players, 0, true))
+            .setPointsToWin(1)
+            .setState(GameState.NORMAL);
+
+    CatanGameEngine engine = new CatanGameEngine(builder);
 
     int requestX = 2;
     int requestY = 2;
@@ -213,17 +232,25 @@ public class CatanGameEngineTest {
 
     int turn = 0;
 
-    CatanGameEngine engine =
-        new CatanGameEngine(
-            board,
-            players,
-            10,
-            GameState.NORMAL,
-            turn,
-            true,
-            errorHandler,
-            log,
-            new ConstantNumberGenerator(6));
+    ICommandSender commandSender =
+        new ICommandSender() {
+
+          @Override
+          public void send(ICommand command) {}
+        };
+
+    ICatanGameBuilder builder =
+        new CatanGameBuilder()
+            .setBoard(board)
+            .setCommandSender(commandSender)
+            .setErrorHandler(errorHandler)
+            .setGameLog(log)
+            .setNumberGenerator(new ConstantNumberGenerator(6))
+            .setPlayerManager(new PlayerManager(players, turn, true))
+            .setPointsToWin(10)
+            .setState(GameState.NORMAL);
+
+    CatanGameEngine engine = new CatanGameEngine(builder);
 
     IRequest request = new BuildConnectionRequest(player, ConnectionType.ROAD, requestX, requestY);
 
@@ -270,17 +297,25 @@ public class CatanGameEngineTest {
 
     int turn = 1;
 
-    CatanGameEngine engine =
-        new CatanGameEngine(
-            board,
-            players,
-            10,
-            GameState.FOUNDATION,
-            turn,
-            true,
-            errorHandler,
-            log,
-            new ConstantNumberGenerator(6));
+    ICommandSender commandSender =
+        new ICommandSender() {
+
+          @Override
+          public void send(ICommand command) {}
+        };
+
+    ICatanGameBuilder builder =
+        new CatanGameBuilder()
+            .setBoard(board)
+            .setCommandSender(commandSender)
+            .setErrorHandler(errorHandler)
+            .setGameLog(log)
+            .setNumberGenerator(new ConstantNumberGenerator(6))
+            .setPlayerManager(new PlayerManager(players, turn, true))
+            .setPointsToWin(10)
+            .setState(GameState.FOUNDATION);
+
+    CatanGameEngine engine = new CatanGameEngine(builder);
 
     IRequest request =
         new BuildInitialConnectionRequest(player, ConnectionType.ROAD, requestX, requestY);
@@ -321,17 +356,25 @@ public class CatanGameEngineTest {
 
     int turn = 0;
 
-    CatanGameEngine engine =
-        new CatanGameEngine(
-            board,
-            players,
-            10,
-            GameState.FOUNDATION,
-            turn,
-            true,
-            errorHandler,
-            log,
-            new ConstantNumberGenerator(6));
+    ICommandSender commandSender =
+        new ICommandSender() {
+
+          @Override
+          public void send(ICommand command) {}
+        };
+
+    ICatanGameBuilder builder =
+        new CatanGameBuilder()
+            .setBoard(board)
+            .setCommandSender(commandSender)
+            .setErrorHandler(errorHandler)
+            .setGameLog(log)
+            .setNumberGenerator(new ConstantNumberGenerator(6))
+            .setPlayerManager(new PlayerManager(players, turn, true))
+            .setPointsToWin(10)
+            .setState(GameState.FOUNDATION);
+
+    CatanGameEngine engine = new CatanGameEngine(builder);
 
     IRequest request =
         new BuildInitialStructureRequest(player, StructureType.SETTLEMENT, requestX, requestY);
@@ -378,17 +421,25 @@ public class CatanGameEngineTest {
 
     int turn = 0;
 
-    CatanGameEngine engine =
-        new CatanGameEngine(
-            board,
-            players,
-            10,
-            GameState.NORMAL,
-            turn,
-            true,
-            errorHandler,
-            log,
-            new ConstantNumberGenerator(6));
+    ICommandSender commandSender =
+        new ICommandSender() {
+
+          @Override
+          public void send(ICommand command) {}
+        };
+
+    ICatanGameBuilder builder =
+        new CatanGameBuilder()
+            .setBoard(board)
+            .setCommandSender(commandSender)
+            .setErrorHandler(errorHandler)
+            .setGameLog(log)
+            .setNumberGenerator(new ConstantNumberGenerator(6))
+            .setPlayerManager(new PlayerManager(players, turn, true))
+            .setPointsToWin(10)
+            .setState(GameState.NORMAL);
+
+    CatanGameEngine engine = new CatanGameEngine(builder);
 
     IRequest request =
         new BuildStructureRequest(player, StructureType.SETTLEMENT, requestX, requestY);
@@ -417,17 +468,25 @@ public class CatanGameEngineTest {
 
     int turn = 0;
 
-    CatanGameEngine engine =
-        new CatanGameEngine(
-            board,
-            players,
-            10,
-            GameState.NORMAL,
-            turn,
-            false,
-            errorHandler,
-            log,
-            new ConstantNumberGenerator(6));
+    ICommandSender commandSender =
+        new ICommandSender() {
+
+          @Override
+          public void send(ICommand command) {}
+        };
+
+    ICatanGameBuilder builder =
+        new CatanGameBuilder()
+            .setBoard(board)
+            .setCommandSender(commandSender)
+            .setErrorHandler(errorHandler)
+            .setGameLog(log)
+            .setNumberGenerator(new ConstantNumberGenerator(6))
+            .setPlayerManager(new PlayerManager(players, turn, false))
+            .setPointsToWin(10)
+            .setState(GameState.NORMAL);
+
+    CatanGameEngine engine = new CatanGameEngine(builder);
 
     IRequest request = new StartTurnRequest(player);
 
@@ -470,17 +529,25 @@ public class CatanGameEngineTest {
     IGameLog log = new LinearGameLog(entries);
     int turn = 0;
 
-    CatanGameEngine engine =
-        new CatanGameEngine(
-            board,
-            players,
-            10,
-            GameState.NORMAL,
-            turn,
-            true,
-            errorHandler,
-            new LinearGameLog(entries),
-            new CatanRandomGenerator());
+    ICommandSender commandSender =
+        new ICommandSender() {
+
+          @Override
+          public void send(ICommand command) {}
+        };
+
+    ICatanGameBuilder builder =
+        new CatanGameBuilder()
+            .setBoard(board)
+            .setCommandSender(commandSender)
+            .setErrorHandler(errorHandler)
+            .setGameLog(log)
+            .setNumberGenerator(new CatanRandomGenerator())
+            .setPlayerManager(new PlayerManager(players, turn, true))
+            .setPointsToWin(10)
+            .setState(GameState.NORMAL);
+
+    CatanGameEngine engine = new CatanGameEngine(builder);
 
     Map<ResourceType, Integer> requestedResourcesMap = new TreeMap<ResourceType, Integer>();
     requestedResourcesMap.put(ResourceType.ORE, 1);
@@ -541,17 +608,25 @@ public class CatanGameEngineTest {
     IGameLog log = new LinearGameLog(entries);
     int turn = 0;
 
-    CatanGameEngine engine =
-        new CatanGameEngine(
-            board,
-            players,
-            10,
-            GameState.NORMAL,
-            turn,
-            true,
-            errorHandler,
-            new LinearGameLog(entries),
-            new CatanRandomGenerator());
+    ICommandSender commandSender =
+        new ICommandSender() {
+
+          @Override
+          public void send(ICommand command) {}
+        };
+
+    ICatanGameBuilder builder =
+        new CatanGameBuilder()
+            .setBoard(board)
+            .setCommandSender(commandSender)
+            .setErrorHandler(errorHandler)
+            .setGameLog(log)
+            .setNumberGenerator(new CatanRandomGenerator())
+            .setPlayerManager(new PlayerManager(players, turn, true))
+            .setPointsToWin(10)
+            .setState(GameState.NORMAL);
+
+    CatanGameEngine engine = new CatanGameEngine(builder);
 
     Map<ResourceType, Integer> requestedResourcesMap = new TreeMap<ResourceType, Integer>();
     requestedResourcesMap.put(ResourceType.ORE, 1);
@@ -616,17 +691,25 @@ public class CatanGameEngineTest {
     IGameLog log = new LinearGameLog(entries);
     int turn = 0;
 
-    CatanGameEngine engine =
-        new CatanGameEngine(
-            board,
-            players,
-            10,
-            GameState.NORMAL,
-            turn,
-            true,
-            errorHandler,
-            new LinearGameLog(entries),
-            new CatanRandomGenerator());
+    ICommandSender commandSender =
+        new ICommandSender() {
+
+          @Override
+          public void send(ICommand command) {}
+        };
+
+    ICatanGameBuilder builder =
+        new CatanGameBuilder()
+            .setBoard(board)
+            .setCommandSender(commandSender)
+            .setErrorHandler(errorHandler)
+            .setGameLog(log)
+            .setNumberGenerator(new CatanRandomGenerator())
+            .setPlayerManager(new PlayerManager(players, turn, true))
+            .setPointsToWin(10)
+            .setState(GameState.NORMAL);
+
+    CatanGameEngine engine = new CatanGameEngine(builder);
 
     Map<ResourceType, Integer> requestedResourcesMap = new TreeMap<ResourceType, Integer>();
     requestedResourcesMap.put(ResourceType.ORE, 1);
@@ -687,17 +770,25 @@ public class CatanGameEngineTest {
     IGameLog log = new LinearGameLog(entries);
     int turn = 0;
 
-    CatanGameEngine engine =
-        new CatanGameEngine(
-            board,
-            players,
-            10,
-            GameState.NORMAL,
-            turn,
-            true,
-            errorHandler,
-            log,
-            new CatanRandomGenerator());
+    ICommandSender commandSender =
+        new ICommandSender() {
+
+          @Override
+          public void send(ICommand command) {}
+        };
+
+    ICatanGameBuilder builder =
+        new CatanGameBuilder()
+            .setBoard(board)
+            .setCommandSender(commandSender)
+            .setErrorHandler(errorHandler)
+            .setGameLog(log)
+            .setNumberGenerator(new CatanRandomGenerator())
+            .setPlayerManager(new PlayerManager(players, turn, true))
+            .setPointsToWin(10)
+            .setState(GameState.NORMAL);
+
+    CatanGameEngine engine = new CatanGameEngine(builder);
 
     Map<ResourceType, Integer> requestedResourcesMap = new TreeMap<ResourceType, Integer>();
     requestedResourcesMap.put(ResourceType.ORE, 1);
@@ -744,17 +835,25 @@ public class CatanGameEngineTest {
 
     int turn = 0;
 
-    CatanGameEngine engine =
-        new CatanGameEngine(
-            board,
-            players,
-            10,
-            GameState.NORMAL,
-            turn,
-            true,
-            errorHandler,
-            log,
-            new ConstantNumberGenerator(6));
+    ICommandSender commandSender =
+        new ICommandSender() {
+
+          @Override
+          public void send(ICommand command) {}
+        };
+
+    ICatanGameBuilder builder =
+        new CatanGameBuilder()
+            .setBoard(board)
+            .setCommandSender(commandSender)
+            .setErrorHandler(errorHandler)
+            .setGameLog(log)
+            .setNumberGenerator(new ConstantNumberGenerator(6))
+            .setPlayerManager(new PlayerManager(players, turn, true))
+            .setPointsToWin(10)
+            .setState(GameState.NORMAL);
+
+    CatanGameEngine engine = new CatanGameEngine(builder);
 
     IRequest request = new EndTurnRequest(player);
 
@@ -803,17 +902,25 @@ public class CatanGameEngineTest {
 
     int turn = 0;
 
-    CatanGameEngine engine =
-        new CatanGameEngine(
-            board,
-            players,
-            10,
-            GameState.NORMAL,
-            turn,
-            true,
-            errorHandler,
-            log,
-            new ConstantNumberGenerator(6));
+    ICommandSender commandSender =
+        new ICommandSender() {
+
+          @Override
+          public void send(ICommand command) {}
+        };
+
+    ICatanGameBuilder builder =
+        new CatanGameBuilder()
+            .setBoard(board)
+            .setCommandSender(commandSender)
+            .setErrorHandler(errorHandler)
+            .setGameLog(log)
+            .setNumberGenerator(new ConstantNumberGenerator(6))
+            .setPlayerManager(new PlayerManager(players, turn, true))
+            .setPointsToWin(10)
+            .setState(GameState.NORMAL);
+
+    CatanGameEngine engine = new CatanGameEngine(builder);
 
     IRequest request = new UpgradeStructureRequest(player, StructureType.CITY, requestX, requestY);
 
@@ -841,17 +948,25 @@ public class CatanGameEngineTest {
           fail();
         };
 
-    CatanGameEngine engine =
-        new CatanGameEngine(
-            board,
-            players,
-            10,
-            GameState.FOUNDATION,
-            0,
-            false,
-            errorHandler,
-            new LinearGameLog(),
-            new ConstantNumberGenerator(6));
+    ICommandSender commandSender =
+        new ICommandSender() {
+
+          @Override
+          public void send(ICommand command) {}
+        };
+
+    ICatanGameBuilder builder =
+        new CatanGameBuilder()
+            .setBoard(board)
+            .setCommandSender(commandSender)
+            .setErrorHandler(errorHandler)
+            .setGameLog(new LinearGameLog())
+            .setNumberGenerator(new ConstantNumberGenerator(6))
+            .setPlayerManager(new PlayerManager(players, 0, false))
+            .setPointsToWin(10)
+            .setState(GameState.FOUNDATION);
+
+    CatanGameEngine engine = new CatanGameEngine(builder);
 
     engine.processRequest(new StartTurnRequest(player));
 
@@ -883,17 +998,25 @@ public class CatanGameEngineTest {
     entryRequests.add(new StartTurnRequest(player1));
     entries.add(new LogEntry(6, entryRequests));
 
-    CatanGameEngine engine =
-        new CatanGameEngine(
-            board,
-            players,
-            10,
-            GameState.NORMAL,
-            0,
-            true,
-            errorHandler,
-            new LinearGameLog(entries),
-            new CatanRandomGenerator());
+    ICommandSender commandSender =
+        new ICommandSender() {
+
+          @Override
+          public void send(ICommand command) {}
+        };
+
+    ICatanGameBuilder builder =
+        new CatanGameBuilder()
+            .setBoard(board)
+            .setCommandSender(commandSender)
+            .setErrorHandler(errorHandler)
+            .setGameLog(new LinearGameLog(entries))
+            .setNumberGenerator(new CatanRandomGenerator())
+            .setPlayerManager(new PlayerManager(players, 0, true))
+            .setPointsToWin(10)
+            .setState(GameState.NORMAL);
+
+    CatanGameEngine engine = new CatanGameEngine(builder);
 
     int requestX = 3;
     int requestY = 2;
@@ -937,17 +1060,25 @@ public class CatanGameEngineTest {
     entryRequests.add(new StartTurnRequest(player1));
     entries.add(new LogEntry(6, entryRequests));
 
-    CatanGameEngine engine =
-        new CatanGameEngine(
-            board,
-            players,
-            10,
-            GameState.NORMAL,
-            0,
-            true,
-            errorHandler,
-            new LinearGameLog(entries),
-            new CatanRandomGenerator());
+    ICommandSender commandSender =
+        new ICommandSender() {
+
+          @Override
+          public void send(ICommand command) {}
+        };
+
+    ICatanGameBuilder builder =
+        new CatanGameBuilder()
+            .setBoard(board)
+            .setCommandSender(commandSender)
+            .setErrorHandler(errorHandler)
+            .setGameLog(new LinearGameLog(entries))
+            .setNumberGenerator(new CatanRandomGenerator())
+            .setPlayerManager(new PlayerManager(players, 0, true))
+            .setPointsToWin(10)
+            .setState(GameState.NORMAL);
+
+    CatanGameEngine engine = new CatanGameEngine(builder);
 
     int requestX = 3;
     int requestY = 2;
@@ -983,17 +1114,25 @@ public class CatanGameEngineTest {
           requestFailed.set(true);
         };
 
-    CatanGameEngine engine =
-        new CatanGameEngine(
-            board,
-            players,
-            10,
-            GameState.NORMAL,
-            0,
-            false,
-            errorHandler,
-            new LinearGameLog(),
-            new CatanRandomGenerator());
+    ICommandSender commandSender =
+        new ICommandSender() {
+
+          @Override
+          public void send(ICommand command) {}
+        };
+
+    ICatanGameBuilder builder =
+        new CatanGameBuilder()
+            .setBoard(board)
+            .setCommandSender(commandSender)
+            .setErrorHandler(errorHandler)
+            .setGameLog(new LinearGameLog())
+            .setNumberGenerator(new CatanRandomGenerator())
+            .setPlayerManager(new PlayerManager(players, 0, false))
+            .setPointsToWin(10)
+            .setState(GameState.NORMAL);
+
+    CatanGameEngine engine = new CatanGameEngine(builder);
 
     int requestX = 3;
     int requestY = 2;
@@ -1036,17 +1175,25 @@ public class CatanGameEngineTest {
     entryRequests.add(new StartTurnRequest(player));
     entries.add(new LogEntry(6, entryRequests));
 
-    CatanGameEngine engine =
-        new CatanGameEngine(
-            board,
-            players,
-            10,
-            GameState.FOUNDATION,
-            0,
-            true,
-            errorHandler,
-            new LinearGameLog(entries),
-            new CatanRandomGenerator());
+    ICommandSender commandSender =
+        new ICommandSender() {
+
+          @Override
+          public void send(ICommand command) {}
+        };
+
+    ICatanGameBuilder builder =
+        new CatanGameBuilder()
+            .setBoard(board)
+            .setCommandSender(commandSender)
+            .setErrorHandler(errorHandler)
+            .setGameLog(new LinearGameLog(entries))
+            .setNumberGenerator(new CatanRandomGenerator())
+            .setPlayerManager(new PlayerManager(players, 0, true))
+            .setPointsToWin(10)
+            .setState(GameState.FOUNDATION);
+
+    CatanGameEngine engine = new CatanGameEngine(builder);
 
     int requestX = 3;
     int requestY = 2;
@@ -1084,17 +1231,25 @@ public class CatanGameEngineTest {
     entryRequests.add(new StartTurnRequest(player1));
     entries.add(new LogEntry(6, entryRequests));
 
-    CatanGameEngine engine =
-        new CatanGameEngine(
-            board,
-            players,
-            10,
-            GameState.NORMAL,
-            0,
-            true,
-            errorHandler,
-            new LinearGameLog(entries),
-            new CatanRandomGenerator());
+    ICommandSender commandSender =
+        new ICommandSender() {
+
+          @Override
+          public void send(ICommand command) {}
+        };
+
+    ICatanGameBuilder builder =
+        new CatanGameBuilder()
+            .setBoard(board)
+            .setCommandSender(commandSender)
+            .setErrorHandler(errorHandler)
+            .setGameLog(new LinearGameLog(entries))
+            .setNumberGenerator(new CatanRandomGenerator())
+            .setPlayerManager(new PlayerManager(players, 0, true))
+            .setPointsToWin(10)
+            .setState(GameState.NORMAL);
+
+    CatanGameEngine engine = new CatanGameEngine(builder);
 
     int requestX = 2;
     int requestY = 2;
@@ -1138,17 +1293,25 @@ public class CatanGameEngineTest {
     entryRequests.add(new StartTurnRequest(player1));
     entries.add(new LogEntry(6, entryRequests));
 
-    CatanGameEngine engine =
-        new CatanGameEngine(
-            board,
-            players,
-            10,
-            GameState.NORMAL,
-            0,
-            true,
-            errorHandler,
-            new LinearGameLog(entries),
-            new CatanRandomGenerator());
+    ICommandSender commandSender =
+        new ICommandSender() {
+
+          @Override
+          public void send(ICommand command) {}
+        };
+
+    ICatanGameBuilder builder =
+        new CatanGameBuilder()
+            .setBoard(board)
+            .setCommandSender(commandSender)
+            .setErrorHandler(errorHandler)
+            .setGameLog(new LinearGameLog(entries))
+            .setNumberGenerator(new CatanRandomGenerator())
+            .setPlayerManager(new PlayerManager(players, 0, true))
+            .setPointsToWin(10)
+            .setState(GameState.NORMAL);
+
+    CatanGameEngine engine = new CatanGameEngine(builder);
 
     int requestX = 2;
     int requestY = 2;
@@ -1184,17 +1347,25 @@ public class CatanGameEngineTest {
           requestFailed.set(true);
         };
 
-    CatanGameEngine engine =
-        new CatanGameEngine(
-            board,
-            players,
-            10,
-            GameState.NORMAL,
-            0,
-            false,
-            errorHandler,
-            new LinearGameLog(),
-            new CatanRandomGenerator());
+    ICommandSender commandSender =
+        new ICommandSender() {
+
+          @Override
+          public void send(ICommand command) {}
+        };
+
+    ICatanGameBuilder builder =
+        new CatanGameBuilder()
+            .setBoard(board)
+            .setCommandSender(commandSender)
+            .setErrorHandler(errorHandler)
+            .setGameLog(new LinearGameLog())
+            .setNumberGenerator(new CatanRandomGenerator())
+            .setPlayerManager(new PlayerManager(players, 0, false))
+            .setPointsToWin(10)
+            .setState(GameState.NORMAL);
+
+    CatanGameEngine engine = new CatanGameEngine(builder);
 
     int requestX = 2;
     int requestY = 2;
@@ -1237,17 +1408,25 @@ public class CatanGameEngineTest {
     entryRequests.add(new StartTurnRequest(player1));
     entries.add(new LogEntry(6, entryRequests));
 
-    CatanGameEngine engine =
-        new CatanGameEngine(
-            board,
-            players,
-            10,
-            GameState.FOUNDATION,
-            0,
-            true,
-            errorHandler,
-            new LinearGameLog(entries),
-            new CatanRandomGenerator());
+    ICommandSender commandSender =
+        new ICommandSender() {
+
+          @Override
+          public void send(ICommand command) {}
+        };
+
+    ICatanGameBuilder builder =
+        new CatanGameBuilder()
+            .setBoard(board)
+            .setCommandSender(commandSender)
+            .setErrorHandler(errorHandler)
+            .setGameLog(new LinearGameLog(entries))
+            .setNumberGenerator(new CatanRandomGenerator())
+            .setPlayerManager(new PlayerManager(players, 0, true))
+            .setPointsToWin(10)
+            .setState(GameState.FOUNDATION);
+
+    CatanGameEngine engine = new CatanGameEngine(builder);
 
     int requestX = 2;
     int requestY = 2;
@@ -1281,17 +1460,25 @@ public class CatanGameEngineTest {
     entryRequests.add(new StartTurnRequest(player));
     entries.add(new LogEntry(6, entryRequests));
 
-    CatanGameEngine engine =
-        new CatanGameEngine(
-            board,
-            players,
-            10,
-            GameState.ENDED,
-            0,
-            true,
-            errorHandler,
-            new LinearGameLog(entries),
-            new CatanRandomGenerator());
+    ICommandSender commandSender =
+        new ICommandSender() {
+
+          @Override
+          public void send(ICommand command) {}
+        };
+
+    ICatanGameBuilder builder =
+        new CatanGameBuilder()
+            .setBoard(board)
+            .setCommandSender(commandSender)
+            .setErrorHandler(errorHandler)
+            .setGameLog(new LinearGameLog(entries))
+            .setNumberGenerator(new CatanRandomGenerator())
+            .setPlayerManager(new PlayerManager(players, 0, true))
+            .setPointsToWin(10)
+            .setState(GameState.ENDED);
+
+    CatanGameEngine engine = new CatanGameEngine(builder);
 
     engine.processRequest(new EndTurnRequest(player));
 
@@ -1332,17 +1519,25 @@ public class CatanGameEngineTest {
     IGameLog log = new LinearGameLog(entries);
     int turn = 0;
 
-    CatanGameEngine engine =
-        new CatanGameEngine(
-            board,
-            players,
-            10,
-            GameState.NORMAL,
-            turn,
-            true,
-            errorHandler,
-            log,
-            new CatanRandomGenerator());
+    ICommandSender commandSender =
+        new ICommandSender() {
+
+          @Override
+          public void send(ICommand command) {}
+        };
+
+    ICatanGameBuilder builder =
+        new CatanGameBuilder()
+            .setBoard(board)
+            .setCommandSender(commandSender)
+            .setErrorHandler(errorHandler)
+            .setGameLog(log)
+            .setNumberGenerator(new CatanRandomGenerator())
+            .setPlayerManager(new PlayerManager(players, turn, true))
+            .setPointsToWin(10)
+            .setState(GameState.NORMAL);
+
+    CatanGameEngine engine = new CatanGameEngine(builder);
 
     Map<ResourceType, Integer> requestedResourcesMap = new TreeMap<ResourceType, Integer>();
     requestedResourcesMap.put(ResourceType.ORE, 1);
@@ -1380,24 +1575,32 @@ public class CatanGameEngineTest {
           requestFailed.set(true);
         };
 
-    CatanGameEngine engine =
-        new CatanGameEngine(
-            board,
-            players,
-            10,
-            GameState.ENDED,
-            0,
-            false,
-            errorHandler,
-            new LinearGameLog(),
-            new CatanRandomGenerator());
+    ICommandSender commandSender =
+        new ICommandSender() {
+
+          @Override
+          public void send(ICommand command) {}
+        };
+
+    ICatanGameBuilder builder =
+        new CatanGameBuilder()
+            .setBoard(board)
+            .setCommandSender(commandSender)
+            .setErrorHandler(errorHandler)
+            .setGameLog(new LinearGameLog())
+            .setNumberGenerator(new CatanRandomGenerator())
+            .setPlayerManager(new PlayerManager(players, 0, false))
+            .setPointsToWin(10)
+            .setState(GameState.ENDED);
+
+    CatanGameEngine engine = new CatanGameEngine(builder);
 
     engine.processRequest(new StartTurnRequest(player));
 
     assertSame(true, requestFailed.get());
   }
 
-  @DisplayName("it must process a valid trade request if the turn is not started")
+  @DisplayName("it must not process a valid trade request if the turn is not started")
   @Tag("CatanBoardEngine")
   @Test
   public void itMustNotProcessAValidTradeRequestI()
@@ -1424,17 +1627,25 @@ public class CatanGameEngineTest {
 
     Collection<ILogEntry> entries = new ArrayList<ILogEntry>();
 
-    CatanGameEngine engine =
-        new CatanGameEngine(
-            board,
-            players,
-            10,
-            GameState.NORMAL,
-            0,
-            false,
-            errorHandler,
-            new LinearGameLog(entries),
-            new CatanRandomGenerator());
+    ICommandSender commandSender =
+        new ICommandSender() {
+
+          @Override
+          public void send(ICommand command) {}
+        };
+
+    ICatanGameBuilder builder =
+        new CatanGameBuilder()
+            .setBoard(board)
+            .setCommandSender(commandSender)
+            .setErrorHandler(errorHandler)
+            .setGameLog(new LinearGameLog(entries))
+            .setNumberGenerator(new CatanRandomGenerator())
+            .setPlayerManager(new PlayerManager(players, 0, false))
+            .setPointsToWin(10)
+            .setState(GameState.NORMAL);
+
+    CatanGameEngine engine = new CatanGameEngine(builder);
 
     Map<ResourceType, Integer> requestedResourcesMap = new TreeMap<ResourceType, Integer>();
     requestedResourcesMap.put(ResourceType.ORE, 1);
@@ -1485,17 +1696,25 @@ public class CatanGameEngineTest {
     entryRequests.add(new StartTurnRequest(player));
     entries.add(new LogEntry(6, entryRequests));
 
-    CatanGameEngine engine =
-        new CatanGameEngine(
-            board,
-            players,
-            10,
-            GameState.FOUNDATION,
-            0,
-            true,
-            errorHandler,
-            new LinearGameLog(entries),
-            new CatanRandomGenerator());
+    ICommandSender commandSender =
+        new ICommandSender() {
+
+          @Override
+          public void send(ICommand command) {}
+        };
+
+    ICatanGameBuilder builder =
+        new CatanGameBuilder()
+            .setBoard(board)
+            .setCommandSender(commandSender)
+            .setErrorHandler(errorHandler)
+            .setGameLog(new LinearGameLog(entries))
+            .setNumberGenerator(new CatanRandomGenerator())
+            .setPlayerManager(new PlayerManager(players, 0, true))
+            .setPointsToWin(10)
+            .setState(GameState.FOUNDATION);
+
+    CatanGameEngine engine = new CatanGameEngine(builder);
 
     Map<ResourceType, Integer> requestedResourcesMap = new TreeMap<ResourceType, Integer>();
     requestedResourcesMap.put(ResourceType.ORE, 1);
@@ -1547,17 +1766,25 @@ public class CatanGameEngineTest {
     entryRequests.add(new StartTurnRequest(player));
     entries.add(new LogEntry(6, entryRequests));
 
-    CatanGameEngine engine =
-        new CatanGameEngine(
-            board,
-            players,
-            10,
-            GameState.NORMAL,
-            0,
-            true,
-            errorHandler,
-            new LinearGameLog(entries),
-            new CatanRandomGenerator());
+    ICommandSender commandSender =
+        new ICommandSender() {
+
+          @Override
+          public void send(ICommand command) {}
+        };
+
+    ICatanGameBuilder builder =
+        new CatanGameBuilder()
+            .setBoard(board)
+            .setCommandSender(commandSender)
+            .setErrorHandler(errorHandler)
+            .setGameLog(new LinearGameLog(entries))
+            .setNumberGenerator(new CatanRandomGenerator())
+            .setPlayerManager(new PlayerManager(players, 0, true))
+            .setPointsToWin(10)
+            .setState(GameState.NORMAL);
+
+    CatanGameEngine engine = new CatanGameEngine(builder);
 
     Map<ResourceType, Integer> requestedResourcesMap = new TreeMap<ResourceType, Integer>();
     requestedResourcesMap.put(ResourceType.ORE, 1);
@@ -1608,17 +1835,25 @@ public class CatanGameEngineTest {
 
     entries.add(new LogEntry(6, turn2Requests));
 
-    CatanGameEngine engine =
-        new CatanGameEngine(
-            board,
-            players,
-            10,
-            GameState.FOUNDATION,
-            1,
-            true,
-            errorHandler,
-            new LinearGameLog(entries),
-            new CatanRandomGenerator());
+    ICommandSender commandSender =
+        new ICommandSender() {
+
+          @Override
+          public void send(ICommand command) {}
+        };
+
+    ICatanGameBuilder builder =
+        new CatanGameBuilder()
+            .setBoard(board)
+            .setCommandSender(commandSender)
+            .setErrorHandler(errorHandler)
+            .setGameLog(new LinearGameLog(entries))
+            .setNumberGenerator(new CatanRandomGenerator())
+            .setPlayerManager(new PlayerManager(players, 1, true))
+            .setPointsToWin(10)
+            .setState(GameState.FOUNDATION);
+
+    CatanGameEngine engine = new CatanGameEngine(builder);
 
     int requestX1 = 3;
     int requestY1 = 4;
@@ -1657,17 +1892,25 @@ public class CatanGameEngineTest {
     entryRequests.add(new StartTurnRequest(player));
     entries.add(new LogEntry(6, entryRequests));
 
-    CatanGameEngine engine =
-        new CatanGameEngine(
-            board,
-            players,
-            10,
-            GameState.FOUNDATION,
-            0,
-            true,
-            errorHandler,
-            new LinearGameLog(entries),
-            new CatanRandomGenerator());
+    ICommandSender commandSender =
+        new ICommandSender() {
+
+          @Override
+          public void send(ICommand command) {}
+        };
+
+    ICatanGameBuilder builder =
+        new CatanGameBuilder()
+            .setBoard(board)
+            .setCommandSender(commandSender)
+            .setErrorHandler(errorHandler)
+            .setGameLog(new LinearGameLog(entries))
+            .setNumberGenerator(new CatanRandomGenerator())
+            .setPlayerManager(new PlayerManager(players, 0, true))
+            .setPointsToWin(10)
+            .setState(GameState.FOUNDATION);
+
+    CatanGameEngine engine = new CatanGameEngine(builder);
 
     int requestX = 2;
     int requestY = 4;
@@ -1708,17 +1951,25 @@ public class CatanGameEngineTest {
     entryRequests.add(new StartTurnRequest(player));
     entries.add(new LogEntry(6, entryRequests));
 
-    CatanGameEngine engine =
-        new CatanGameEngine(
-            board,
-            players,
-            10,
-            GameState.NORMAL,
-            0,
-            true,
-            errorHandler,
-            new LinearGameLog(entries),
-            new CatanRandomGenerator());
+    ICommandSender commandSender =
+        new ICommandSender() {
+
+          @Override
+          public void send(ICommand command) {}
+        };
+
+    ICatanGameBuilder builder =
+        new CatanGameBuilder()
+            .setBoard(board)
+            .setCommandSender(commandSender)
+            .setErrorHandler(errorHandler)
+            .setGameLog(new LinearGameLog(entries))
+            .setNumberGenerator(new CatanRandomGenerator())
+            .setPlayerManager(new PlayerManager(players, 0, true))
+            .setPointsToWin(10)
+            .setState(GameState.NORMAL);
+
+    CatanGameEngine engine = new CatanGameEngine(builder);
 
     int requestX = 3;
     int requestY = 2;
@@ -1765,17 +2016,25 @@ public class CatanGameEngineTest {
 
     entries.add(new LogEntry(6, turn2Requests));
 
-    CatanGameEngine engine =
-        new CatanGameEngine(
-            board,
-            players,
-            10,
-            GameState.FOUNDATION,
-            1,
-            true,
-            errorHandler,
-            new LinearGameLog(entries),
-            new CatanRandomGenerator());
+    ICommandSender commandSender =
+        new ICommandSender() {
+
+          @Override
+          public void send(ICommand command) {}
+        };
+
+    ICatanGameBuilder builder =
+        new CatanGameBuilder()
+            .setBoard(board)
+            .setCommandSender(commandSender)
+            .setErrorHandler(errorHandler)
+            .setGameLog(new LinearGameLog(entries))
+            .setNumberGenerator(new CatanRandomGenerator())
+            .setPlayerManager(new PlayerManager(players, 1, true))
+            .setPointsToWin(10)
+            .setState(GameState.FOUNDATION);
+
+    CatanGameEngine engine = new CatanGameEngine(builder);
 
     int requestX = 3;
     int requestY = 4;
@@ -1811,17 +2070,25 @@ public class CatanGameEngineTest {
     entryRequests.add(new StartTurnRequest(player));
     entries.add(new LogEntry(6, entryRequests));
 
-    CatanGameEngine engine =
-        new CatanGameEngine(
-            board,
-            players,
-            10,
-            GameState.FOUNDATION,
-            0,
-            true,
-            errorHandler,
-            new LinearGameLog(entries),
-            new CatanRandomGenerator());
+    ICommandSender commandSender =
+        new ICommandSender() {
+
+          @Override
+          public void send(ICommand command) {}
+        };
+
+    ICatanGameBuilder builder =
+        new CatanGameBuilder()
+            .setBoard(board)
+            .setCommandSender(commandSender)
+            .setErrorHandler(errorHandler)
+            .setGameLog(new LinearGameLog(entries))
+            .setNumberGenerator(new CatanRandomGenerator())
+            .setPlayerManager(new PlayerManager(players, 0, true))
+            .setPointsToWin(10)
+            .setState(GameState.FOUNDATION);
+
+    CatanGameEngine engine = new CatanGameEngine(builder);
 
     int requestX = 2;
     int requestY = 4;
@@ -1864,17 +2131,25 @@ public class CatanGameEngineTest {
     entryRequests.add(new StartTurnRequest(player));
     entries.add(new LogEntry(6, entryRequests));
 
-    CatanGameEngine engine =
-        new CatanGameEngine(
-            board,
-            players,
-            10,
-            GameState.NORMAL,
-            0,
-            true,
-            errorHandler,
-            new LinearGameLog(entries),
-            new CatanRandomGenerator());
+    ICommandSender commandSender =
+        new ICommandSender() {
+
+          @Override
+          public void send(ICommand command) {}
+        };
+
+    ICatanGameBuilder builder =
+        new CatanGameBuilder()
+            .setBoard(board)
+            .setCommandSender(commandSender)
+            .setErrorHandler(errorHandler)
+            .setGameLog(new LinearGameLog(entries))
+            .setNumberGenerator(new CatanRandomGenerator())
+            .setPlayerManager(new PlayerManager(players, 0, true))
+            .setPointsToWin(10)
+            .setState(GameState.NORMAL);
+
+    CatanGameEngine engine = new CatanGameEngine(builder);
 
     int requestX = 2;
     int requestY = 2;
@@ -1914,17 +2189,25 @@ public class CatanGameEngineTest {
     entryRequests.add(new StartTurnRequest(player));
     entries.add(new LogEntry(6, entryRequests));
 
-    CatanGameEngine engine =
-        new CatanGameEngine(
-            board,
-            players,
-            10,
-            GameState.NORMAL,
-            0,
-            true,
-            errorHandler,
-            new LinearGameLog(entries),
-            new CatanRandomGenerator());
+    ICommandSender commandSender =
+        new ICommandSender() {
+
+          @Override
+          public void send(ICommand command) {}
+        };
+
+    ICatanGameBuilder builder =
+        new CatanGameBuilder()
+            .setBoard(board)
+            .setCommandSender(commandSender)
+            .setErrorHandler(errorHandler)
+            .setGameLog(new LinearGameLog(entries))
+            .setNumberGenerator(new CatanRandomGenerator())
+            .setPlayerManager(new PlayerManager(players, 0, true))
+            .setPointsToWin(10)
+            .setState(GameState.NORMAL);
+
+    CatanGameEngine engine = new CatanGameEngine(builder);
 
     engine.processRequest(new EndTurnRequest(player));
 
@@ -1960,17 +2243,25 @@ public class CatanGameEngineTest {
     entryRequests.add(new StartTurnRequest(player));
     entries.add(new LogEntry(6, entryRequests));
 
-    CatanGameEngine engine =
-        new CatanGameEngine(
-            board,
-            players,
-            10,
-            GameState.NORMAL,
-            0,
-            true,
-            errorHandler,
-            new LinearGameLog(entries),
-            new CatanRandomGenerator());
+    ICommandSender commandSender =
+        new ICommandSender() {
+
+          @Override
+          public void send(ICommand command) {}
+        };
+
+    ICatanGameBuilder builder =
+        new CatanGameBuilder()
+            .setBoard(board)
+            .setCommandSender(commandSender)
+            .setErrorHandler(errorHandler)
+            .setGameLog(new LinearGameLog(entries))
+            .setNumberGenerator(new CatanRandomGenerator())
+            .setPlayerManager(new PlayerManager(players, 0, true))
+            .setPointsToWin(10)
+            .setState(GameState.NORMAL);
+
+    CatanGameEngine engine = new CatanGameEngine(builder);
 
     int requestX = 2;
     int requestY = 2;
@@ -2007,17 +2298,25 @@ public class CatanGameEngineTest {
           fail();
         };
 
-    CatanGameEngine engine =
-        new CatanGameEngine(
-            board,
-            players,
-            10,
-            GameState.NORMAL,
-            0,
-            false,
-            errorHandler,
-            new LinearGameLog(),
-            new ConstantNumberGenerator(6));
+    ICommandSender commandSender =
+        new ICommandSender() {
+
+          @Override
+          public void send(ICommand command) {}
+        };
+
+    ICatanGameBuilder builder =
+        new CatanGameBuilder()
+            .setBoard(board)
+            .setCommandSender(commandSender)
+            .setErrorHandler(errorHandler)
+            .setGameLog(new LinearGameLog())
+            .setNumberGenerator(new ConstantNumberGenerator(6))
+            .setPlayerManager(new PlayerManager(players, 0, false))
+            .setPointsToWin(10)
+            .setState(GameState.NORMAL);
+
+    CatanGameEngine engine = new CatanGameEngine(builder);
 
     engine.processRequest(new StartTurnRequest(player));
 
@@ -2057,17 +2356,25 @@ public class CatanGameEngineTest {
     entryRequests.add(new StartTurnRequest(player1));
     entries.add(new LogEntry(6, entryRequests));
 
-    CatanGameEngine engine =
-        new CatanGameEngine(
-            board,
-            players,
-            10,
-            GameState.NORMAL,
-            0,
-            true,
-            errorHandler,
-            new LinearGameLog(entries),
-            new CatanRandomGenerator());
+    ICommandSender commandSender =
+        new ICommandSender() {
+
+          @Override
+          public void send(ICommand command) {}
+        };
+
+    ICatanGameBuilder builder =
+        new CatanGameBuilder()
+            .setBoard(board)
+            .setCommandSender(commandSender)
+            .setErrorHandler(errorHandler)
+            .setGameLog(new LinearGameLog(entries))
+            .setNumberGenerator(new CatanRandomGenerator())
+            .setPlayerManager(new PlayerManager(players, 0, true))
+            .setPointsToWin(10)
+            .setState(GameState.NORMAL);
+
+    CatanGameEngine engine = new CatanGameEngine(builder);
 
     Map<ResourceType, Integer> requestedResourcesMap = new TreeMap<ResourceType, Integer>();
     requestedResourcesMap.put(ResourceType.ORE, 1);
@@ -2125,17 +2432,25 @@ public class CatanGameEngineTest {
     entryRequests.add(new StartTurnRequest(player1));
     entries.add(new LogEntry(6, entryRequests));
 
-    CatanGameEngine engine =
-        new CatanGameEngine(
-            board,
-            players,
-            10,
-            GameState.NORMAL,
-            0,
-            true,
-            errorHandler,
-            new LinearGameLog(entries),
-            new CatanRandomGenerator());
+    ICommandSender commandSender =
+        new ICommandSender() {
+
+          @Override
+          public void send(ICommand command) {}
+        };
+
+    ICatanGameBuilder builder =
+        new CatanGameBuilder()
+            .setBoard(board)
+            .setCommandSender(commandSender)
+            .setErrorHandler(errorHandler)
+            .setGameLog(new LinearGameLog(entries))
+            .setNumberGenerator(new CatanRandomGenerator())
+            .setPlayerManager(new PlayerManager(players, 0, true))
+            .setPointsToWin(10)
+            .setState(GameState.NORMAL);
+
+    CatanGameEngine engine = new CatanGameEngine(builder);
 
     Map<ResourceType, Integer> requestedResourcesMap = new TreeMap<ResourceType, Integer>();
     requestedResourcesMap.put(ResourceType.ORE, 1);
@@ -2193,17 +2508,25 @@ public class CatanGameEngineTest {
     entryRequests.add(new StartTurnRequest(player1));
     entries.add(new LogEntry(6, entryRequests));
 
-    CatanGameEngine engine =
-        new CatanGameEngine(
-            board,
-            players,
-            10,
-            GameState.NORMAL,
-            0,
-            true,
-            errorHandler,
-            new LinearGameLog(entries),
-            new CatanRandomGenerator());
+    ICommandSender commandSender =
+        new ICommandSender() {
+
+          @Override
+          public void send(ICommand command) {}
+        };
+
+    ICatanGameBuilder builder =
+        new CatanGameBuilder()
+            .setBoard(board)
+            .setCommandSender(commandSender)
+            .setErrorHandler(errorHandler)
+            .setGameLog(new LinearGameLog(entries))
+            .setNumberGenerator(new CatanRandomGenerator())
+            .setPlayerManager(new PlayerManager(players, 0, true))
+            .setPointsToWin(10)
+            .setState(GameState.NORMAL);
+
+    CatanGameEngine engine = new CatanGameEngine(builder);
 
     Map<ResourceType, Integer> requestedResourcesMap = new TreeMap<ResourceType, Integer>();
     requestedResourcesMap.put(ResourceType.ORE, 1);
@@ -2261,17 +2584,25 @@ public class CatanGameEngineTest {
     entryRequests.add(new StartTurnRequest(player));
     entries.add(new LogEntry(6, entryRequests));
 
-    CatanGameEngine engine =
-        new CatanGameEngine(
-            board,
-            players,
-            10,
-            GameState.NORMAL,
-            0,
-            true,
-            errorHandler,
-            new LinearGameLog(entries),
-            new CatanRandomGenerator());
+    ICommandSender commandSender =
+        new ICommandSender() {
+
+          @Override
+          public void send(ICommand command) {}
+        };
+
+    ICatanGameBuilder builder =
+        new CatanGameBuilder()
+            .setBoard(board)
+            .setCommandSender(commandSender)
+            .setErrorHandler(errorHandler)
+            .setGameLog(new LinearGameLog(entries))
+            .setNumberGenerator(new CatanRandomGenerator())
+            .setPlayerManager(new PlayerManager(players, 0, true))
+            .setPointsToWin(10)
+            .setState(GameState.NORMAL);
+
+    CatanGameEngine engine = new CatanGameEngine(builder);
 
     Map<ResourceType, Integer> requestedResourcesMap = new TreeMap<ResourceType, Integer>();
     requestedResourcesMap.put(ResourceType.ORE, 1);
@@ -2317,17 +2648,25 @@ public class CatanGameEngineTest {
           fail();
         };
 
-    CatanGameEngine engine =
-        new CatanGameEngine(
-            board,
-            players,
-            10,
-            GameState.NORMAL,
-            0,
-            false,
-            errorHandler,
-            new LinearGameLog(),
-            new ConstantNumberGenerator(6));
+    ICommandSender commandSender =
+        new ICommandSender() {
+
+          @Override
+          public void send(ICommand command) {}
+        };
+
+    ICatanGameBuilder builder =
+        new CatanGameBuilder()
+            .setBoard(board)
+            .setCommandSender(commandSender)
+            .setErrorHandler(errorHandler)
+            .setGameLog(new LinearGameLog())
+            .setNumberGenerator(new ConstantNumberGenerator(6))
+            .setPlayerManager(new PlayerManager(players, 0, false))
+            .setPointsToWin(10)
+            .setState(GameState.NORMAL);
+
+    CatanGameEngine engine = new CatanGameEngine(builder);
 
     engine.processRequest(new StartTurnRequest(player));
 
