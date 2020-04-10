@@ -4,6 +4,7 @@ import io.github.notaphplover.catan.core.board.connection.ConnectionDirection;
 import io.github.notaphplover.catan.core.board.connection.ConnectionType;
 import io.github.notaphplover.catan.core.board.connection.IBoardConnection;
 import io.github.notaphplover.catan.core.board.element.IBoardElement;
+import io.github.notaphplover.catan.core.board.element.IOwnedElement;
 import io.github.notaphplover.catan.core.board.element.OwnedElement;
 import io.github.notaphplover.catan.core.board.exception.InvalidBoardDimensionsException;
 import io.github.notaphplover.catan.core.board.exception.InvalidBoardElementException;
@@ -13,6 +14,7 @@ import io.github.notaphplover.catan.core.board.structure.IBoardStructure;
 import io.github.notaphplover.catan.core.board.structure.StructureType;
 import io.github.notaphplover.catan.core.board.terrain.IBoardTerrain;
 import io.github.notaphplover.catan.core.board.terrain.TerrainType;
+import io.github.notaphplover.catan.core.player.IPlayer;
 import io.github.notaphplover.catan.core.resource.production.IResourceProduction;
 import io.github.notaphplover.catan.core.resource.provider.ITerrainProductionProvider;
 
@@ -90,8 +92,31 @@ public class CatanBoard implements ICatanBoard {
   }
 
   @Override
-  public IBoardStructure getStructure(int x, int y) {
-    return (IBoardStructure) this.elements[2 * x][2 * y];
+  public boolean isConnectionConnected(IPlayer player, int x, int y) {
+    if (get(x, y).getElementType() != BoardElementType.CONNECTION) {
+      return false;
+    }
+
+    ConnectionDirection direction = getConnectionDirection(x, y);
+
+    if (direction == ConnectionDirection.HORIZONTAL) {
+      return this.isHorizontalConnectionConnected(player, x, y);
+    } else if (direction == ConnectionDirection.VERTICAL) {
+      return this.isVerticalConnectionConnected(player, x, y);
+    } else {
+      return false;
+    }
+  }
+
+  @Override
+  public boolean isStructurePointConnected(IPlayer player, int x, int y) {
+    return get(x, y).getElementType() == BoardElementType.STRUCTURE
+        && ((x > 0 && isStructureConnectedCheckConnection(player, (IOwnedElement) get(x - 1, y)))
+            || (x + 1 < getWidth()
+                && isStructureConnectedCheckConnection(player, (IOwnedElement) get(x + 1, y)))
+            || (y > 0 && isStructureConnectedCheckConnection(player, (IOwnedElement) get(x, y - 1)))
+            || (y + 1 > getHeight()
+                && isStructureConnectedCheckConnection(player, (IOwnedElement) get(x, y + 1))));
   }
 
   @Override
@@ -128,6 +153,12 @@ public class CatanBoard implements ICatanBoard {
     return type == BoardElementType.TERRAIN;
   }
 
+  private boolean isHorizontalConnectionConnected(IPlayer player, int x, int y) {
+    // Get the structure locations. The board topology ensures their existence
+    return isStructurePointConnectedOrControlled(player, x - 1, y)
+        || isStructurePointConnectedOrControlled(player, x + 1, y);
+  }
+
   private boolean isNonVoidTerrainCloseTo(int x, int y) {
 
     return get(x, y).getElementType() == BoardElementType.STRUCTURE
@@ -143,6 +174,17 @@ public class CatanBoard implements ICatanBoard {
             || (x + 1 < getWidth()
                 && y + 1 < getHeight()
                 && ((IBoardTerrain) get(x + 1, y + 1)).getType() != TerrainType.NONE));
+  }
+
+  private boolean isStructureConnectedCheckConnection(IPlayer player, IOwnedElement element) {
+    return element.getOwner() != null && element.getOwner().equals(player);
+  }
+
+  private boolean isStructurePointConnectedOrControlled(IPlayer player, int x, int y) {
+    return (get(x, y).getElementType() == BoardElementType.STRUCTURE
+            && ((IOwnedElement) get(x, y)).getOwner() != null
+            && ((IOwnedElement) get(x, y)).getOwner().equals(player))
+        || isStructurePointConnected(player, x, y);
   }
 
   private boolean isValidBuildNew(IBoardElement element, int x, int y) {
@@ -163,6 +205,12 @@ public class CatanBoard implements ICatanBoard {
         && element.getElementType() == BoardElementType.STRUCTURE
         && ((IBoardStructure) element).getType() == StructureType.CITY
         && ((OwnedElement) oldElement).getOwner() == ((OwnedElement) element).getOwner();
+  }
+
+  private boolean isVerticalConnectionConnected(IPlayer player, int x, int y) {
+    // Get the structure locations. The board topology ensures their existence
+    return isStructurePointConnectedOrControlled(player, x, y - 1)
+        || isStructurePointConnectedOrControlled(player, x, y + 1);
   }
 
   private boolean isVoidElement(IBoardElement element) {
