@@ -19,6 +19,7 @@ import io.github.notaphplover.catan.core.board.terrain.IBoardTerrain;
 import io.github.notaphplover.catan.core.board.terrain.TerrainType;
 import io.github.notaphplover.catan.core.exception.NonNullInputException;
 import io.github.notaphplover.catan.core.exception.NonVoidCollectionException;
+import io.github.notaphplover.catan.core.game.player.PlayerManager;
 import io.github.notaphplover.catan.core.player.IPlayer;
 import io.github.notaphplover.catan.core.player.Player;
 import io.github.notaphplover.catan.core.resource.ResourceManager;
@@ -40,7 +41,7 @@ public class CatanGameTest {
     ICatanBoard board = buildStandardBoard();
     assertThrows(
         NonNullInputException.class,
-        () -> new CatanGame(board, players, 10, GameState.NORMAL, 0, false));
+        () -> new CatanGame(board, new PlayerManager(players, 0, false), 10, GameState.NORMAL));
   }
 
   @DisplayName("It must not build a game with a null board")
@@ -51,7 +52,7 @@ public class CatanGameTest {
     IPlayer[] players = {new Player(0, new ResourceManager())};
     assertThrows(
         NonNullInputException.class,
-        () -> new CatanGame(null, players, 10, GameState.NORMAL, 0, false));
+        () -> new CatanGame(null, new PlayerManager(players, 0, false), 10, GameState.NORMAL));
   }
 
   @DisplayName("It must not build a game with a null collection of players")
@@ -65,7 +66,7 @@ public class CatanGameTest {
     ICatanBoard board = buildStandardBoard();
     assertThrows(
         NonNullInputException.class,
-        () -> new CatanGame(board, players, 10, GameState.NORMAL, 0, false));
+        () -> new CatanGame(board, new PlayerManager(players, 0, false), 10, GameState.NORMAL));
   }
 
   @DisplayName("It must not build a game with a void collection of players")
@@ -79,7 +80,7 @@ public class CatanGameTest {
     ICatanBoard board = buildStandardBoard();
     assertThrows(
         NonVoidCollectionException.class,
-        () -> new CatanGame(board, players, 10, GameState.NORMAL, 0, false));
+        () -> new CatanGame(board, new PlayerManager(players, 0, false), 10, GameState.NORMAL));
   }
 
   @DisplayName("It must return the active player")
@@ -92,7 +93,8 @@ public class CatanGameTest {
     IPlayer activePlayer = new Player(0, new ResourceManager());
     IPlayer[] players = {activePlayer};
     ICatanBoard board = buildStandardBoard();
-    CatanGame game = new CatanGame(board, players, 10, GameState.NORMAL, 0, false);
+    CatanGame game =
+        new CatanGame(board, new PlayerManager(players, 0, false), 10, GameState.NORMAL);
 
     assertSame(activePlayer, game.getActivePlayer());
   }
@@ -106,7 +108,8 @@ public class CatanGameTest {
 
     IPlayer[] players = {new Player(0, new ResourceManager())};
     ICatanBoard board = buildStandardBoard();
-    CatanGame game = new CatanGame(board, players, 10, GameState.NORMAL, 0, false);
+    CatanGame game =
+        new CatanGame(board, new PlayerManager(players, 0, false), 10, GameState.NORMAL);
 
     assertSame(board, game.getBoard());
   }
@@ -120,7 +123,8 @@ public class CatanGameTest {
 
     IPlayer[] players = {new Player(0, new ResourceManager())};
     ICatanBoard board = buildStandardBoard();
-    CatanGame game = new CatanGame(board, players, 10, GameState.NORMAL, 0, false);
+    CatanGame game =
+        new CatanGame(board, new PlayerManager(players, 0, false), 10, GameState.NORMAL);
 
     assertSame(players, game.getPlayers());
   }
@@ -135,7 +139,8 @@ public class CatanGameTest {
     IPlayer[] players = {new Player(0, new ResourceManager())};
     ICatanBoard board = buildStandardBoard();
     boolean turnStarted = true;
-    CatanGame game = new CatanGame(board, players, 10, GameState.NORMAL, 0, turnStarted);
+    CatanGame game =
+        new CatanGame(board, new PlayerManager(players, 0, turnStarted), 10, GameState.NORMAL);
 
     assertSame(turnStarted, game.isTurnStarted());
   }
