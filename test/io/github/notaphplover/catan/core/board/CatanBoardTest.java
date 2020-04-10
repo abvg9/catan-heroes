@@ -113,30 +113,6 @@ public class CatanBoardTest {
     assertEquals(element, board.get(0, 0));
   }
 
-  @DisplayName("It must get an structure by its position")
-  @Tag(value = "CatanBoard")
-  @Test
-  public void itMustGetAnStructureByItsPosition()
-      throws InvalidBoardDimensionsException, InvalidBoardElementException {
-
-    IBoardElement element = createNoneStructure();
-    IBoardElement[][] elements = {
-      {
-        element, createVoidConnection(), createNoneStructure(),
-      },
-      {
-        createVoidConnection(), createNoneTerrain(), createVoidConnection(),
-      },
-      {
-        createNoneStructure(), createVoidConnection(), createNoneStructure(),
-      },
-    };
-
-    CatanBoard board = new CatanBoard(3, 3, elements, new DefaultTerrainProductionProvider());
-
-    assertEquals(element, board.getStructure(0, 0));
-  }
-
   @DisplayName("It must fail if a false connection is provided")
   @Tag(value = "CatanBoard")
   @Test
