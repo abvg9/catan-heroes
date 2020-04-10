@@ -2,6 +2,8 @@ package io.github.notaphplover.catan.core.game.log;
 
 import io.github.notaphplover.catan.core.exception.NonNullInputException;
 import io.github.notaphplover.catan.core.game.exception.InvalidLogInsertionException;
+import io.github.notaphplover.catan.core.request.IRequest;
+import io.github.notaphplover.catan.core.request.RequestType;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.TreeMap;
@@ -35,6 +37,24 @@ public class LinearGameLog implements IGameLog {
   @Override
   public ILogEntry get(int turn) {
     return entries.get(turn);
+  }
+
+  public boolean isRequestPerformedAt(int turn, RequestType type) {
+    ILogEntry turnEntry = get(turn);
+
+    if (turnEntry == null) {
+      return false;
+    }
+
+    Iterable<IRequest> turnRequests = turnEntry.getRequests();
+
+    for (IRequest turnRequest : turnRequests) {
+      if (turnRequest != null && turnRequest.getType() == type) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   @Override

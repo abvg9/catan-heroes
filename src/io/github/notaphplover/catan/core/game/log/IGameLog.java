@@ -1,5 +1,7 @@
 package io.github.notaphplover.catan.core.game.log;
 
+import io.github.notaphplover.catan.core.request.RequestType;
+
 /**
  * Represents a game log.
  *
@@ -13,7 +15,16 @@ public interface IGameLog {
    * @param turn turn number
    * @return Log entry at the turn provided.
    */
-  public ILogEntry get(int turn);
+  ILogEntry get(int turn);
+
+  /**
+   * Determines if at least a request of the specific type has been logged at the specified turn.
+   *
+   * @param turn request's turn.
+   * @param type request's type.
+   * @return True if at least a request of the specific type has been logged at the specified turn.
+   */
+  boolean isRequestPerformedAt(int turn, RequestType type);
 
   /**
    * Pushes an entry
