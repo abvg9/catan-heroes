@@ -9,37 +9,37 @@ import io.github.notaphplover.catan.core.request.IBuildElementRequest;
 import io.github.notaphplover.catan.core.resource.exception.NotEnoughtResourcesException;
 import java.util.function.BiFunction;
 
-public abstract class BuildElementRequestHandler<Req extends IBuildElementRequest>
-    extends StandardRequestHandler<Req> {
+public abstract class BuildElementRequestHandler<R extends IBuildElementRequest>
+    extends StandardRequestHandler<R> {
 
   public BuildElementRequestHandler(
-      BuildElementRequestHandlerBuilder<Req, ?> builder,
-      BiFunction<ICatanGameHearth, Req, IOwnedElement> elementBuilder) {
+      BuildElementRequestHandlerBuilder<R, ?> builder,
+      BiFunction<ICatanGameHearth, R, IOwnedElement> elementBuilder) {
     super(processBuilder(builder, elementBuilder));
   }
 
-  private static <Req extends IBuildElementRequest> void baseBuildAction(
-      ICatanGameHearth hearth, Req request, IOwnedElement element)
+  private static <R extends IBuildElementRequest> void baseBuildAction(
+      ICatanGameHearth hearth, R request, IOwnedElement element)
       throws InvalidBoardElementException {
     hearth.getBoard().build(element, request.getX(), request.getY());
   }
 
-  private static <Req extends IBuildElementRequest> void baseSubstractResources(
-      ICatanGameHearth hearth, Req request, IOwnedElement element)
+  private static <R extends IBuildElementRequest> void baseSubstractResources(
+      ICatanGameHearth hearth, R request, IOwnedElement element)
       throws NotEnoughtResourcesException {
     hearth.getPlayerManager().getActivePlayer().getResourceManager().substract(element.getCost());
   }
 
-  private static <Req extends IBuildElementRequest> void baseUpgradeAction(
-      ICatanGameHearth hearth, Req request, IOwnedElement element)
+  private static <R extends IBuildElementRequest> void baseUpgradeAction(
+      ICatanGameHearth hearth, R request, IOwnedElement element)
       throws InvalidBoardElementException {
     hearth.getBoard().upgrade(element, request.getX(), request.getY());
   }
 
-  private static <Req extends IBuildElementRequest>
-      BiFunction<ICatanGameHearth, Req, Boolean> generateBuildAction(
-          BuildElementRequestHandlerBuilder<Req, ?> builder,
-          BiFunction<ICatanGameHearth, Req, IOwnedElement> elementBuilder) {
+  private static <R extends IBuildElementRequest>
+      BiFunction<ICatanGameHearth, R, Boolean> generateBuildAction(
+          BuildElementRequestHandlerBuilder<R, ?> builder,
+          BiFunction<ICatanGameHearth, R, IOwnedElement> elementBuilder) {
 
     if (builder.isUpgradeHandler()) {
       if (builder.isSubstractResources()) {
@@ -56,12 +56,12 @@ public abstract class BuildElementRequestHandler<Req extends IBuildElementReques
     }
   }
 
-  private static <Req extends IBuildElementRequest>
-      BiFunction<ICatanGameHearth, Req, Boolean> generateBuildActionSubstractingResources(
-          BuildElementRequestHandlerBuilder<Req, ?> builder,
-          BiFunction<ICatanGameHearth, Req, IOwnedElement> elementBuilder) {
+  private static <R extends IBuildElementRequest>
+      BiFunction<ICatanGameHearth, R, Boolean> generateBuildActionSubstractingResources(
+          BuildElementRequestHandlerBuilder<R, ?> builder,
+          BiFunction<ICatanGameHearth, R, IOwnedElement> elementBuilder) {
 
-    return (ICatanGameHearth hearth, Req request) -> {
+    return (ICatanGameHearth hearth, R request) -> {
       IOwnedElement element = elementBuilder.apply(hearth, request);
 
       try {
@@ -78,12 +78,12 @@ public abstract class BuildElementRequestHandler<Req extends IBuildElementReques
     };
   }
 
-  private static <Req extends IBuildElementRequest>
-      BiFunction<ICatanGameHearth, Req, Boolean> generateBuildActionWithoutSubstractingResources(
-          BuildElementRequestHandlerBuilder<Req, ?> builder,
-          BiFunction<ICatanGameHearth, Req, IOwnedElement> elementBuilder) {
+  private static <R extends IBuildElementRequest>
+      BiFunction<ICatanGameHearth, R, Boolean> generateBuildActionWithoutSubstractingResources(
+          BuildElementRequestHandlerBuilder<R, ?> builder,
+          BiFunction<ICatanGameHearth, R, IOwnedElement> elementBuilder) {
 
-    return (ICatanGameHearth hearth, Req request) -> {
+    return (ICatanGameHearth hearth, R request) -> {
       IOwnedElement element = elementBuilder.apply(hearth, request);
 
       try {
@@ -99,12 +99,12 @@ public abstract class BuildElementRequestHandler<Req extends IBuildElementReques
     };
   }
 
-  private static <Req extends IBuildElementRequest>
-      BiFunction<ICatanGameHearth, Req, Boolean> generateUpgradeActionSubstractingResources(
-          BuildElementRequestHandlerBuilder<Req, ?> builder,
-          BiFunction<ICatanGameHearth, Req, IOwnedElement> elementBuilder) {
+  private static <R extends IBuildElementRequest>
+      BiFunction<ICatanGameHearth, R, Boolean> generateUpgradeActionSubstractingResources(
+          BuildElementRequestHandlerBuilder<R, ?> builder,
+          BiFunction<ICatanGameHearth, R, IOwnedElement> elementBuilder) {
 
-    return (ICatanGameHearth hearth, Req request) -> {
+    return (ICatanGameHearth hearth, R request) -> {
       IOwnedElement element = elementBuilder.apply(hearth, request);
 
       try {
@@ -121,12 +121,12 @@ public abstract class BuildElementRequestHandler<Req extends IBuildElementReques
     };
   }
 
-  private static <Req extends IBuildElementRequest>
-      BiFunction<ICatanGameHearth, Req, Boolean> generateUpgradeActionWithoutSubstractingResources(
-          BuildElementRequestHandlerBuilder<Req, ?> builder,
-          BiFunction<ICatanGameHearth, Req, IOwnedElement> elementBuilder) {
+  private static <R extends IBuildElementRequest>
+      BiFunction<ICatanGameHearth, R, Boolean> generateUpgradeActionWithoutSubstractingResources(
+          BuildElementRequestHandlerBuilder<R, ?> builder,
+          BiFunction<ICatanGameHearth, R, IOwnedElement> elementBuilder) {
 
-    return (ICatanGameHearth hearth, Req request) -> {
+    return (ICatanGameHearth hearth, R request) -> {
       IOwnedElement element = elementBuilder.apply(hearth, request);
 
       try {
@@ -142,10 +142,10 @@ public abstract class BuildElementRequestHandler<Req extends IBuildElementReques
     };
   }
 
-  private static <Req extends IBuildElementRequest>
-      StandardRequestHandlerBuilder<Req, ?> processBuilder(
-          BuildElementRequestHandlerBuilder<Req, ?> builder,
-          BiFunction<ICatanGameHearth, Req, IOwnedElement> elementBuilder) {
+  private static <R extends IBuildElementRequest>
+      StandardRequestHandlerBuilder<R, ?> processBuilder(
+          BuildElementRequestHandlerBuilder<R, ?> builder,
+          BiFunction<ICatanGameHearth, R, IOwnedElement> elementBuilder) {
 
     builder.setPreconditionFullfilledAction(generateBuildAction(builder, elementBuilder));
 

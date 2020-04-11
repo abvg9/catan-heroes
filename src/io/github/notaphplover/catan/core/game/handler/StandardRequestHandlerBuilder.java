@@ -4,8 +4,8 @@ import io.github.notaphplover.catan.core.game.GameState;
 import io.github.notaphplover.catan.core.request.IRequest;
 
 public abstract class StandardRequestHandlerBuilder<
-        Req extends IRequest, Self extends StandardRequestHandlerBuilder<Req, Self>>
-    extends RequestHandlerBuilder<Req, Self> {
+        R extends IRequest, S extends StandardRequestHandlerBuilder<R, S>>
+    extends RequestHandlerBuilder<R, S> {
 
   private boolean logRequestAfterAction;
 
@@ -43,37 +43,37 @@ public abstract class StandardRequestHandlerBuilder<
     return rejectUnactivePlayers;
   }
 
-  public Self setRejectActivePlayer(boolean rejectActivePlayer) {
+  public S setRejectActivePlayer(boolean rejectActivePlayer) {
     this.rejectActivePlayer = rejectActivePlayer;
 
     return getSelf();
   }
 
-  public Self setRejectIfTurnStarted(boolean rejectIfTurnStarted) {
+  public S setRejectIfTurnStarted(boolean rejectIfTurnStarted) {
     this.rejectIfTurnStarted = rejectIfTurnStarted;
 
     return getSelf();
   }
 
-  public Self setRejectIfTurnNotStarted(boolean rejectIfTurnNotStarted) {
+  public S setRejectIfTurnNotStarted(boolean rejectIfTurnNotStarted) {
     this.rejectIfTurnNotStarted = rejectIfTurnNotStarted;
 
     return getSelf();
   }
 
-  public Self setRejectUnactivePlayers(boolean rejectUnactivePlayers) {
+  public S setRejectUnactivePlayers(boolean rejectUnactivePlayers) {
     this.rejectUnactivePlayers = rejectUnactivePlayers;
 
     return getSelf();
   }
 
-  public Self setStateAllowed(GameState stateAllowed) {
+  public S setStateAllowed(GameState stateAllowed) {
     this.stateAllowed = stateAllowed;
 
     return getSelf();
   }
 
-  public Self setLogRequestAfterAction(boolean logRequestAfterAction) {
+  public S setLogRequestAfterAction(boolean logRequestAfterAction) {
     this.logRequestAfterAction = logRequestAfterAction;
 
     return getSelf();

@@ -4,6 +4,5 @@ import io.github.notaphplover.catan.core.game.handler.element.BuildElementReques
 import io.github.notaphplover.catan.core.request.IStructureRelatedRequest;
 
 public class StructureRelatedRequestHandlerBuilder<
-        Req extends IStructureRelatedRequest,
-        Self extends StructureRelatedRequestHandlerBuilder<Req, Self>>
-    extends BuildElementRequestHandlerBuilder<Req, Self> {}
+        R extends IStructureRelatedRequest, S extends StructureRelatedRequestHandlerBuilder<R, S>>
+    extends BuildElementRequestHandlerBuilder<R, S> {}

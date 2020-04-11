@@ -7,59 +7,59 @@ import java.util.LinkedList;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
-public abstract class StandardRequestHandler<Req extends IRequest> extends RequestHandler<Req> {
+public abstract class StandardRequestHandler<R extends IRequest> extends RequestHandler<R> {
 
-  public StandardRequestHandler(StandardRequestHandlerBuilder<Req, ?> builder) {
+  public StandardRequestHandler(StandardRequestHandlerBuilder<R, ?> builder) {
     super(processBuilder(builder));
   }
 
-  private static <Req extends IRequest> BiConsumer<ICatanGameHearth, Req> buildLogAction() {
-    return (ICatanGameHearth hearth, Req request) -> {
+  private static <R extends IRequest> BiConsumer<ICatanGameHearth, R> buildLogAction() {
+    return (ICatanGameHearth hearth, R request) -> {
       hearth.getGameLog().get(hearth.getPlayerManager().getTurnNumber()).add(request);
     };
   }
 
-  private static <Req extends IRequest>
-      BiFunction<ICatanGameHearth, Req, Boolean> buildOnlyActivePlayerAllowedPrecondition() {
-    return (ICatanGameHearth hearth, Req request) -> {
+  private static <R extends IRequest>
+      BiFunction<ICatanGameHearth, R, Boolean> buildOnlyActivePlayerAllowedPrecondition() {
+    return (ICatanGameHearth hearth, R request) -> {
       return hearth.getPlayerManager().getActivePlayer().equals(request.getPlayer());
     };
   }
 
-  private static <Req extends IRequest>
-      BiFunction<ICatanGameHearth, Req, Boolean> buildOnlyAtPhaseAllowedPrecondition(
+  private static <R extends IRequest>
+      BiFunction<ICatanGameHearth, R, Boolean> buildOnlyAtPhaseAllowedPrecondition(
           final GameState state) {
 
-    return (ICatanGameHearth hearth, Req request) -> {
+    return (ICatanGameHearth hearth, R request) -> {
       return hearth.getState() == state;
     };
   }
 
-  private static <Req extends IRequest>
-      BiFunction<ICatanGameHearth, Req, Boolean> buildOnlyIfTurnNotStartedPrecondition() {
-    return (ICatanGameHearth hearth, Req request) -> {
+  private static <R extends IRequest>
+      BiFunction<ICatanGameHearth, R, Boolean> buildOnlyIfTurnNotStartedPrecondition() {
+    return (ICatanGameHearth hearth, R request) -> {
       return !hearth.getPlayerManager().isTurnStarted();
     };
   }
 
-  private static <Req extends IRequest>
-      BiFunction<ICatanGameHearth, Req, Boolean> buildOnlyIfTurnStartedPrecondition() {
-    return (ICatanGameHearth hearth, Req request) -> {
+  private static <R extends IRequest>
+      BiFunction<ICatanGameHearth, R, Boolean> buildOnlyIfTurnStartedPrecondition() {
+    return (ICatanGameHearth hearth, R request) -> {
       return hearth.getPlayerManager().isTurnStarted();
     };
   }
 
-  private static <Req extends IRequest>
-      BiFunction<ICatanGameHearth, Req, Boolean> buildOnlyUnactivePlayerAllowedPrecondition() {
-    return (ICatanGameHearth hearth, Req request) -> {
+  private static <R extends IRequest>
+      BiFunction<ICatanGameHearth, R, Boolean> buildOnlyUnactivePlayerAllowedPrecondition() {
+    return (ICatanGameHearth hearth, R request) -> {
       return !hearth.getPlayerManager().getActivePlayer().equals(request.getPlayer());
     };
   }
 
-  private static <Req extends IRequest> StandardRequestHandlerBuilder<Req, ?> processBuilder(
-      StandardRequestHandlerBuilder<Req, ?> builder) {
+  private static <R extends IRequest> StandardRequestHandlerBuilder<R, ?> processBuilder(
+      StandardRequestHandlerBuilder<R, ?> builder) {
 
-    StandardRequestHandlerBuilder<Req, ?> processedBuilder = builder;
+    StandardRequestHandlerBuilder<R, ?> processedBuilder = builder;
 
     processedBuilder = processBuilderPreconditions(processedBuilder);
     processedBuilder = processBuilderPreconditionRejectedAction(processedBuilder);
@@ -69,11 +69,11 @@ public abstract class StandardRequestHandler<Req extends IRequest> extends Reque
     return processedBuilder;
   }
 
-  private static <Req extends IRequest>
-      StandardRequestHandlerBuilder<Req, ?> processBuilderAfterFailureActions(
-          StandardRequestHandlerBuilder<Req, ?> builder) {
+  private static <R extends IRequest>
+      StandardRequestHandlerBuilder<R, ?> processBuilderAfterFailureActions(
+          StandardRequestHandlerBuilder<R, ?> builder) {
 
-    LinkedList<BiConsumer<ICatanGameHearth, Req>> failureActions = builder.getAfterFailureActions();
+    LinkedList<BiConsumer<ICatanGameHearth, R>> failureActions = builder.getAfterFailureActions();
 
     if (failureActions == null) {
       failureActions = new LinkedList<>();
@@ -84,11 +84,11 @@ public abstract class StandardRequestHandler<Req extends IRequest> extends Reque
     return builder;
   }
 
-  private static <Req extends IRequest>
-      StandardRequestHandlerBuilder<Req, ?> processBuilderAfterSuccessActions(
-          StandardRequestHandlerBuilder<Req, ?> builder) {
+  private static <R extends IRequest>
+      StandardRequestHandlerBuilder<R, ?> processBuilderAfterSuccessActions(
+          StandardRequestHandlerBuilder<R, ?> builder) {
 
-    LinkedList<BiConsumer<ICatanGameHearth, Req>> successActions = builder.getAfterSuccessActions();
+    LinkedList<BiConsumer<ICatanGameHearth, R>> successActions = builder.getAfterSuccessActions();
 
     if (successActions == null) {
       successActions = new LinkedList<>();
@@ -103,9 +103,9 @@ public abstract class StandardRequestHandler<Req extends IRequest> extends Reque
     return builder;
   }
 
-  private static <Req extends IRequest>
-      StandardRequestHandlerBuilder<Req, ?> processBuilderAllowedPhase(
-          StandardRequestHandlerBuilder<Req, ?> builder) {
+  private static <R extends IRequest>
+      StandardRequestHandlerBuilder<R, ?> processBuilderAllowedPhase(
+          StandardRequestHandlerBuilder<R, ?> builder) {
 
     if (builder.getStateAllowed() != null) {
       builder
@@ -116,9 +116,9 @@ public abstract class StandardRequestHandler<Req extends IRequest> extends Reque
     return builder;
   }
 
-  private static <Req extends IRequest>
-      StandardRequestHandlerBuilder<Req, ?> processBuilderAllowedPlayers(
-          StandardRequestHandlerBuilder<Req, ?> builder) {
+  private static <R extends IRequest>
+      StandardRequestHandlerBuilder<R, ?> processBuilderAllowedPlayers(
+          StandardRequestHandlerBuilder<R, ?> builder) {
     if (builder.isRejectActivePlayer()) {
       builder.getPreconditionsList().addFirst(buildOnlyUnactivePlayerAllowedPrecondition());
     }
@@ -130,9 +130,9 @@ public abstract class StandardRequestHandler<Req extends IRequest> extends Reque
     return builder;
   }
 
-  private static <Req extends IRequest>
-      StandardRequestHandlerBuilder<Req, ?> processBuilderAllowedTurnStarted(
-          StandardRequestHandlerBuilder<Req, ?> builder) {
+  private static <R extends IRequest>
+      StandardRequestHandlerBuilder<R, ?> processBuilderAllowedTurnStarted(
+          StandardRequestHandlerBuilder<R, ?> builder) {
     if (builder.isRejectIfTurnNotStarted()) {
       builder.getPreconditionsList().addFirst(buildOnlyIfTurnStartedPrecondition());
     }
@@ -144,23 +144,23 @@ public abstract class StandardRequestHandler<Req extends IRequest> extends Reque
     return builder;
   }
 
-  private static <Req extends IRequest>
-      StandardRequestHandlerBuilder<Req, ?> processBuilderPreconditionRejectedAction(
-          StandardRequestHandlerBuilder<Req, ?> builder) {
+  private static <R extends IRequest>
+      StandardRequestHandlerBuilder<R, ?> processBuilderPreconditionRejectedAction(
+          StandardRequestHandlerBuilder<R, ?> builder) {
 
     builder.setPreconditionRejectedAction(
-        (ICatanGameHearth hearth, Req request) -> {
+        (ICatanGameHearth hearth, R request) -> {
           hearth.getErrorHandler().accept(request);
         });
 
     return builder;
   }
 
-  private static <Req extends IRequest>
-      StandardRequestHandlerBuilder<Req, ?> processBuilderPreconditions(
-          StandardRequestHandlerBuilder<Req, ?> builder) {
+  private static <R extends IRequest>
+      StandardRequestHandlerBuilder<R, ?> processBuilderPreconditions(
+          StandardRequestHandlerBuilder<R, ?> builder) {
 
-    StandardRequestHandlerBuilder<Req, ?> processedBuilder = builder;
+    StandardRequestHandlerBuilder<R, ?> processedBuilder = builder;
 
     processedBuilder = processBuilderAllowedTurnStarted(processedBuilder);
     processedBuilder = processBuilderAllowedPlayers(processedBuilder);

@@ -7,74 +7,72 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
 public abstract class RequestHandlerBuilder<
-    Req extends IRequest, Self extends RequestHandlerBuilder<Req, Self>> {
+    R extends IRequest, S extends RequestHandlerBuilder<R, S>> {
 
-  private LinkedList<BiConsumer<ICatanGameHearth, Req>> afterFailureActions;
+  private LinkedList<BiConsumer<ICatanGameHearth, R>> afterFailureActions;
 
-  private LinkedList<BiConsumer<ICatanGameHearth, Req>> afterSuccessActions;
+  private LinkedList<BiConsumer<ICatanGameHearth, R>> afterSuccessActions;
 
-  private BiFunction<ICatanGameHearth, Req, Boolean> preconditionFullfilledAction;
+  private BiFunction<ICatanGameHearth, R, Boolean> preconditionFullfilledAction;
 
-  private LinkedList<BiFunction<ICatanGameHearth, Req, Boolean>> preconditionsList;
+  private LinkedList<BiFunction<ICatanGameHearth, R, Boolean>> preconditionsList;
 
-  private BiConsumer<ICatanGameHearth, Req> preconditionRejectedAction;
+  private BiConsumer<ICatanGameHearth, R> preconditionRejectedAction;
 
-  public LinkedList<BiConsumer<ICatanGameHearth, Req>> getAfterFailureActions() {
+  public LinkedList<BiConsumer<ICatanGameHearth, R>> getAfterFailureActions() {
     return afterFailureActions;
   }
 
-  public LinkedList<BiConsumer<ICatanGameHearth, Req>> getAfterSuccessActions() {
+  public LinkedList<BiConsumer<ICatanGameHearth, R>> getAfterSuccessActions() {
     return afterSuccessActions;
   }
 
-  public BiFunction<ICatanGameHearth, Req, Boolean> getPreconditionFullfilledAction() {
+  public BiFunction<ICatanGameHearth, R, Boolean> getPreconditionFullfilledAction() {
     return preconditionFullfilledAction;
   }
 
-  public LinkedList<BiFunction<ICatanGameHearth, Req, Boolean>> getPreconditionsList() {
+  public LinkedList<BiFunction<ICatanGameHearth, R, Boolean>> getPreconditionsList() {
     return preconditionsList;
   }
 
-  public BiConsumer<ICatanGameHearth, Req> getPreconditionRejectedAction() {
+  public BiConsumer<ICatanGameHearth, R> getPreconditionRejectedAction() {
     return preconditionRejectedAction;
   }
 
-  public Self setAfterFailureActions(
-      LinkedList<BiConsumer<ICatanGameHearth, Req>> afterFailureActions) {
+  public S setAfterFailureActions(LinkedList<BiConsumer<ICatanGameHearth, R>> afterFailureActions) {
     this.afterFailureActions = afterFailureActions;
 
     return getSelf();
   }
 
-  public Self setAfterSuccessActions(
-      LinkedList<BiConsumer<ICatanGameHearth, Req>> afterSuccessActions) {
+  public S setAfterSuccessActions(LinkedList<BiConsumer<ICatanGameHearth, R>> afterSuccessActions) {
     this.afterSuccessActions = afterSuccessActions;
 
     return getSelf();
   }
 
-  public Self setPreconditionFullfilledAction(BiFunction<ICatanGameHearth, Req, Boolean> action) {
+  public S setPreconditionFullfilledAction(BiFunction<ICatanGameHearth, R, Boolean> action) {
     this.preconditionFullfilledAction = action;
 
     return getSelf();
   }
 
-  public Self setPreconditionsList(
-      LinkedList<BiFunction<ICatanGameHearth, Req, Boolean>> preconditionsList) {
+  public S setPreconditionsList(
+      LinkedList<BiFunction<ICatanGameHearth, R, Boolean>> preconditionsList) {
     this.preconditionsList = preconditionsList;
 
     return getSelf();
   }
 
-  public Self setPreconditionRejectedAction(BiConsumer<ICatanGameHearth, Req> action) {
+  public S setPreconditionRejectedAction(BiConsumer<ICatanGameHearth, R> action) {
     this.preconditionRejectedAction = action;
 
     return getSelf();
   }
 
-  protected Self getSelf() {
+  protected S getSelf() {
     @SuppressWarnings("unchecked")
-    Self self = (Self) this;
+    S self = (S) this;
 
     return self;
   }
