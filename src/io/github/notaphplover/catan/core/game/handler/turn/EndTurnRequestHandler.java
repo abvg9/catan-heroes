@@ -81,8 +81,6 @@ public class EndTurnRequestHandler extends StandardRequestHandler<IEndTurnReques
 
   private static void switchStateIfNeeded(ICatanGameHearth hearth) {
     switch (hearth.getState()) {
-      case ENDED:
-        return;
       case FOUNDATION:
         if (isLastFoundationPhaseTurn(hearth)) {
           hearth.setState(GameState.NORMAL);
@@ -92,6 +90,8 @@ public class EndTurnRequestHandler extends StandardRequestHandler<IEndTurnReques
         if (hasActivePlayerWon(hearth)) {
           hearth.setState(GameState.ENDED);
         }
+        return;
+      default:
         return;
     }
   }

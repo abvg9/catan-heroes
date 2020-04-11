@@ -4,7 +4,7 @@ import java.util.UUID;
 
 public class TradeConfirmation extends Reference implements ITradeConfirmation {
 
-  IReference agreement;
+  private IReference agreement;
 
   public TradeConfirmation(UUID id, IReference agreement) {
     super(id);
