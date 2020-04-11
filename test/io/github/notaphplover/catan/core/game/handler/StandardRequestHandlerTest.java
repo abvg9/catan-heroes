@@ -126,6 +126,179 @@ public class StandardRequestHandlerTest {
 
       assertTrue(called.get());
     }
+
+    @DisplayName(
+        "It should reject the request if the turn has not started and rejectIfTurnNotStarted is enabled")
+    @Test
+    public void itShouldRejectTurnNotStarted()
+        throws NonNullInputException, NonVoidCollectionException {
+      MinimunStandardRequestHandlerBuilder builder =
+          generateStandardBuilder()
+              .setLogRequestAfterAction(false)
+              .setRejectActivePlayer(false)
+              .setRejectIfTurnNotStarted(true)
+              .setRejectIfTurnStarted(false)
+              .setRejectUnactivePlayers(false)
+              .setStateAllowed(null);
+
+      MinimunStandardRequestHandler handler = new MinimunStandardRequestHandler(builder);
+
+      int turn = 0;
+      boolean turnStarted = false;
+      int productionNumber = 2;
+      GameState state = GameState.NORMAL;
+
+      ICatanGameHearthBuilder hearthBuilder =
+          generateHearthBuilder(turn, turnStarted, productionNumber, state);
+
+      AtomicBoolean called = new AtomicBoolean(false);
+      hearthBuilder.setErrorHandler(
+          (IRequest request) -> {
+            called.set(true);
+          });
+
+      ICatanGameHearth hearth = new CatanGameHearth(hearthBuilder);
+
+      IRequest request =
+          new MinimunRequest(
+              hearth.getPlayerManager().getActivePlayer(), RequestType.BUILD_CONNECTION);
+
+      handler.handle(hearth, request);
+
+      assertTrue(called.get());
+    }
+
+    @DisplayName(
+        "It should reject the request if the turn has not started and rejectIfTurnStarted is enabled")
+    @Test
+    public void itShouldRejectTurnStarted()
+        throws NonNullInputException, NonVoidCollectionException {
+      MinimunStandardRequestHandlerBuilder builder =
+          generateStandardBuilder()
+              .setLogRequestAfterAction(false)
+              .setRejectActivePlayer(false)
+              .setRejectIfTurnNotStarted(false)
+              .setRejectIfTurnStarted(true)
+              .setRejectUnactivePlayers(false)
+              .setStateAllowed(null);
+
+      MinimunStandardRequestHandler handler = new MinimunStandardRequestHandler(builder);
+
+      int turn = 0;
+      boolean turnStarted = true;
+      int productionNumber = 2;
+      GameState state = GameState.NORMAL;
+
+      ICatanGameHearthBuilder hearthBuilder =
+          generateHearthBuilder(turn, turnStarted, productionNumber, state);
+
+      AtomicBoolean called = new AtomicBoolean(false);
+      hearthBuilder.setErrorHandler(
+          (IRequest request) -> {
+            called.set(true);
+          });
+
+      ICatanGameHearth hearth = new CatanGameHearth(hearthBuilder);
+
+      IRequest request =
+          new MinimunRequest(
+              hearth.getPlayerManager().getActivePlayer(), RequestType.BUILD_CONNECTION);
+
+      handler.handle(hearth, request);
+
+      assertTrue(called.get());
+    }
+
+    @DisplayName("It should reject an unactive player request if rejectUnactivePlayers is enabled")
+    @Test
+    public void itShouldRejectUnactivePlayer()
+        throws NonNullInputException, NonVoidCollectionException {
+      MinimunStandardRequestHandlerBuilder builder =
+          generateStandardBuilder()
+              .setLogRequestAfterAction(false)
+              .setRejectActivePlayer(false)
+              .setRejectIfTurnNotStarted(false)
+              .setRejectIfTurnStarted(false)
+              .setRejectUnactivePlayers(true)
+              .setStateAllowed(null);
+
+      MinimunStandardRequestHandler handler = new MinimunStandardRequestHandler(builder);
+
+      int turn = 0;
+      boolean turnStarted = true;
+      int productionNumber = 2;
+      GameState state = GameState.NORMAL;
+
+      ICatanGameHearthBuilder hearthBuilder =
+          generateHearthBuilder(turn, turnStarted, productionNumber, state);
+
+      AtomicBoolean called = new AtomicBoolean(false);
+      hearthBuilder.setErrorHandler(
+          (IRequest request) -> {
+            called.set(true);
+          });
+
+      ICatanGameHearth hearth = new CatanGameHearth(hearthBuilder);
+
+      IRequest request =
+          new MinimunRequest(
+              findUnactivePlayer(hearth.getPlayerManager()), RequestType.BUILD_CONNECTION);
+
+      handler.handle(hearth, request);
+
+      assertTrue(called.get());
+    }
+
+    @DisplayName("It should reject the request if the phase is not the right one")
+    @Test
+    public void itShouldRejectStateNotAllowed()
+        throws NonNullInputException, NonVoidCollectionException {
+      MinimunStandardRequestHandlerBuilder builder =
+          generateStandardBuilder()
+              .setLogRequestAfterAction(false)
+              .setRejectActivePlayer(false)
+              .setRejectIfTurnNotStarted(false)
+              .setRejectIfTurnStarted(false)
+              .setRejectUnactivePlayers(false)
+              .setStateAllowed(GameState.FOUNDATION);
+
+      MinimunStandardRequestHandler handler = new MinimunStandardRequestHandler(builder);
+
+      int turn = 0;
+      boolean turnStarted = true;
+      int productionNumber = 2;
+      GameState state = GameState.NORMAL;
+
+      ICatanGameHearthBuilder hearthBuilder =
+          generateHearthBuilder(turn, turnStarted, productionNumber, state);
+
+      AtomicBoolean called = new AtomicBoolean(false);
+      hearthBuilder.setErrorHandler(
+          (IRequest request) -> {
+            called.set(true);
+          });
+
+      ICatanGameHearth hearth = new CatanGameHearth(hearthBuilder);
+
+      IRequest request =
+          new MinimunRequest(
+              hearth.getPlayerManager().getActivePlayer(), RequestType.BUILD_CONNECTION);
+
+      handler.handle(hearth, request);
+
+      assertTrue(called.get());
+    }
+  }
+
+  private static IPlayer findUnactivePlayer(IPlayerManager playerManger) {
+
+    for (IPlayer player : playerManger.getPlayers()) {
+      if (player != playerManger.getActivePlayer()) {
+        return player;
+      }
+    }
+
+    return null;
   }
 
   private static ICatanGameHearthBuilder generateHearthBuilder(
