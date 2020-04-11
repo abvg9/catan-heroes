@@ -24,8 +24,7 @@ public abstract class BuildElementRequestHandler<R extends IBuildElementRequest>
     hearth.getBoard().build(element, request.getX(), request.getY());
   }
 
-  private static <R extends IBuildElementRequest> void baseSubstractResources(
-      ICatanGameHearth hearth, R request, IOwnedElement element)
+  private static void baseSubstractResources(ICatanGameHearth hearth, IOwnedElement element)
       throws NotEnoughtResourcesException {
     hearth.getPlayerManager().getActivePlayer().getResourceManager().substract(element.getCost());
   }
@@ -65,7 +64,7 @@ public abstract class BuildElementRequestHandler<R extends IBuildElementRequest>
       IOwnedElement element = elementBuilder.apply(hearth, request);
 
       try {
-        baseSubstractResources(hearth, request, element);
+        baseSubstractResources(hearth, element);
         baseBuildAction(hearth, request, element);
         return true;
       } catch (InvalidBoardElementException | NotEnoughtResourcesException e) {
@@ -108,7 +107,7 @@ public abstract class BuildElementRequestHandler<R extends IBuildElementRequest>
       IOwnedElement element = elementBuilder.apply(hearth, request);
 
       try {
-        baseSubstractResources(hearth, request, element);
+        baseSubstractResources(hearth, element);
         baseUpgradeAction(hearth, request, element);
         return true;
       } catch (InvalidBoardElementException | NotEnoughtResourcesException e) {
