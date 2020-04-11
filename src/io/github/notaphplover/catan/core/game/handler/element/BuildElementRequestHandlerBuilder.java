@@ -4,9 +4,8 @@ import io.github.notaphplover.catan.core.game.handler.StandardRequestHandlerBuil
 import io.github.notaphplover.catan.core.request.IBuildElementRequest;
 
 public abstract class BuildElementRequestHandlerBuilder<
-        TRequest extends IBuildElementRequest,
-        TReturn extends StandardRequestHandlerBuilder<TRequest, TReturn>>
-    extends StandardRequestHandlerBuilder<TRequest, TReturn> {
+        Req extends IBuildElementRequest, Self extends StandardRequestHandlerBuilder<Req, Self>>
+    extends StandardRequestHandlerBuilder<Req, Self> {
 
   private boolean substractResources;
 
@@ -20,13 +19,13 @@ public abstract class BuildElementRequestHandlerBuilder<
     return upgradeHandler;
   }
 
-  public TReturn setSubstractResources(boolean substractResources) {
+  public Self setSubstractResources(boolean substractResources) {
     this.substractResources = substractResources;
 
     return getSelf();
   }
 
-  public TReturn setUpgradeHandler(boolean upgradeHandler) {
+  public Self setUpgradeHandler(boolean upgradeHandler) {
     this.upgradeHandler = upgradeHandler;
 
     return getSelf();

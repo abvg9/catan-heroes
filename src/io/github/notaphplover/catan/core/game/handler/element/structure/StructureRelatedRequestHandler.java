@@ -7,17 +7,16 @@ import io.github.notaphplover.catan.core.game.hearth.ICatanGameHearth;
 import io.github.notaphplover.catan.core.request.IStructureRelatedRequest;
 import java.util.function.BiFunction;
 
-public class StructureRelatedRequestHandler<TRequest extends IStructureRelatedRequest>
-    extends BuildElementRequestHandler<TRequest> {
+public class StructureRelatedRequestHandler<Req extends IStructureRelatedRequest>
+    extends BuildElementRequestHandler<Req> {
 
-  public StructureRelatedRequestHandler(
-      StructureRelatedRequestHandlerBuilder<TRequest, ?> builder) {
+  public StructureRelatedRequestHandler(StructureRelatedRequestHandlerBuilder<Req, ?> builder) {
     super(builder, getElementBuilder());
   }
 
-  private static <TRequest extends IStructureRelatedRequest>
-      BiFunction<ICatanGameHearth, TRequest, IOwnedElement> getElementBuilder() {
-    return (ICatanGameHearth hearth, TRequest request) ->
+  private static <Req extends IStructureRelatedRequest>
+      BiFunction<ICatanGameHearth, Req, IOwnedElement> getElementBuilder() {
+    return (ICatanGameHearth hearth, Req request) ->
         new BoardStructure(
             request.getPlayer(),
             hearth.getStructureCostProvider().getResourceManager(request.getStructureType()),

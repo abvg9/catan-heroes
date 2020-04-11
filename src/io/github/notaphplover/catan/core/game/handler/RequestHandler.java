@@ -7,20 +7,19 @@ import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
-public abstract class RequestHandler<TRequest extends IRequest>
-    implements IRequestHandler<TRequest> {
+public abstract class RequestHandler<Req extends IRequest> implements IRequestHandler<Req> {
 
-  private LinkedList<BiConsumer<ICatanGameHearth, TRequest>> afterFailureActions;
+  private LinkedList<BiConsumer<ICatanGameHearth, Req>> afterFailureActions;
 
-  private LinkedList<BiConsumer<ICatanGameHearth, TRequest>> afterSuccessActions;
+  private LinkedList<BiConsumer<ICatanGameHearth, Req>> afterSuccessActions;
 
-  private BiFunction<ICatanGameHearth, TRequest, Boolean> preconditionFullfilledAction;
+  private BiFunction<ICatanGameHearth, Req, Boolean> preconditionFullfilledAction;
 
-  private LinkedList<BiFunction<ICatanGameHearth, TRequest, Boolean>> preconditionsList;
+  private LinkedList<BiFunction<ICatanGameHearth, Req, Boolean>> preconditionsList;
 
-  private BiConsumer<ICatanGameHearth, TRequest> preconditionRejectedAction;
+  private BiConsumer<ICatanGameHearth, Req> preconditionRejectedAction;
 
-  public RequestHandler(RequestHandlerBuilder<TRequest, ?> builder) {
+  public RequestHandler(RequestHandlerBuilder<Req, ?> builder) {
 
     if (builder.getAfterFailureActions() == null) {
       this.afterFailureActions = new LinkedList<>();
@@ -46,11 +45,11 @@ public abstract class RequestHandler<TRequest extends IRequest>
   }
 
   @Override
-  public void handle(ICatanGameHearth hearth, TRequest request) {
+  public void handle(ICatanGameHearth hearth, Req request) {
 
     boolean preconditionsFullfilled = true;
 
-    for (BiFunction<ICatanGameHearth, TRequest, Boolean> precondition : preconditionsList) {
+    for (BiFunction<ICatanGameHearth, Req, Boolean> precondition : preconditionsList) {
       if (!precondition.apply(hearth, request)) {
         preconditionsFullfilled = false;
         break;
@@ -63,10 +62,10 @@ public abstract class RequestHandler<TRequest extends IRequest>
       preconditionRejectedAction.accept(hearth, request);
     }
 
-    List<BiConsumer<ICatanGameHearth, TRequest>> actionList =
+    List<BiConsumer<ICatanGameHearth, Req>> actionList =
         preconditionsFullfilled ? afterSuccessActions : afterFailureActions;
 
-    for (BiConsumer<ICatanGameHearth, TRequest> action : actionList) {
+    for (BiConsumer<ICatanGameHearth, Req> action : actionList) {
       action.accept(hearth, request);
     }
   }
