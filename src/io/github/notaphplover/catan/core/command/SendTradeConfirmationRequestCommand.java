@@ -8,7 +8,7 @@ import java.util.Collection;
 public class SendTradeConfirmationRequestCommand extends Command
     implements ISendTradeConfirmationRequestCommand {
 
-  Collection<ITradeAgreement> agreements;
+  private Collection<ITradeAgreement> agreements;
 
   public SendTradeConfirmationRequestCommand(
       IPlayer destinatary, Collection<ITradeAgreement> agreements) {

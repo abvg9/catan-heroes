@@ -4,7 +4,7 @@ import java.util.UUID;
 
 public class TradeDiscard extends Reference implements ITradeDiscard {
 
-  IReference trade;
+  private IReference trade;
 
   public TradeDiscard(UUID id, IReference trade) {
     super(id);
