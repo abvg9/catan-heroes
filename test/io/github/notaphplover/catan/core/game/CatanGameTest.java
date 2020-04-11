@@ -76,7 +76,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-public class CatanGameEngineTest {
+public class CatanGameTest {
 
   @DisplayName("it must end the foundation phase")
   @Tag("CatanBoardEngine")
