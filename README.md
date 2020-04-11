@@ -10,6 +10,6 @@ This is the core project of a varian of the game. This project aims to implement
 
 As any gradle project, the build task can be used for this purpose:
 
-```
+```bash
   gradle build
 ```
