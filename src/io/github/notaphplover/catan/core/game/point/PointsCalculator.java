@@ -5,7 +5,7 @@ import io.github.notaphplover.catan.core.board.ICatanBoard;
 import io.github.notaphplover.catan.core.board.element.IBoardElement;
 import io.github.notaphplover.catan.core.board.structure.IBoardStructure;
 import io.github.notaphplover.catan.core.board.structure.StructureType;
-import io.github.notaphplover.catan.core.game.ICatanGameEngine;
+import io.github.notaphplover.catan.core.game.ICatanGame;
 import io.github.notaphplover.catan.core.player.IPlayer;
 import java.util.Map;
 import java.util.TreeMap;
@@ -15,9 +15,9 @@ public class PointsCalculator implements IPointsCalculator {
   private static final int POINTS_PER_CITY = 2;
   private static final int POINTS_PER_SETTLEMENT = 1;
 
-  private ICatanGameEngine game;
+  private ICatanGame game;
 
-  public PointsCalculator(ICatanGameEngine game) {
+  public PointsCalculator(ICatanGame game) {
     this.game = game;
   }
 

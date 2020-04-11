@@ -128,7 +128,7 @@ public class CatanGameEngineTest {
             .setPointsToWin(10)
             .setState(GameState.NORMAL);
 
-    CatanGameEngine engine = new CatanGameEngine(builder);
+    CatanGame engine = new CatanGame(builder);
 
     engine.processRequest(new EndTurnRequest(player1));
 
@@ -183,7 +183,7 @@ public class CatanGameEngineTest {
             .setPointsToWin(1)
             .setState(GameState.NORMAL);
 
-    CatanGameEngine engine = new CatanGameEngine(builder);
+    CatanGame engine = new CatanGame(builder);
 
     int requestX = 2;
     int requestY = 2;
@@ -251,7 +251,7 @@ public class CatanGameEngineTest {
             .setPointsToWin(10)
             .setState(GameState.NORMAL);
 
-    CatanGameEngine engine = new CatanGameEngine(builder);
+    CatanGame engine = new CatanGame(builder);
 
     IRequest request = new BuildConnectionRequest(player, ConnectionType.ROAD, requestX, requestY);
 
@@ -316,7 +316,7 @@ public class CatanGameEngineTest {
             .setPointsToWin(10)
             .setState(GameState.FOUNDATION);
 
-    CatanGameEngine engine = new CatanGameEngine(builder);
+    CatanGame engine = new CatanGame(builder);
 
     IRequest request =
         new BuildInitialConnectionRequest(player, ConnectionType.ROAD, requestX, requestY);
@@ -375,7 +375,7 @@ public class CatanGameEngineTest {
             .setPointsToWin(10)
             .setState(GameState.FOUNDATION);
 
-    CatanGameEngine engine = new CatanGameEngine(builder);
+    CatanGame engine = new CatanGame(builder);
 
     IRequest request =
         new BuildInitialStructureRequest(player, StructureType.SETTLEMENT, requestX, requestY);
@@ -440,7 +440,7 @@ public class CatanGameEngineTest {
             .setPointsToWin(10)
             .setState(GameState.NORMAL);
 
-    CatanGameEngine engine = new CatanGameEngine(builder);
+    CatanGame engine = new CatanGame(builder);
 
     IRequest request =
         new BuildStructureRequest(player, StructureType.SETTLEMENT, requestX, requestY);
@@ -487,7 +487,7 @@ public class CatanGameEngineTest {
             .setPointsToWin(10)
             .setState(GameState.NORMAL);
 
-    CatanGameEngine engine = new CatanGameEngine(builder);
+    CatanGame engine = new CatanGame(builder);
 
     IRequest request = new StartTurnRequest(player);
 
@@ -548,7 +548,7 @@ public class CatanGameEngineTest {
             .setPointsToWin(10)
             .setState(GameState.NORMAL);
 
-    CatanGameEngine engine = new CatanGameEngine(builder);
+    CatanGame engine = new CatanGame(builder);
 
     Map<ResourceType, Integer> requestedResourcesMap = new TreeMap<ResourceType, Integer>();
     requestedResourcesMap.put(ResourceType.ORE, 1);
@@ -627,7 +627,7 @@ public class CatanGameEngineTest {
             .setPointsToWin(10)
             .setState(GameState.NORMAL);
 
-    CatanGameEngine engine = new CatanGameEngine(builder);
+    CatanGame engine = new CatanGame(builder);
 
     Map<ResourceType, Integer> requestedResourcesMap = new TreeMap<ResourceType, Integer>();
     requestedResourcesMap.put(ResourceType.ORE, 1);
@@ -710,7 +710,7 @@ public class CatanGameEngineTest {
             .setPointsToWin(10)
             .setState(GameState.NORMAL);
 
-    CatanGameEngine engine = new CatanGameEngine(builder);
+    CatanGame engine = new CatanGame(builder);
 
     Map<ResourceType, Integer> requestedResourcesMap = new TreeMap<ResourceType, Integer>();
     requestedResourcesMap.put(ResourceType.ORE, 1);
@@ -789,7 +789,7 @@ public class CatanGameEngineTest {
             .setPointsToWin(10)
             .setState(GameState.NORMAL);
 
-    CatanGameEngine engine = new CatanGameEngine(builder);
+    CatanGame engine = new CatanGame(builder);
 
     Map<ResourceType, Integer> requestedResourcesMap = new TreeMap<ResourceType, Integer>();
     requestedResourcesMap.put(ResourceType.ORE, 1);
@@ -854,7 +854,7 @@ public class CatanGameEngineTest {
             .setPointsToWin(10)
             .setState(GameState.NORMAL);
 
-    CatanGameEngine engine = new CatanGameEngine(builder);
+    CatanGame engine = new CatanGame(builder);
 
     IRequest request = new EndTurnRequest(player);
 
@@ -921,7 +921,7 @@ public class CatanGameEngineTest {
             .setPointsToWin(10)
             .setState(GameState.NORMAL);
 
-    CatanGameEngine engine = new CatanGameEngine(builder);
+    CatanGame engine = new CatanGame(builder);
 
     IRequest request = new UpgradeStructureRequest(player, StructureType.CITY, requestX, requestY);
 
@@ -966,7 +966,7 @@ public class CatanGameEngineTest {
                   .setPointsToWin(10)
                   .setState(GameState.NORMAL);
 
-          new CatanGameEngine(builder);
+          new CatanGame(builder);
         });
   }
 
@@ -1003,7 +1003,7 @@ public class CatanGameEngineTest {
                   .setPointsToWin(10)
                   .setState(GameState.NORMAL);
 
-          new CatanGameEngine(builder);
+          new CatanGame(builder);
         });
   }
 
@@ -1043,7 +1043,7 @@ public class CatanGameEngineTest {
                   .setPointsToWin(10)
                   .setState(GameState.NORMAL);
 
-          new CatanGameEngine(builder);
+          new CatanGame(builder);
         });
   }
 
@@ -1082,7 +1082,7 @@ public class CatanGameEngineTest {
                   .setPlayerManager(new PlayerManager(players, 0, false))
                   .setPointsToWin(10)
                   .setState(GameState.NORMAL);
-          new CatanGameEngine(builder);
+          new CatanGame(builder);
         });
   }
 
@@ -1123,7 +1123,7 @@ public class CatanGameEngineTest {
             .setPointsToWin(10)
             .setState(GameState.FOUNDATION);
 
-    CatanGameEngine engine = new CatanGameEngine(builder);
+    CatanGame engine = new CatanGame(builder);
 
     engine.processRequest(new StartTurnRequest(player));
 
@@ -1173,7 +1173,7 @@ public class CatanGameEngineTest {
             .setPointsToWin(10)
             .setState(GameState.NORMAL);
 
-    CatanGameEngine engine = new CatanGameEngine(builder);
+    CatanGame engine = new CatanGame(builder);
 
     int requestX = 3;
     int requestY = 2;
@@ -1235,7 +1235,7 @@ public class CatanGameEngineTest {
             .setPointsToWin(10)
             .setState(GameState.NORMAL);
 
-    CatanGameEngine engine = new CatanGameEngine(builder);
+    CatanGame engine = new CatanGame(builder);
 
     int requestX = 3;
     int requestY = 2;
@@ -1289,7 +1289,7 @@ public class CatanGameEngineTest {
             .setPointsToWin(10)
             .setState(GameState.NORMAL);
 
-    CatanGameEngine engine = new CatanGameEngine(builder);
+    CatanGame engine = new CatanGame(builder);
 
     int requestX = 3;
     int requestY = 2;
@@ -1350,7 +1350,7 @@ public class CatanGameEngineTest {
             .setPointsToWin(10)
             .setState(GameState.FOUNDATION);
 
-    CatanGameEngine engine = new CatanGameEngine(builder);
+    CatanGame engine = new CatanGame(builder);
 
     int requestX = 3;
     int requestY = 2;
@@ -1406,7 +1406,7 @@ public class CatanGameEngineTest {
             .setPointsToWin(10)
             .setState(GameState.NORMAL);
 
-    CatanGameEngine engine = new CatanGameEngine(builder);
+    CatanGame engine = new CatanGame(builder);
 
     int requestX = 2;
     int requestY = 2;
@@ -1468,7 +1468,7 @@ public class CatanGameEngineTest {
             .setPointsToWin(10)
             .setState(GameState.NORMAL);
 
-    CatanGameEngine engine = new CatanGameEngine(builder);
+    CatanGame engine = new CatanGame(builder);
 
     int requestX = 2;
     int requestY = 2;
@@ -1522,7 +1522,7 @@ public class CatanGameEngineTest {
             .setPointsToWin(10)
             .setState(GameState.NORMAL);
 
-    CatanGameEngine engine = new CatanGameEngine(builder);
+    CatanGame engine = new CatanGame(builder);
 
     int requestX = 2;
     int requestY = 2;
@@ -1583,7 +1583,7 @@ public class CatanGameEngineTest {
             .setPointsToWin(10)
             .setState(GameState.FOUNDATION);
 
-    CatanGameEngine engine = new CatanGameEngine(builder);
+    CatanGame engine = new CatanGame(builder);
 
     int requestX = 2;
     int requestY = 2;
@@ -1635,7 +1635,7 @@ public class CatanGameEngineTest {
             .setPointsToWin(10)
             .setState(GameState.ENDED);
 
-    CatanGameEngine engine = new CatanGameEngine(builder);
+    CatanGame engine = new CatanGame(builder);
 
     engine.processRequest(new EndTurnRequest(player));
 
@@ -1694,7 +1694,7 @@ public class CatanGameEngineTest {
             .setPointsToWin(10)
             .setState(GameState.NORMAL);
 
-    CatanGameEngine engine = new CatanGameEngine(builder);
+    CatanGame engine = new CatanGame(builder);
 
     Map<ResourceType, Integer> requestedResourcesMap = new TreeMap<ResourceType, Integer>();
     requestedResourcesMap.put(ResourceType.ORE, 1);
@@ -1750,7 +1750,7 @@ public class CatanGameEngineTest {
             .setPointsToWin(10)
             .setState(GameState.ENDED);
 
-    CatanGameEngine engine = new CatanGameEngine(builder);
+    CatanGame engine = new CatanGame(builder);
 
     engine.processRequest(new StartTurnRequest(player));
 
@@ -1802,7 +1802,7 @@ public class CatanGameEngineTest {
             .setPointsToWin(10)
             .setState(GameState.NORMAL);
 
-    CatanGameEngine engine = new CatanGameEngine(builder);
+    CatanGame engine = new CatanGame(builder);
 
     Map<ResourceType, Integer> requestedResourcesMap = new TreeMap<ResourceType, Integer>();
     requestedResourcesMap.put(ResourceType.ORE, 1);
@@ -1871,7 +1871,7 @@ public class CatanGameEngineTest {
             .setPointsToWin(10)
             .setState(GameState.FOUNDATION);
 
-    CatanGameEngine engine = new CatanGameEngine(builder);
+    CatanGame engine = new CatanGame(builder);
 
     Map<ResourceType, Integer> requestedResourcesMap = new TreeMap<ResourceType, Integer>();
     requestedResourcesMap.put(ResourceType.ORE, 1);
@@ -1941,7 +1941,7 @@ public class CatanGameEngineTest {
             .setPointsToWin(10)
             .setState(GameState.NORMAL);
 
-    CatanGameEngine engine = new CatanGameEngine(builder);
+    CatanGame engine = new CatanGame(builder);
 
     Map<ResourceType, Integer> requestedResourcesMap = new TreeMap<ResourceType, Integer>();
     requestedResourcesMap.put(ResourceType.ORE, 1);
@@ -2010,7 +2010,7 @@ public class CatanGameEngineTest {
             .setPointsToWin(10)
             .setState(GameState.FOUNDATION);
 
-    CatanGameEngine engine = new CatanGameEngine(builder);
+    CatanGame engine = new CatanGame(builder);
 
     int requestX1 = 3;
     int requestY1 = 4;
@@ -2067,7 +2067,7 @@ public class CatanGameEngineTest {
             .setPointsToWin(10)
             .setState(GameState.FOUNDATION);
 
-    CatanGameEngine engine = new CatanGameEngine(builder);
+    CatanGame engine = new CatanGame(builder);
 
     int requestX = 2;
     int requestY = 4;
@@ -2126,7 +2126,7 @@ public class CatanGameEngineTest {
             .setPointsToWin(10)
             .setState(GameState.NORMAL);
 
-    CatanGameEngine engine = new CatanGameEngine(builder);
+    CatanGame engine = new CatanGame(builder);
 
     int requestX = 3;
     int requestY = 2;
@@ -2191,7 +2191,7 @@ public class CatanGameEngineTest {
             .setPointsToWin(10)
             .setState(GameState.FOUNDATION);
 
-    CatanGameEngine engine = new CatanGameEngine(builder);
+    CatanGame engine = new CatanGame(builder);
 
     int requestX = 3;
     int requestY = 4;
@@ -2245,7 +2245,7 @@ public class CatanGameEngineTest {
             .setPointsToWin(10)
             .setState(GameState.FOUNDATION);
 
-    CatanGameEngine engine = new CatanGameEngine(builder);
+    CatanGame engine = new CatanGame(builder);
 
     int requestX = 2;
     int requestY = 4;
@@ -2306,7 +2306,7 @@ public class CatanGameEngineTest {
             .setPointsToWin(10)
             .setState(GameState.NORMAL);
 
-    CatanGameEngine engine = new CatanGameEngine(builder);
+    CatanGame engine = new CatanGame(builder);
 
     int requestX = 2;
     int requestY = 2;
@@ -2364,7 +2364,7 @@ public class CatanGameEngineTest {
             .setPointsToWin(10)
             .setState(GameState.NORMAL);
 
-    CatanGameEngine engine = new CatanGameEngine(builder);
+    CatanGame engine = new CatanGame(builder);
 
     engine.processRequest(new EndTurnRequest(player));
 
@@ -2418,7 +2418,7 @@ public class CatanGameEngineTest {
             .setPointsToWin(10)
             .setState(GameState.NORMAL);
 
-    CatanGameEngine engine = new CatanGameEngine(builder);
+    CatanGame engine = new CatanGame(builder);
 
     int requestX = 2;
     int requestY = 2;
@@ -2473,7 +2473,7 @@ public class CatanGameEngineTest {
             .setPointsToWin(10)
             .setState(GameState.NORMAL);
 
-    CatanGameEngine engine = new CatanGameEngine(builder);
+    CatanGame engine = new CatanGame(builder);
 
     engine.processRequest(new StartTurnRequest(player));
 
@@ -2531,7 +2531,7 @@ public class CatanGameEngineTest {
             .setPointsToWin(10)
             .setState(GameState.NORMAL);
 
-    CatanGameEngine engine = new CatanGameEngine(builder);
+    CatanGame engine = new CatanGame(builder);
 
     Map<ResourceType, Integer> requestedResourcesMap = new TreeMap<ResourceType, Integer>();
     requestedResourcesMap.put(ResourceType.ORE, 1);
@@ -2607,7 +2607,7 @@ public class CatanGameEngineTest {
             .setPointsToWin(10)
             .setState(GameState.NORMAL);
 
-    CatanGameEngine engine = new CatanGameEngine(builder);
+    CatanGame engine = new CatanGame(builder);
 
     Map<ResourceType, Integer> requestedResourcesMap = new TreeMap<ResourceType, Integer>();
     requestedResourcesMap.put(ResourceType.ORE, 1);
@@ -2683,7 +2683,7 @@ public class CatanGameEngineTest {
             .setPointsToWin(10)
             .setState(GameState.NORMAL);
 
-    CatanGameEngine engine = new CatanGameEngine(builder);
+    CatanGame engine = new CatanGame(builder);
 
     Map<ResourceType, Integer> requestedResourcesMap = new TreeMap<ResourceType, Integer>();
     requestedResourcesMap.put(ResourceType.ORE, 1);
@@ -2759,7 +2759,7 @@ public class CatanGameEngineTest {
             .setPointsToWin(10)
             .setState(GameState.NORMAL);
 
-    CatanGameEngine engine = new CatanGameEngine(builder);
+    CatanGame engine = new CatanGame(builder);
 
     Map<ResourceType, Integer> requestedResourcesMap = new TreeMap<ResourceType, Integer>();
     requestedResourcesMap.put(ResourceType.ORE, 1);
@@ -2823,7 +2823,7 @@ public class CatanGameEngineTest {
             .setPointsToWin(10)
             .setState(GameState.NORMAL);
 
-    CatanGameEngine engine = new CatanGameEngine(builder);
+    CatanGame engine = new CatanGame(builder);
 
     engine.processRequest(new StartTurnRequest(player));
 

@@ -42,13 +42,13 @@ import io.github.notaphplover.catan.core.resource.provider.DefaultStructureCostP
 import java.util.Map;
 import java.util.function.Consumer;
 
-public class CatanGameEngine implements ICatanGameEngine {
+public class CatanGame implements ICatanGame {
 
   private IGameEngineHandlersMap handlersMap;
 
   private ICatanGameHearth hearth;
 
-  public CatanGameEngine(ICatanGameBuilder builder)
+  public CatanGame(ICatanGameBuilder builder)
       throws NonNullInputException, InvalidLogException {
 
     ICatanGameHearthBuilder hearthBuilder =

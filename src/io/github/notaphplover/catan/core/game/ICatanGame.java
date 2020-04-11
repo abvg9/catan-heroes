@@ -6,7 +6,7 @@ import io.github.notaphplover.catan.core.player.IPlayer;
 import io.github.notaphplover.catan.core.request.IRequest;
 import java.util.Map;
 
-public interface ICatanGameEngine {
+public interface ICatanGame {
 
   IPlayer getActivePlayer();
 
