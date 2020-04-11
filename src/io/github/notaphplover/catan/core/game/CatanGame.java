@@ -48,8 +48,7 @@ public class CatanGame implements ICatanGame {
 
   private ICatanGameHearth hearth;
 
-  public CatanGame(ICatanGameBuilder builder)
-      throws NonNullInputException, InvalidLogException {
+  public CatanGame(ICatanGameBuilder builder) throws NonNullInputException, InvalidLogException {
 
     ICatanGameHearthBuilder hearthBuilder =
         new CatanGameHearthBuilder()
