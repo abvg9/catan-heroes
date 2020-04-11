@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 public class RequestHandlerBuilderTest {
 
   @Nested
-  @DisplayName("Tests for the constructor")
+  @DisplayName("RequestHandlerBuilder.constructor")
   class Constructor {
 
     @Test

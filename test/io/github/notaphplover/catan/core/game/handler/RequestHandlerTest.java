@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
 public class RequestHandlerTest {
 
   @Nested
-  @DisplayName("Tests for the handle method")
+  @DisplayName("RequestHandler.handle")
   class Handle {
 
     @Test
