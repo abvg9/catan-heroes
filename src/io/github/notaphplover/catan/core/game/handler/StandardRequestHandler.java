@@ -59,12 +59,14 @@ public abstract class StandardRequestHandler<Req extends IRequest> extends Reque
   private static <Req extends IRequest> StandardRequestHandlerBuilder<Req, ?> processBuilder(
       StandardRequestHandlerBuilder<Req, ?> builder) {
 
-    builder = processBuilderPreconditions(builder);
-    builder = processBuilderPreconditionRejectedAction(builder);
-    builder = processBuilderAfterFailureActions(builder);
-    builder = processBuilderAfterSuccessActions(builder);
+    StandardRequestHandlerBuilder<Req, ?> processedBuilder = builder;
 
-    return builder;
+    processedBuilder = processBuilderPreconditions(processedBuilder);
+    processedBuilder = processBuilderPreconditionRejectedAction(processedBuilder);
+    processedBuilder = processBuilderAfterFailureActions(processedBuilder);
+    processedBuilder = processBuilderAfterSuccessActions(processedBuilder);
+
+    return processedBuilder;
   }
 
   private static <Req extends IRequest>
@@ -158,10 +160,12 @@ public abstract class StandardRequestHandler<Req extends IRequest> extends Reque
       StandardRequestHandlerBuilder<Req, ?> processBuilderPreconditions(
           StandardRequestHandlerBuilder<Req, ?> builder) {
 
-    builder = processBuilderAllowedTurnStarted(builder);
-    builder = processBuilderAllowedPlayers(builder);
-    builder = processBuilderAllowedPhase(builder);
+    StandardRequestHandlerBuilder<Req, ?> processedBuilder = builder;
 
-    return builder;
+    processedBuilder = processBuilderAllowedTurnStarted(processedBuilder);
+    processedBuilder = processBuilderAllowedPlayers(processedBuilder);
+    processedBuilder = processBuilderAllowedPhase(processedBuilder);
+
+    return processedBuilder;
   }
 }
