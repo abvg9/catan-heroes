@@ -9,7 +9,7 @@ plugins {
 }
 
 group 'io.github.notaphplover.catan-core'
-version '0.3.0'
+version '0.3.1'
 
 sourceCompatibility = 1.11
 
@@ -46,9 +46,33 @@ publishing {
         mavenJava(MavenPublication) {
             groupId = 'io.github.notaphplover'
             artifactId = 'catan-core'
-            version = '0.3.0'
+            version = '0.3.1'
 
             from components.java
+
+            pom {
+                name = 'Catan core'
+                description = 'Core library of the game'
+                url = 'https://github.com/notaphplover/catan-heroes'
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'notaphplover'
+                        name = 'Roberto Pintos López'
+                        email = 'roberto.pintos.lopez@gmail.com'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:https://github.com/notaphplover/catan-heroes.git'
+                    developerConnection = 'scm:git:https://github.com/notaphplover/catan-heroes.git'
+                    url = 'https://github.com/notaphplover/catan-heroes/'
+                }
+            }
         }
     }
 
