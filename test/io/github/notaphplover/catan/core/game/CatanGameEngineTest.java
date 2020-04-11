@@ -3,6 +3,7 @@ package io.github.notaphplover.catan.core.game;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
@@ -927,6 +928,162 @@ public class CatanGameEngineTest {
     engine.processRequest(request);
 
     verify(log.get(turn)).add(request);
+  }
+
+  @DisplayName("It must not build a game with a collection of null players")
+  @Tag(value = "CatanGame")
+  @Test
+  public void itMustNotBuildAGameWithACollectionOfNullPlayers()
+      throws NonNullInputException, NonVoidCollectionException, InvalidBoardDimensionsException,
+          InvalidBoardElementException {
+
+    IPlayer[] players = {null};
+    ICatanBoard board = buildStandardBoard(null);
+
+    Consumer<IRequest> errorHandler =
+        (request) -> {
+          fail();
+        };
+
+    ICommandSender commandSender =
+        new ICommandSender() {
+
+          @Override
+          public void send(ICommand command) {}
+        };
+
+    assertThrows(
+        NonNullInputException.class,
+        () -> {
+          ICatanGameBuilder builder =
+              new CatanGameBuilder()
+                  .setBoard(board)
+                  .setCommandSender(commandSender)
+                  .setErrorHandler(errorHandler)
+                  .setGameLog(new LinearGameLog())
+                  .setNumberGenerator(new ConstantNumberGenerator(6))
+                  .setPlayerManager(new PlayerManager(players, 0, false))
+                  .setPointsToWin(10)
+                  .setState(GameState.NORMAL);
+
+          new CatanGameEngine(builder);
+        });
+  }
+
+  @DisplayName("It must not build a game with a null board")
+  @Tag(value = "CatanGameEngine")
+  @Test
+  public void itMustNotBuildAGameWithANullBoard()
+      throws NonNullInputException, NonVoidCollectionException {
+    IPlayer[] players = {new Player(0, new ResourceManager())};
+
+    Consumer<IRequest> errorHandler =
+        (request) -> {
+          fail();
+        };
+
+    ICommandSender commandSender =
+        new ICommandSender() {
+
+          @Override
+          public void send(ICommand command) {}
+        };
+
+    assertThrows(
+        NonNullInputException.class,
+        () -> {
+          ICatanGameBuilder builder =
+              new CatanGameBuilder()
+                  .setBoard(null)
+                  .setCommandSender(commandSender)
+                  .setErrorHandler(errorHandler)
+                  .setGameLog(new LinearGameLog())
+                  .setNumberGenerator(new ConstantNumberGenerator(6))
+                  .setPlayerManager(new PlayerManager(players, 0, false))
+                  .setPointsToWin(10)
+                  .setState(GameState.NORMAL);
+
+          new CatanGameEngine(builder);
+        });
+  }
+
+  @DisplayName("It must not build a game with a null collection of players")
+  @Tag(value = "CatanGameEngine")
+  @Test
+  public void itMustNotBuildAGameWithANullCollectionOfPlayers()
+      throws NonNullInputException, NonVoidCollectionException, InvalidBoardDimensionsException,
+          InvalidBoardElementException {
+
+    IPlayer[] players = null;
+    ICatanBoard board = buildStandardBoard(null);
+
+    Consumer<IRequest> errorHandler =
+        (request) -> {
+          fail();
+        };
+
+    ICommandSender commandSender =
+        new ICommandSender() {
+
+          @Override
+          public void send(ICommand command) {}
+        };
+
+    assertThrows(
+        NonNullInputException.class,
+        () -> {
+          ICatanGameBuilder builder =
+              new CatanGameBuilder()
+                  .setBoard(board)
+                  .setCommandSender(commandSender)
+                  .setErrorHandler(errorHandler)
+                  .setGameLog(new LinearGameLog())
+                  .setNumberGenerator(new ConstantNumberGenerator(6))
+                  .setPlayerManager(new PlayerManager(players, 0, false))
+                  .setPointsToWin(10)
+                  .setState(GameState.NORMAL);
+
+          new CatanGameEngine(builder);
+        });
+  }
+
+  @DisplayName("It must not build a game with a void collection of players")
+  @Tag(value = "CatanGameEngine")
+  @Test
+  public void itMustNotBuildAGameWithAVoidCollectionOfPlayers()
+      throws NonNullInputException, NonVoidCollectionException, InvalidBoardDimensionsException,
+          InvalidBoardElementException {
+
+    IPlayer[] players = {};
+    ICatanBoard board = buildStandardBoard(null);
+
+    Consumer<IRequest> errorHandler =
+        (request) -> {
+          fail();
+        };
+
+    ICommandSender commandSender =
+        new ICommandSender() {
+
+          @Override
+          public void send(ICommand command) {}
+        };
+
+    assertThrows(
+        NonVoidCollectionException.class,
+        () -> {
+          ICatanGameBuilder builder =
+              new CatanGameBuilder()
+                  .setBoard(board)
+                  .setCommandSender(commandSender)
+                  .setErrorHandler(errorHandler)
+                  .setGameLog(new LinearGameLog())
+                  .setNumberGenerator(new ConstantNumberGenerator(6))
+                  .setPlayerManager(new PlayerManager(players, 0, false))
+                  .setPointsToWin(10)
+                  .setState(GameState.NORMAL);
+          new CatanGameEngine(builder);
+        });
   }
 
   @DisplayName(
@@ -2707,7 +2864,7 @@ public class CatanGameEngineTest {
       {
         buildVoidConnection(),
         buildNoneTerrain(),
-        buildPlayerConnection(player1),
+        player1 == null ? buildVoidConnection() : buildPlayerConnection(player1),
         buildMountainTerrain(),
         buildVoidConnection(),
       },
