@@ -2,6 +2,7 @@ package io.github.notaphplover.catan.core.game.handler;
 
 import io.github.notaphplover.catan.core.game.GameState;
 import io.github.notaphplover.catan.core.game.hearth.ICatanGameHearth;
+import io.github.notaphplover.catan.core.player.IPlayer;
 import io.github.notaphplover.catan.core.request.IRequest;
 import java.util.LinkedList;
 import java.util.function.BiConsumer;
@@ -11,6 +12,18 @@ public abstract class StandardRequestHandler<R extends IRequest> extends Request
 
   public StandardRequestHandler(StandardRequestHandlerBuilder<R, ?> builder) {
     super(processBuilder(builder));
+  }
+
+  private static <R extends IRequest>
+      BiConsumer<ICatanGameHearth, R> buildHandleRequestNotificationAction() {
+
+    return (ICatanGameHearth hearth, R request) -> {
+      hearth.getPlayerManager().getActivePlayer().emptyMissing();
+
+      for (IPlayer player : hearth.getPlayerManager().getPlayers()) {
+        player.registerMiss(request);
+      }
+    };
   }
 
   private static <R extends IRequest> BiConsumer<ICatanGameHearth, R> buildLogAction() {
@@ -92,6 +105,10 @@ public abstract class StandardRequestHandler<R extends IRequest> extends Request
 
     if (successActions == null) {
       successActions = new LinkedList<>();
+    }
+
+    if (builder.isNotifyToPlayers()) {
+      successActions.addFirst(buildHandleRequestNotificationAction());
     }
 
     if (builder.isLogRequestAfterAction()) {

@@ -41,6 +41,7 @@ public class UpgradeStructureRequestAtNormalPhaseHandler
         .setAfterFailureActions(new LinkedList<>())
         .setAfterSuccessActions(afterSuccessActions)
         .setLogRequestAfterAction(true)
+        .setNotifyToPlayers(true)
         .setPreconditionFullfilledAction(null)
         .setPreconditionRejectedAction(null)
         .setPreconditionsList(preconditionsList)

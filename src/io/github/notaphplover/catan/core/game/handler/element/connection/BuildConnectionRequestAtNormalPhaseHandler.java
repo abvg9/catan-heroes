@@ -39,6 +39,7 @@ public class BuildConnectionRequestAtNormalPhaseHandler extends BuildConnectionR
         .setAfterFailureActions(new LinkedList<>())
         .setAfterSuccessActions(afterSuccessActions)
         .setLogRequestAfterAction(true)
+        .setNotifyToPlayers(true)
         .setPreconditionFullfilledAction(null)
         .setPreconditionRejectedAction(null)
         .setPreconditionsList(preconditionsList)
