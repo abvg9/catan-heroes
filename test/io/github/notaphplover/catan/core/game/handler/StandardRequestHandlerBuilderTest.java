@@ -19,6 +19,7 @@ public class StandardRequestHandlerBuilderTest {
     void itShouldStoreBuilderAttr() {
 
       boolean logRequestAfterAction = true;
+      boolean notifyToPlayers = true;
       boolean rejectActivePlayer = true;
       boolean rejectIfTurnNotStarted = true;
       boolean rejectIfTurnStarted = true;
@@ -29,6 +30,7 @@ public class StandardRequestHandlerBuilderTest {
       MinimunStandardRequestHandlerBuilder builder =
           new MinimunStandardRequestHandlerBuilder()
               .setLogRequestAfterAction(logRequestAfterAction)
+              .setNotifyToPlayers(notifyToPlayers)
               .setRejectActivePlayer(rejectActivePlayer)
               .setRejectIfTurnNotStarted(rejectIfTurnNotStarted)
               .setRejectIfTurnStarted(rejectIfTurnStarted)
@@ -36,6 +38,7 @@ public class StandardRequestHandlerBuilderTest {
               .setStateAllowed(state);
 
       assertSame(logRequestAfterAction, builder.isLogRequestAfterAction());
+      assertSame(notifyToPlayers, builder.isNotifyToPlayers());
       assertSame(rejectActivePlayer, builder.isRejectActivePlayer());
       assertSame(rejectIfTurnNotStarted, builder.isRejectIfTurnNotStarted());
       assertSame(rejectIfTurnStarted, builder.isRejectIfTurnStarted());
