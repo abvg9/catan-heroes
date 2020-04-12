@@ -49,6 +49,7 @@ public class StandardRequestHandlerTest {
       MinimunStandardRequestHandlerBuilder builder =
           generateStandardBuilder()
               .setLogRequestAfterAction(true)
+              .setNotifyToPlayers(false)
               .setRejectActivePlayer(false)
               .setRejectIfTurnNotStarted(false)
               .setRejectIfTurnStarted(false)
@@ -87,6 +88,43 @@ public class StandardRequestHandlerTest {
       assertTrue(isContained.get());
     }
 
+    @DisplayName("It should add player request notification if notifyToPlayers is enabled")
+    @Test
+    public void itShouldAddPlayerNotification()
+        throws NonNullInputException, NonVoidCollectionException {
+
+      MinimunStandardRequestHandlerBuilder builder =
+          generateStandardBuilder()
+              .setLogRequestAfterAction(false)
+              .setNotifyToPlayers(true)
+              .setRejectActivePlayer(false)
+              .setRejectIfTurnNotStarted(false)
+              .setRejectIfTurnStarted(false)
+              .setRejectUnactivePlayers(false)
+              .setStateAllowed(null);
+
+      MinimunStandardRequestHandler handler = new MinimunStandardRequestHandler(builder);
+
+      int turn = 0;
+      boolean turnStarted = true;
+      int productionNumber = 2;
+      GameState state = GameState.NORMAL;
+
+      ICatanGameHearth hearth =
+          new CatanGameHearth(generateHearthBuilder(turn, turnStarted, productionNumber, state));
+
+      IRequest request =
+          new MinimunRequest(
+              hearth.getPlayerManager().getActivePlayer(), RequestType.BUILD_CONNECTION);
+
+      handler.handle(hearth, request);
+
+      Collection<IRequest> pendingRequests =
+          hearth.getPlayerManager().getActivePlayer().emptyMissing();
+
+      assertTrue(pendingRequests.contains(request));
+    }
+
     @DisplayName("It should reject the active player request if rejectActivePlayer is enabled")
     @Test
     public void itShouldRejectActivePlayer()
@@ -94,6 +132,7 @@ public class StandardRequestHandlerTest {
       MinimunStandardRequestHandlerBuilder builder =
           generateStandardBuilder()
               .setLogRequestAfterAction(false)
+              .setNotifyToPlayers(false)
               .setRejectActivePlayer(true)
               .setRejectIfTurnNotStarted(false)
               .setRejectIfTurnStarted(false)
@@ -135,6 +174,7 @@ public class StandardRequestHandlerTest {
       MinimunStandardRequestHandlerBuilder builder =
           generateStandardBuilder()
               .setLogRequestAfterAction(false)
+              .setNotifyToPlayers(false)
               .setRejectActivePlayer(false)
               .setRejectIfTurnNotStarted(true)
               .setRejectIfTurnStarted(false)
@@ -176,6 +216,7 @@ public class StandardRequestHandlerTest {
       MinimunStandardRequestHandlerBuilder builder =
           generateStandardBuilder()
               .setLogRequestAfterAction(false)
+              .setNotifyToPlayers(false)
               .setRejectActivePlayer(false)
               .setRejectIfTurnNotStarted(false)
               .setRejectIfTurnStarted(true)
@@ -216,6 +257,7 @@ public class StandardRequestHandlerTest {
       MinimunStandardRequestHandlerBuilder builder =
           generateStandardBuilder()
               .setLogRequestAfterAction(false)
+              .setNotifyToPlayers(false)
               .setRejectActivePlayer(false)
               .setRejectIfTurnNotStarted(false)
               .setRejectIfTurnStarted(false)
@@ -256,6 +298,7 @@ public class StandardRequestHandlerTest {
       MinimunStandardRequestHandlerBuilder builder =
           generateStandardBuilder()
               .setLogRequestAfterAction(false)
+              .setNotifyToPlayers(false)
               .setRejectActivePlayer(false)
               .setRejectIfTurnNotStarted(false)
               .setRejectIfTurnStarted(false)
