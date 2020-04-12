@@ -15,8 +15,11 @@ public abstract class StandardRequestHandler<R extends IRequest> extends Request
   }
 
   private static <R extends IRequest>
-      BiConsumer<ICatanGameHearth, R> buildAddRequestNotificationAction() {
+      BiConsumer<ICatanGameHearth, R> buildHandleRequestNotificationAction() {
+
     return (ICatanGameHearth hearth, R request) -> {
+      hearth.getPlayerManager().getActivePlayer().emptyMissing();
+
       for (IPlayer player : hearth.getPlayerManager().getPlayers()) {
         player.registerMiss(request);
       }
@@ -105,7 +108,7 @@ public abstract class StandardRequestHandler<R extends IRequest> extends Request
     }
 
     if (builder.isNotifyToPlayers()) {
-      successActions.addFirst(buildAddRequestNotificationAction());
+      successActions.addFirst(buildHandleRequestNotificationAction());
     }
 
     if (builder.isLogRequestAfterAction()) {
