@@ -43,6 +43,7 @@ public class TradeRequestHandler extends StandardRequestHandler<ITradeRequest> {
             .setAfterFailureActions(new LinkedList<>())
             .setAfterSuccessActions(afterSuccessActions)
             .setLogRequestAfterAction(true)
+            .setNotifyToPlayers(true)
             .setPreconditionRejectedAction(null)
             .setPreconditionsList(new LinkedList<>())
             .setRejectActivePlayer(false)

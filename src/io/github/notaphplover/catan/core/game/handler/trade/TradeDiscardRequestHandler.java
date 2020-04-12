@@ -36,6 +36,7 @@ public class TradeDiscardRequestHandler extends StandardRequestHandler<ITradeDis
             .setAfterFailureActions(new LinkedList<>())
             .setAfterSuccessActions(afterSuccessActions)
             .setLogRequestAfterAction(true)
+            .setNotifyToPlayers(true)
             .setPreconditionRejectedAction(null)
             .setPreconditionsList(new LinkedList<>())
             .setRejectActivePlayer(false)

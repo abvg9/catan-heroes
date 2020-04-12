@@ -9,6 +9,8 @@ public abstract class StandardRequestHandlerBuilder<
 
   private boolean logRequestAfterAction;
 
+  private boolean notifyToPlayers;
+
   private boolean rejectActivePlayer;
 
   private boolean rejectIfTurnStarted;
@@ -27,6 +29,10 @@ public abstract class StandardRequestHandlerBuilder<
     return logRequestAfterAction;
   }
 
+  public boolean isNotifyToPlayers() {
+    return notifyToPlayers;
+  }
+
   public boolean isRejectActivePlayer() {
     return rejectActivePlayer;
   }
@@ -41,6 +47,18 @@ public abstract class StandardRequestHandlerBuilder<
 
   public boolean isRejectUnactivePlayers() {
     return rejectUnactivePlayers;
+  }
+
+  public S setLogRequestAfterAction(boolean logRequestAfterAction) {
+    this.logRequestAfterAction = logRequestAfterAction;
+
+    return getSelf();
+  }
+
+  public S setNotifyToPlayers(boolean notifyToPlayers) {
+    this.notifyToPlayers = notifyToPlayers;
+
+    return getSelf();
   }
 
   public S setRejectActivePlayer(boolean rejectActivePlayer) {
@@ -69,12 +87,6 @@ public abstract class StandardRequestHandlerBuilder<
 
   public S setStateAllowed(GameState stateAllowed) {
     this.stateAllowed = stateAllowed;
-
-    return getSelf();
-  }
-
-  public S setLogRequestAfterAction(boolean logRequestAfterAction) {
-    this.logRequestAfterAction = logRequestAfterAction;
 
     return getSelf();
   }

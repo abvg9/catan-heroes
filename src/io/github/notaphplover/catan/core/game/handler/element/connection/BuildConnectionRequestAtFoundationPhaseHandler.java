@@ -47,6 +47,7 @@ public class BuildConnectionRequestAtFoundationPhaseHandler extends BuildConnect
         .setAfterFailureActions(new LinkedList<>())
         .setAfterSuccessActions(afterSuccessActions)
         .setLogRequestAfterAction(true)
+        .setNotifyToPlayers(true)
         .setPreconditionFullfilledAction(null)
         .setPreconditionRejectedAction(null)
         .setPreconditionsList(preconditionsList)
