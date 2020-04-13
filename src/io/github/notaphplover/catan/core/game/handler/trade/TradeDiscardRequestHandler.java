@@ -29,6 +29,8 @@ public class TradeDiscardRequestHandler extends StandardRequestHandler<ITradeDis
           hearth
               .getCommandSender()
               .send(new Command(request.getPlayer(), CommandType.SEND_NORMAL_REQUEST));
+
+          request.getPlayer().emptyMissing();
         });
 
     TradeDiscardRequestHandlerBuilder builder =

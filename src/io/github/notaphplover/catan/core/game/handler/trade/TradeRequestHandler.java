@@ -34,6 +34,8 @@ public class TradeRequestHandler extends StandardRequestHandler<ITradeRequest> {
               hearth
                   .getCommandSender()
                   .send(new Command(player, CommandType.SEND_TRADE_AGREEMENT_REQUEST));
+
+              player.emptyMissing();
             }
           }
         });

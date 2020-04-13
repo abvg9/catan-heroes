@@ -33,7 +33,12 @@ public class EndTurnRequestHandler extends StandardRequestHandler<IEndTurnReques
 
     afterSuccessActions.add(
         (ICatanGameHearth hearth, IEndTurnRequest request) -> {
-          hearth.getCommandSender().send(new Command(request.getPlayer(), CommandType.START_TURN));
+          hearth
+              .getCommandSender()
+              .send(
+                  new Command(hearth.getPlayerManager().getActivePlayer(), CommandType.START_TURN));
+
+          hearth.getPlayerManager().getActivePlayer().emptyMissing();
         });
 
     EndTurnRequestHandlerBuilder builder =

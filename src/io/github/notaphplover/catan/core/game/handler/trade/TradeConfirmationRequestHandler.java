@@ -29,6 +29,8 @@ public class TradeConfirmationRequestHandler
           hearth
               .getCommandSender()
               .send(new Command(request.getPlayer(), CommandType.SEND_NORMAL_REQUEST));
+
+          request.getPlayer().emptyMissing();
         });
 
     TradeConfirmationRequestHandlerBuilder builder =
