@@ -9,7 +9,7 @@ plugins {
 }
 
 group 'io.github.notaphplover.catan-core'
-version '0.3.1'
+version '0.4.0'
 
 sourceCompatibility = 1.11
 
@@ -47,7 +47,7 @@ publishing {
         mavenJava(MavenPublication) {
             groupId = 'io.github.notaphplover'
             artifactId = 'catan-core'
-            version = '0.3.1'
+            version = '0.4.0'
 
             from components.java
 
