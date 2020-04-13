@@ -35,12 +35,15 @@ public class UpgradeStructureRequestAtNormalPhaseHandler
           hearth
               .getCommandSender()
               .send(new Command(request.getPlayer(), CommandType.SEND_NORMAL_REQUEST));
+
+          request.getPlayer().emptyMissing();
         });
 
     return new UpgradeStructureRequestHandlerBuilder()
         .setAfterFailureActions(new LinkedList<>())
         .setAfterSuccessActions(afterSuccessActions)
         .setLogRequestAfterAction(true)
+        .setNotifyToPlayers(true)
         .setPreconditionFullfilledAction(null)
         .setPreconditionRejectedAction(null)
         .setPreconditionsList(preconditionsList)

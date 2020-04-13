@@ -34,6 +34,8 @@ public class TradeRequestHandler extends StandardRequestHandler<ITradeRequest> {
               hearth
                   .getCommandSender()
                   .send(new Command(player, CommandType.SEND_TRADE_AGREEMENT_REQUEST));
+
+              player.emptyMissing();
             }
           }
         });
@@ -43,6 +45,7 @@ public class TradeRequestHandler extends StandardRequestHandler<ITradeRequest> {
             .setAfterFailureActions(new LinkedList<>())
             .setAfterSuccessActions(afterSuccessActions)
             .setLogRequestAfterAction(true)
+            .setNotifyToPlayers(true)
             .setPreconditionRejectedAction(null)
             .setPreconditionsList(new LinkedList<>())
             .setRejectActivePlayer(false)

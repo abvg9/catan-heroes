@@ -26,6 +26,7 @@ public class TradeAgreementRequestHandler extends StandardRequestHandler<ITradeA
             .setAfterFailureActions(new LinkedList<>())
             .setAfterSuccessActions(new LinkedList<>())
             .setLogRequestAfterAction(true)
+            .setNotifyToPlayers(true)
             .setPreconditionRejectedAction(null)
             .setPreconditionsList(new LinkedList<>())
             .setRejectActivePlayer(true)

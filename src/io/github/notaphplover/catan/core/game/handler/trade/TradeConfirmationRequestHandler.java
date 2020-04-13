@@ -29,6 +29,8 @@ public class TradeConfirmationRequestHandler
           hearth
               .getCommandSender()
               .send(new Command(request.getPlayer(), CommandType.SEND_NORMAL_REQUEST));
+
+          request.getPlayer().emptyMissing();
         });
 
     TradeConfirmationRequestHandlerBuilder builder =
@@ -36,6 +38,7 @@ public class TradeConfirmationRequestHandler
             .setAfterFailureActions(new LinkedList<>())
             .setAfterSuccessActions(afterSuccessActions)
             .setLogRequestAfterAction(true)
+            .setNotifyToPlayers(true)
             .setPreconditionRejectedAction(null)
             .setPreconditionsList(new LinkedList<>())
             .setRejectActivePlayer(false)

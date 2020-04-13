@@ -38,6 +38,8 @@ public class StartTurnRequestHandler extends StandardRequestHandler<IStartTurnRe
           hearth
               .getCommandSender()
               .send(new Command(request.getPlayer(), CommandType.SEND_NORMAL_REQUEST));
+
+          request.getPlayer().emptyMissing();
         });
 
     StartTurnRequestHandlerBuilder builder =

@@ -33,12 +33,15 @@ public class BuildConnectionRequestAtNormalPhaseHandler extends BuildConnectionR
           hearth
               .getCommandSender()
               .send(new Command(request.getPlayer(), CommandType.SEND_NORMAL_REQUEST));
+
+          request.getPlayer().emptyMissing();
         });
 
     return new BuildConnectionRequestHandlerBuilder()
         .setAfterFailureActions(new LinkedList<>())
         .setAfterSuccessActions(afterSuccessActions)
         .setLogRequestAfterAction(true)
+        .setNotifyToPlayers(true)
         .setPreconditionFullfilledAction(null)
         .setPreconditionRejectedAction(null)
         .setPreconditionsList(preconditionsList)

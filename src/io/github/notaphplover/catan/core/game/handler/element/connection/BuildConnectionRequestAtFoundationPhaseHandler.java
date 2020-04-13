@@ -41,12 +41,15 @@ public class BuildConnectionRequestAtFoundationPhaseHandler extends BuildConnect
           hearth
               .getCommandSender()
               .send(new Command(request.getPlayer(), CommandType.SEND_FOUNDATION_REQUEST));
+
+          request.getPlayer().emptyMissing();
         });
 
     return new BuildConnectionRequestHandlerBuilder()
         .setAfterFailureActions(new LinkedList<>())
         .setAfterSuccessActions(afterSuccessActions)
         .setLogRequestAfterAction(true)
+        .setNotifyToPlayers(true)
         .setPreconditionFullfilledAction(null)
         .setPreconditionRejectedAction(null)
         .setPreconditionsList(preconditionsList)

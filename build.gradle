@@ -9,7 +9,7 @@ plugins {
 }
 
 group 'io.github.notaphplover.catan-core'
-version '0.3.1'
+version '0.4.0'
 
 sourceCompatibility = 1.11
 
@@ -21,6 +21,7 @@ dependencies {
     implementation('com.diffplug.spotless:spotless-plugin-gradle:3.28.0')
     testImplementation('org.mockito:mockito-core:3.3.3')
     testImplementation('org.junit.jupiter:junit-jupiter:5.5.2')
+    testImplementation('org.junit.platform:junit-platform-commons:1.6.2')
 }
 
 jacoco {
@@ -46,7 +47,7 @@ publishing {
         mavenJava(MavenPublication) {
             groupId = 'io.github.notaphplover'
             artifactId = 'catan-core'
-            version = '0.3.1'
+            version = '0.4.0'
 
             from components.java
 
