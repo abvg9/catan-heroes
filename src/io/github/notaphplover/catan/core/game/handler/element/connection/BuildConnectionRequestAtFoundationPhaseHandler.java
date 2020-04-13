@@ -41,6 +41,8 @@ public class BuildConnectionRequestAtFoundationPhaseHandler extends BuildConnect
           hearth
               .getCommandSender()
               .send(new Command(request.getPlayer(), CommandType.SEND_FOUNDATION_REQUEST));
+
+          request.getPlayer().emptyMissing();
         });
 
     return new BuildConnectionRequestHandlerBuilder()
