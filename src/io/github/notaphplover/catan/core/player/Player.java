@@ -36,13 +36,13 @@ public class Player implements IPlayer {
   }
 
   @Override
-  public Collection<IRequest> emptyMissing() {
+  public void emptyMissing() {
+    this.missingRequests.clear();
+  }
 
-    Collection<IRequest> requests = this.missingRequests;
-
-    this.missingRequests = new LinkedList<>();
-
-    return requests;
+  @Override
+  public Collection<IRequest> getMissing() {
+    return missingRequests;
   }
 
   @Override

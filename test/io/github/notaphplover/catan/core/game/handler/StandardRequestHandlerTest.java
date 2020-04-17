@@ -120,7 +120,7 @@ public class StandardRequestHandlerTest {
       handler.handle(hearth, request);
 
       Collection<IRequest> pendingRequests =
-          hearth.getPlayerManager().getActivePlayer().emptyMissing();
+          hearth.getPlayerManager().getActivePlayer().getMissing();
 
       assertTrue(pendingRequests.contains(request));
     }
