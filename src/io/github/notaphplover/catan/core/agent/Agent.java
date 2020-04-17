@@ -16,7 +16,7 @@ public abstract class Agent implements IAgent {
   @Override
   public void handle(ICommand command) {
 
-    registerPendingRequests(command.getDestinatary().emptyMissing());
+    registerPendingRequests(command.getDestinatary().getMissing());
   }
 
   protected ICatanGame getInnerGame() {
