@@ -9,7 +9,9 @@ public interface IPlayer extends Comparable<IPlayer> {
 
   IResourceManager getResourceManager();
 
-  Collection<IRequest> emptyMissing();
+  void emptyMissing();
+
+  Collection<IRequest> getMissing();
 
   void registerMiss(IRequest request);
 }
